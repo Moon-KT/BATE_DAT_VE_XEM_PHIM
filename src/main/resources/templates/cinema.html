@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Cinema</title>
+  <!-- ======= Styles ====== -->
+  <link rel="stylesheet" th:href="@{/assets/css/movie.css}">
+</head>
+
+<body>
+<!-- =============== Navigation ================ -->
+<div th:replace="~{navMenu:: navbar}"></div>
+
+<!-- =========================== Main cho quản lý phim ==================================== -->
+<div id="dashboard" class="content active">
+  <div class="main">
+    <div class="topbar">
+      <div class="toggle">
+        <ion-icon name="menu-outline"></ion-icon>
+      </div>
+      <h2>Quản Lý Rạp Phim</h2>
+      <div class="search-form">
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search for cinemas...">
+          <button id="searchButton">Search</button>
+        </div>
+        <div class="filter-bar">
+          <label for="filterSelect">Lọc rạp phim: </label>
+          <select id="filterSelect" onchange="filterMovies()">
+            <option value="all">Tất cả</option>
+            <option value="new">Phim mới</option>
+            <option value="upcoming">Phim chưa phát hành</option>
+            <option value="mostViewed">Phim nhiều lượt xem nhất</option>
+          </select>
+          <button onclick="showCinemaDetails()">Thêm Rạp Phim</button>
+        </div>
+
+      </div>
+    </div>
+    <!-- Nút Lọc với Menu Con -->
+
+    <table>
+      <thead>
+      <tr>
+        <th>Mã Rạp Phim</th>
+        <th>Tên Rạp Phim</th>
+        <th>Số Điện Thoại</th>
+        <th>Thao Tác</th> <!-- Cột thêm, sửa, xóa -->
+      </tr>
+      </thead>
+      <tbody id="cinemaTable">
+      <!-- Dòng dữ liệu sẽ được thêm vào đây -->
+      </tbody>
+    </table>
+
+    <div id="cinemaModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Thêm Rạp Phim</h2>
+        <form id="cinemaForm">
+          <input type="hidden" id="cinemaId">
+          <div>
+            <label for="cinemaName">Tên Rạp Phim:</label>
+            <input type="text" id="cinemaName" required>
+          </div>
+          <div>
+            <label for="hotline">Số Điện Thoại:</label>
+            <input type="text" id="hotline" required>
+          </div>
+          <div>
+            <label for="detailedAddress">Địa Chỉ Cụ Thể:</label>
+            <input type="text" id="detailedAddress" required>
+          </div>
+          <div>
+            <label for="locationId">Mã Thành Phố:</label>
+            <input type="text" id="locationId" required>
+          </div>
+          <button type="submit">Lưu</button>
+          <button type="button" onclick="closeModal()">Đóng</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========== Scripts =========  -->
+<script th:src="@{/assets/js/cinema.js}"></script>
+<script>
+  function showContent(id) {
+    // Ẩn tất cả các phần tử nội dung
+    document.querySelectorAll('.content').forEach(div => div.classList.remove('active'));
+    // Hiển thị phần tử nội dung được chọn
+    document.getElementById(id).classList.add('active');
+  }
+
+  // Đảm bảo trang chủ là trang mặc định khi load
+  window.onload = function () {
+    showContent('dashboard');
+  };
+</script>
+<script th:src="@{/assets/js/chartsJS.js}"></script>
+<!-- ====== ionicons ======= -->
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>

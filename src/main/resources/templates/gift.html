@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Cinema</title>
+    <!-- ======= Styles ====== -->
+    <link rel="stylesheet" th:href="@{/assets/css/movie.css}">
+</head>
+
+<body>
+<!-- =============== Navigation ================ -->
+<div th:replace="~{navMenu:: navbar}"></div>
+
+<!-- =========================== Main cho quản lý phim ==================================== -->
+<div id="dashboard" class="content active">
+    <div class="main">
+        <div class="topbar">
+            <div class="toggle">
+                <ion-icon name="menu-outline"></ion-icon>
+            </div>
+            <h2>Promotion Management</h2>
+            <div class="search-form">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search for promotions...">
+                    <button id="searchButton">Search</button>
+                </div>
+            </div>
+            <button onclick="showModal()">Thêm Khuyến Mãi</button>
+        </div>
+        <!-- Nút Lọc với Menu Con -->
+
+        <!-- Danh sách Khuyến Mãi -->
+        <h3>Danh Sách Khuyến Mãi</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Mã Khuyến Mãi</th>
+                <th>Tên Khuyến Mãi</th>
+                <th>Mô Tả</th>
+                <th>Ngày Bắt Đầu</th>
+                <th>Ngày Kết Thúc</th>
+                <th>Loại</th>
+                <th>Thao Tác</th>
+            </tr>
+            </thead>
+            <tbody id="promotionTable">
+            <!-- Dữ liệu khuyến mãi sẽ hiển thị ở đây -->
+            </tbody>
+        </table>
+
+
+        <!-- Modal Thêm/Sửa Khuyến Mãi -->
+        <div id="promotionModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2 id="modalTitle">Thêm Khuyến Mãi</h2>
+                <form id="promotionForm">
+                    <input type="hidden" id="promotionId">
+                    <div>
+                        <label for="promotionName">Tên Khuyến Mãi:</label>
+                        <input type="text" id="promotionName" required>
+                    </div>
+                    <div>
+                        <label for="promotionDescription">Mô Tả:</label>
+                        <textarea id="promotionDescription" required></textarea>
+                    </div>
+                    <div>
+                        <label for="promotionStartDate">Ngày Bắt Đầu:</label>
+                        <input type="date" id="promotionStartDate" required>
+                    </div>
+                    <div>
+                        <label for="promotionEndDate">Ngày Kết Thúc:</label>
+                        <input type="date" id="promotionEndDate" required>
+                    </div>
+                    <div>
+                        <label for="promotionType">Loại Khuyến Mãi:</label>
+                        <select id="promotionType">
+                            <option value="COMBO">Combo</option>
+                            <option value="CINEMA">Cinema</option>
+                            <option value="MOVIE">Movie</option>
+                        </select>
+
+                    </div>
+                    <button type="submit">Lưu</button>
+                    <button type="button" onclick="closeModal()">Đóng</button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- =========== Scripts =========  -->
+<script th:src="@{/assets/js/promotion.js}"></script>
+<script>
+    function showContent(id) {
+        // Ẩn tất cả các phần tử nội dung
+        document.querySelectorAll('.content').forEach(div => div.classList.remove('active'));
+        // Hiển thị phần tử nội dung được chọn
+        document.getElementById(id).classList.add('active');
+    }
+
+    // Đảm bảo trang chủ là trang mặc định khi load
+    window.onload = function () {
+        showContent('dashboard');
+    };
+</script>
+<script th:src="@{/assets/js/main.js}"></script>
+
+<!-- ====== ionicons ======= -->
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
