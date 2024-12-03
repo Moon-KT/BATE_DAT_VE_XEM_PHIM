@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ 
+  <title>Movie Schedule</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    /* Tabs */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin-bottom: 20px;
+    }
+
+    .nav-tabs .nav-item {
+      margin: 0 5px;
+    }
+
+    .nav-tabs .nav-link {
+      padding: 10px 20px;
+      text-decoration: none;
+      background-color: #ecf0f1;
+      color: #34495e;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .nav-tabs .nav-link.active {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .nav-tabs .nav-link:hover {
+      background-color: #bdc3c7;
+      color: #2c3e50;
+    }
+
+    /* Movie Cards */
+    .movie-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .movie-card {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .movie-card img {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 10px;
+    }
+
+    .movie-card .card-body {
+      padding: 15px;
+    }
+
+    .movie-card h5 {
+      font-size: 24px;
+      margin-left: 310px;
+      margin-top: -400px;
+      color: #2c3e50;
+    }
+
+    .movie-card p {
+      font-size: 20px;
+      margin-left: 310px;
+      
+      color: #7f8c8d;
+    }
+    .movie-card .schedule {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 300px;
+      gap: 10px;
+    }
+    .schedule #showbutton{
+     
+      width: 100px;
+    }
+
+    .schedule button {
+      flex: 1;
+      padding: 10px;
+      background-color: #ecf0f1;
+      border: 1px solid #bdc3c7;
+      border-radius: 5px;
+      color: #2c3e50;
+      width: 80px;
+    }
+
+    .schedule button:hover {
+      background-color: #3498db;
+      color: white;
+      border-color: #3498db;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+    .newmovie{
+      background-color:black;
+      color: white;
+      text-align: center;
+    }
+    .movienew img {
+      width: 100%;
+      max-width: 200px;
+      border-radius: 10px;
+    }
+
+
+
+  </style>
+</head>
+<body>
+  <div id="menu-container"></div>
+
+  <div class="container">
+    <h1>Lịch Chiếu Phim</h1>
+
+    <!-- Date Tabs -->
+    <ul class="nav-tabs" id="dateTabs"></ul>
+
+    <!-- Movie List -->
+    <div class="movie-list" id="movieList"></div>
+  </div>
+  
+  <div class="newmovie">
+    <!-- Phần Tiêu Đề -->
+    <div>
+          <h3  style="text-align:center;">PHIM MỚI CHIẾU</h3>
+    </div>
+    <div class="movie-section">
+      <div id="newmovie-container">
+          <!-- Ảnh và video được thêm bằng JavaScript -->
+      </div>
+  </div>
+  </div>
+    <!-- Modal để xem Trailer -->
+<div class="modal fade" id="movieTrailerModal" tabindex="-1" role="dialog" aria-labelledby="movieTrailerModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="movieTrailerModalLabel">Trailer</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <iframe id="trailerVideo" width="100%" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+      </div>
+  </div>
+</div>
+
+  
+  <div id="footer-container"></div>
+  <script>
+      //  =============== Gọi menu vào trình bày ==============
+          // Gọi menu.html và chèn vào #menu-container
+    fetch('menu1.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('menu-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading menu:', error));
+
+    // =============== Trình bày của trang===================
+    document.addEventListener("DOMContentLoaded", () => {
+      const dateTabs = document.getElementById("dateTabs");
+      const movieList = document.getElementById("movieList");
+
+      // Mock data for movies
+      const movies = [
+        {
+          title: "Cô Dâu Hào Môn",
+          imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f09%2fbeta%2D400x633%2D133538%2D091024%2D49.png",
+          genre: "Hài",
+          duration: "120 mins",
+          schedules: {
+            "2024-11-30": [
+              { time: "10:00 AM", seats: 20 },
+              { time: "2:00 PM", seats: 15 }
+            ],
+            "2024-11-29": [
+              { time: "12:00 PM", seats: 30 },
+              { time: "6:00 PM", seats: 25 }
+            ]
+          }
+        },
+        {
+          id: 2,
+        title: "Quỷ Ăn Tạng ",
+        imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f15%2f400wx633h%2D3%2D163518%2D151024%2D56.jpg",
+        genre: "Kinh dị",
+        duration: "100 phút",
+        schedules: {
+          "2024-11-29": [
+            { time: "09:00", seats: 8 },
+            { time: "12:00", seats: 0 },
+            { time: "15:00", seats: 20 },
+            { time: "18:00", seats: 4 },
+            { time: "10:00", seats: 20 },
+            { time: "13:00", seats: 15 },
+            { time: "16:00", seats: 10 },
+            { time: "19:00", seats: 5 },
+            { time: "09:00", seats: 8 },
+            { time: "12:00", seats: 0 },
+            { time: "15:00", seats: 20 },
+            { time: "18:00", seats: 4 },
+            { time: "10:00", seats: 20 },
+            { time: "13:00", seats: 15 },
+            { time: "16:00", seats: 10 },
+            { time: "19:00", seats: 5 }
+            ],
+            "2024-11-30": [
+              { time: "12:00 PM", seats: 30 },
+              { time: "6:00 PM", seats: 25 }
+            ]
+          }
+        }
+      ];
+
+      // Function to create date tabs for the next 7 days
+      function createDateTabs() {
+        dateTabs.innerHTML = "";
+        const today = new Date();
+
+        for (let i = 0; i < 7; i++) {
+          const currentDate = new Date(today);
+          currentDate.setDate(today.getDate() + i);
+
+          const formattedDate = currentDate.toISOString().split("T")[0];
+          const displayDate = currentDate.toLocaleDateString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit"
+          });
+          const dayOfWeek = currentDate.toLocaleDateString("vi-VN", {
+            weekday: "short"
+          });
+
+          const activeClass = i === 0 ? "active" : "";
+
+          const tab = `
+            <li class="nav-item">
+              <a class="nav-link ${activeClass}" data-date="${formattedDate}" href="#">
+                ${displayDate} - ${dayOfWeek}
+              </a>
+            </li>`;
+          dateTabs.insertAdjacentHTML("beforeend", tab);
+        }
+      }
+
+      // Render movie schedules for a specific date
+      function renderMovies(date) {
+        movieList.innerHTML = "";
+
+        const filteredMovies = movies.filter((movie) => movie.schedules[date]);
+        if (filteredMovies.length === 0) {
+          movieList.innerHTML = "<p class='text-center'>No movies available on this day.</p>";
+          return;
+        }
+
+        filteredMovies.forEach((movie) => {
+          const schedules = movie.schedules[date] || [];
+          const timeButtons = schedules
+            .map(
+              (schedule) => `
+              <div class="col-3" id="showbutton">
+                <button class="btn btn-outline-primary w-100">${schedule.time}</button>
+                <p1 class="text-muted text-center mt-1" style="font-size: 10px;text-align: center; margin-left:17px">Ghế trống: ${schedule.seats}</p1>
+              </div>`
+            )
+            .join("");
+
+          const movieCard = `
+            <div class="movie-card">
+              <img src="${movie.imgSrc}" alt="${movie.title}" />
+              <div class="card-body">
+                <h5>${movie.title}</h5>
+                <p>Thể loại: ${movie.genre}</p>
+                <p>Thời Lượng: ${movie.duration}</p>
+                <div class="schedule">${timeButtons}</div>
+              </div>
+              
+            </div>`;
+          movieList.insertAdjacentHTML("beforeend", movieCard);
+        });
+      }
+
+      // Initialize date tabs and default movie list
+      createDateTabs();
+      const defaultDate = new Date().toISOString().split("T")[0];
+      renderMovies(defaultDate);
+
+      // Event handler for clicking date tabs
+      dateTabs.addEventListener("click", (event) => {
+        if (event.target.tagName === "A") {
+          event.preventDefault();
+          const selectedDate = event.target.getAttribute("data-date");
+          renderMovies(selectedDate);
+          document.querySelectorAll(".nav-link").forEach((link) => link.classList.remove("active"));
+          event.target.classList.add("active");
+        }
+      });
+    });
+ 
+
+      //  =============== Gọi footer vào trình bày ==============
+          // Gọi footer.html và chèn vào #footer-container
+          fetch('Footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading menu:', error));
+  </script>
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <script>
+     // ============================= Hiển thị phim mới =====================================
+    
+     $(document).ready(function() {
+    const movie = {
+        title: "Cô Dâu Hào Môn",
+        image_url: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f09%2fbeta%2D400x633%2D133538%2D091024%2D49.png",
+        trailer_url: "https://www.youtube.com/embed/MOt0s0t7LZc"
+    };
+
+    // Thêm phim vào HTML
+    const movieHtml = `
+        <div class="movienew">
+            <img src="${movie.image_url}" alt="${movie.title}" class="movie-poster" data-trailer="${movie.trailer_url}" />
+            <h5>${movie.title}</h5>
+        </div>
+    `;
+    $('#newmovie-container').append(movieHtml);
+
+    // Mở modal khi nhấn vào ảnh
+    $(document).on('click', '.movie-poster', function() {
+        const trailerUrl = $(this).data('trailer');
+        $('#trailerVideo').attr('src', trailerUrl);
+        $('#movieTrailerModal').modal('show');
+    });
+
+    // Dừng video khi đóng modal
+    $('#movieTrailerModal').on('hidden.bs.modal', function () {
+        $('#trailerVideo').attr('src', '');
+    });
+
+    // Thay đổi màu sắc của tab phim mới chiếu
+    $('.tab-films h1').on('click', function() {
+        $('.tab-films h1').removeClass('active');
+        $(this).addClass('active');
+    });
+});
+  </script>
+</body>
+</html>

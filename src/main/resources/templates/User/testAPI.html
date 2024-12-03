@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Details Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .post-details {
+            max-width: 500px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+            display: block;
+        }
+        .form-group .value {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="post-details" id="post-details">
+    <h2>Loading post details...</h2>
+</div>
+
+<script>
+    async function fetchPostDetails() {
+        const postId = '2'; // Static ID for testing
+        const apiUrl = `https://jsonplaceholder.typicode.com/posts/${postId}`;
+
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error(`Network response was not ok. Status: ${response.status}`);
+
+            const post = await response.json();
+            displayPostDetails(post);
+        } catch (error) {
+            document.getElementById('post-details').innerHTML = '<h2>Error loading post details</h2>';
+            console.error('Fetch error:', error);
+        }
+    }
+
+    function displayPostDetails(post) {
+        const postDetailsContainer = document.getElementById('post-details');
+        postDetailsContainer.innerHTML = `
+            <div class="form-group">
+                <label for="postId">Post ID</label>
+                <div class="value" id="postId">${post.id}</div>
+            </div>
+            <div class="form-group">
+                <label for="userId">User ID</label>
+                <div class="value" id="userId">${post.userId}</div>
+            </div>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <div class="value" id="title">${post.title}</div>
+            </div>
+            <div class="form-group">
+                <label for="body">Body</label>
+                <div class="value" id="body">${post.body}</div>
+            </div>
+        `;
+    }
+
+    fetchPostDetails();
+</script>
+
+</body>
+</html>

@@ -22,4 +22,8 @@ public interface ShowtimeRepository extends JpaRepository<Showtime, Long> {
     @Query("SELECT s FROM Showtime s WHERE s.movie.movieId = :movieId")
     List<Showtime> getShowtimeByMovieId(@Param("movieId") Long movieId);
 
+    @Query("SELECT COUNT(bs.seat.seatId) FROM Booking_Seat bs " +
+            "JOIN bs.booking b " +
+            "WHERE b.showtime.showtimeId = :showtimeId")
+    Long countBookedSeatsByShowtime(@Param("showtimeId") Long showtimeId);
 }

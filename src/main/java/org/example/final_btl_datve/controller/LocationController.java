@@ -35,4 +35,10 @@ public class LocationController {
         locationService.delete(id);
         return ResponseEntity.ok("Xóa địa điểm thành công");
     }
+
+    // Lấy danh sách cá rạp theo địa điểm
+    @GetMapping("/{locationID}/cinemas")
+    public ResponseEntity<?> getCinemaByLocation(@PathVariable Long locationID) throws Exception{
+        return ResponseEntity.ok().body(locationService.getCinemaByLocation(locationID));
+    }
 }

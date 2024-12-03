@@ -14,4 +14,7 @@ public interface LocationService {
     LocationDto read(Long locationId) throws Exception;
     LocationDto update(Long locationId, LocationDto locationDto) throws Exception;
     void delete(Long locationId) throws Exception;
+
+    //Other
+    List<CinemaDto> getCinemaByLocation(Long locationId) throws Exception;
 }

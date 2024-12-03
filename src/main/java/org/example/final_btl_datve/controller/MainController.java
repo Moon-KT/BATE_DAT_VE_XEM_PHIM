@@ -12,75 +12,72 @@ import java.security.Principal;
 public class MainController {
     @GetMapping("/login")
     public String login() {
-        return "/login";
+        return "Admin/login";
     }
 
     @GetMapping("/home")
     public String home() {
-        return "/index";
+        return "Admin/index";
     }
 
     @GetMapping("forget-password")
     public String forgetPassword() {
-        return "/forget-password";
+        return "Admin/forget-password";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "/login";
+        return "Admin/login";
     }
 
     @GetMapping("/user")
     public String user() {
-        return "/user";
+        return "Admin/user";
     }
 
     @GetMapping("/movie")
     public String movie() {
-        return "/movie";
-    }
-
-    @GetMapping("/test")
-    public String test() {
-        return "/test";
+        return "Admin/movie";
     }
 
     @GetMapping("/ticket")
     public String ticket() {
-        return "/ticket";
+        return "Admin/ticket";
     }
 
     @GetMapping("/cinema")
     public String cinema() {
-        return "/cinema";
+        return "Admin/cinema";
     }
 
     @GetMapping("/room")
     public String room() {
-        return "/room";
+        return "Admin/room";
     }
 
     @GetMapping("/showtime")
     public String showtime() {
-        return "/showtime";
+        return "Admin/showtime";
     }
 
     @GetMapping("/gift")
     public String gift() {
-        return "/gift";
+        return "Admin/gift";
     }
 
     @GetMapping("/total")
     public String total() {
-        return "/total";
+        return "Admin/total";
     }
+
+
     // Kiem tra nguoi dung va phan quyen hien tai
     @GetMapping("/auth")
     public String auth(Model model, Principal principal, Authentication authentication) {
         String userName = principal.getName();
         model.addAttribute("userInfo", userName);
         model.addAttribute("userRole", authentication.getAuthorities());
-        return "/auth";
+        return "Admin/auth";
     }
 }

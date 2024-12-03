@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cinema Payment</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .movie-poster {
+      width: 200px;
+      border-radius: 10px;
+      margin-left: 50px;
+    }
+    .information-movie .information{
+      font-size: 16px;
+      margin-left: 50px;
+    }
+    .information-movie button{
+      margin-left: 20px;
+    }
+    .divider {
+      border: none;
+      border-top: 2px dashed gray; /* Đường kẻ nét đứt */
+      margin: 5px 0;
+    }
+
+    .combo-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+    }
+
+    .btn-quantity {
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      border-radius: 50%;
+      background-color: #dc3545;
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn-quantity:hover {
+      background-color: #c82333;
+    }
+
+    .combo-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .combo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .combo-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .combo-info img {
+      margin-right: 10px;
+    }
+    .combo-info p{
+      margin-left: 160px;
+    }
+
+    .combo-buttons span {
+      margin: 0 5px;
+    }
+
+    .payment-methods {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .payment-methods div {
+      text-align: center;
+    }
+
+    .payment-methods img {
+      max-width: 50px;
+      margin-bottom: 5px;
+    }
+
+    .payment-methods label {
+      display: block;
+      margin-top: 5px;
+    }
+
+    .total-payment {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #dc3545;
+    }
+    .container{
+      display: flex;
+    }
+    .container .movie-container{
+      width: 400px;
+
+    }
+    /* Box lớn */
+    #boxLarge {
+      width: 300px;
+      height: 1600px;
+      border: 2px solid white;
+      position: relative;
+      border: none;
+    }
+
+    /* Box nhỏ */
+    #boxSmall {
+      width: 100%;
+      height: 720px;
+      background-color: rgb(181, 230, 247);
+      position: absolute;
+      top: 0; /* Ban đầu ở đầu box lớn */
+      left: 0;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="menu-container"></div>
+
+  <div class="container d-flex">
+    <div class="movie-container " id="boxLarge">
+      <div class="movie-run" id="boxSmall">
+     <!-- =================================Thông tin phim ================================ -->
+          <div class="information-movie">
+          <img src="https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f09%2fbeta%2D400x633%2D133538%2D091024%2D49.png" class="movie-poster">
+          <div class="information">
+          <h4 style="font-weight: bold; margin-top: 5px;"> Cô Dâu Hào Môn</h4>
+                <p>Thể loại: Hành động</p>
+                <p>Thời lượng: 120 phút</p>
+          </div>
+                <hr class="divider">
+          <div class="information">
+                <p>Rạp: Beta Cinema</p>
+                <p>Ngày chiếu: 30/12/2024</p>
+                <p>Giờ chiếu: 12:30</p>
+                <p>Phòng chiếu: 1</p>
+              <p>Số ghế đã chọn: <span id="selectedSeats">A1,A2</span></p>
+          </div>
+          <button style="margin-left: 48px;" type="button" class="btn btn-secondary" id="backseat">Quay lại</button>
+          <button type="button" class="btn btn-primary" id="btnThanhtoan">Tiếp Tục</button>
+          </div>
+      
+        </div>
+    </div>
+    
+
+    <!-- ========================Box thông tin thanh toán =========================== -->
+    <div class="pay-container border border-dark p-3">
+        <!-- Thông tin thanh toán -->
+        <div class="col-md-6">
+          <div class="d-flex">
+          <img src="https://betacinemas.vn/Assets/global/img/booking/ic-inforpayment.png" width="50px" height="50px">
+          <h3 style="margin-top: 10px; margin-left: 7px;">Thông tin thanh toán</h3>
+          </div>
+          <p style="margin-top: 10px;"><strong>Họ và tên:</strong> Bùi Thị Kiều Trang</p>
+          <p><strong>Số điện thoại:</strong> 0987654321</p>
+          <p><strong>Gmail:</strong> kieutrangciute@gmail.com</p>
+          <p><strong>Ghế Vip:</strong> <span id="seatPrice"> 3 x 50000</span> VND</p>
+          <p><strong>Tổng tiền ghế:</strong> <span id="totalSeatPrice">150000</span> VND</p>
+        </div>
+        <hr>
+      
+
+      <!-- Combo ưu đãi -->
+      <div class="combo-container">
+        <div class="d-flex">
+          <img src="https://betacinemas.vn/Assets/global/img/booking/ic-combo.png" width="50px" height="50px">
+          <h3 style="margin-top: 10px; margin-left: 10px;">COMBO ƯU ĐÃI</h3>
+          </div>
+        <div class="d-flex">
+          <div style="margin-left: 200px;font-weight: bold;">Tên ComBo</div>
+          <div style="margin-left: 200px;font-weight: bold;">Mô Tả</div>
+          <div style="margin-left: 200px;font-weight: bold;">Số Lượng</div>
+        </div>
+        <hr>
+        <div id="comboList"></div>
+      </div>
+      <hr>
+
+      <!-- Tổng tiền -->
+       <!-- ===========================Mã khuyến mãi============================ -->
+      <div class="mt-4">
+        <div class="d-flex">
+          <img src="https://betacinemas.vn/Assets/global/img/booking/ic-payment.png" width="70px" height="50px">
+          <h3 style="margin-top: 10px; margin-left: 10px;">GIẢM GIÁ</h3>
+          </div>
+        <h5 style="margin-top: 3px;">Voucher Beta</h5>
+        <input type="text" id="promoCode" class="form-control mb-2" placeholder="Nhập mã khuyến mãi" />
+        <button type="button" class="btn btn-primary" onclick="applyPromoCode()">Áp dụng</button>
+        <hr>
+        <h5 id="betaPointsToggle" style="margin-top: 5px;">Điểm Beta</h5>
+        <div id="betaPointsDetails" class="hidden">
+          <p>Số điểm hiện có: <span id="currentPoints">500</span></p>
+          <label for="pointsInput">Nhập số điểm cần đổi:</label>
+          <input type="number" id="pointsInput" min="0">
+          <button onclick="convertPoints()">Đổi</button>
+          <p id="errorMessage" class="error hidden"></p>
+          <p id="resultMessage" class="result hidden"></p>
+        </div>
+        <p class="mt-3"><strong id="appliedDiscount" class="result hidden">Số tiền giảm: 0 VND</p>
+        <hr>
+        <p class="total-payment">
+          Tổng thanh toán: <span id="finalTotal">150000</span> VND
+        </p>
+      </div>
+
+      <!-- Phương thức thanh toán -->
+      <div class="mt-4">
+        <h5>Chọn phương thức thanh toán</h5>
+        <div class="payment-methods">
+          <div>
+            <input type="radio" id="bankCard" name="paymentMethod" value="bankCard" checked />
+            <label for="bankCard">
+              <img src="https://icon-library.com/images/visa-icon-vector/visa-icon-vector-16.jpg" alt="Thẻ ngân hàng" />
+              Thẻ ngân hàng
+            </label>
+          </div>
+          <div>
+            <input type="radio" id="zaloPay" name="paymentMethod" value="zaloPay" />
+            <label for="zaloPay">
+              <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-ZaloPay-Square-768x768.png" alt="ZaloPay" />
+              ZaloPay
+            </label>
+          </div>
+          <div>
+            <input type="radio" id="momo" name="paymentMethod" value="momo" />
+            <label for="momo">
+              <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-MoMo-Square.png" alt="MOMO" />
+              MOMO
+            </label>
+          </div>
+          <div>
+            <input type="radio" id="vnPay" name="paymentMethod" value="vnPay" />
+            <label for="vnPay">
+              <img src="https://media.glassdoor.com/sqll/3324319/vnpay-squarelogo-1646214550713.png" alt="VNPay" />
+              VNPay
+            </label>
+          </div>
+        </div>
+      </div>
+      <!-- ======================= Thời gian chạy =============================== -->
+      <div class="d-flex" style="margin-top: 10px;">
+        <p style="font-size: 30px"><strong>Thời gian còn lại:</strong></p>
+        <div id="time" class="time-remaining" style="font-size: 30px;font-weight: bold;margin-left: 10px;">10:00</div>
+    </div>
+      <!-- Submit Button -->
+      <div class="mt-4">
+        <button type="submit" class="btn btn-success w-100">Thanh toán</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="footer-container"></div>
+<!-- =======================================nhúng menu và footer====================== -->
+<script>
+//  =============== Gọi menu vào trình bày ==============
+          // Gọi menu.html và chèn vào #menu-container
+    fetch('menu1.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('menu-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading menu:', error));
+     //  =============== Gọi footer vào trình bày ==============
+          // Gọi footer.html và chèn vào #footer-container
+          fetch('Footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading menu:', error));
+</script>
+  <script>
+    const seatPrice = 50000;
+    const selectedSeats = 3;
+    let discount = 0;
+
+    const combos = [
+      { id: 1, name: "Combo 1", description: "Bắp + Nước", price: 30000, quantity: 0, img: "https://files.betacorp.vn/media/combopackage/2024/08/23/combo-see-me-duoi-ca-01-120352-230824-11.png" },
+      { id: 2, name: "Combo 2", description: "2 Bắp + 2 Nước", price: 40000, quantity: 0, img: "https://files.betacorp.vn/media/combopackage/2024/03/31/combo-online-04-163144-310324-32.png" },
+      { id: 3, name: "Combo 3", description: "Combo gia đình", price: 50000, quantity: 0, img: "https://files.betacorp.vn/media/combopackage/2024/03/31/combo-online-05-163237-310324-21.png" },
+      { id: 1, name: "Combo 1", description: "Bắp + Nước", price: 30000, quantity: 0, img: "https://files.betacorp.vn/media/combopackage/2024/08/23/combo-see-me-duoi-ca-01-120352-230824-11.png" },
+      { id: 2, name: "Combo 2", description: "2 Bắp + 2 Nước", price: 40000, quantity: 0, img: "https://files.betacorp.vn/media/combopackage/2024/03/31/combo-online-04-163144-310324-32.png" },
+      { id: 3, name: "Combo 3", description: "Combo gia đình", price: 50000, quantity: 0, img: "https://files.betacorp.vn/media/combopackage/2024/03/31/combo-online-05-163237-310324-21.png" },
+    ];
+
+    function renderCombos() {
+      const comboList = document.getElementById("comboList");
+      comboList.innerHTML = "";
+      combos.forEach((combo) => {
+        const comboItem = document.createElement("div");
+        comboItem.className = "combo-item";
+        comboItem.innerHTML = `
+          <div class="combo-info">
+            <img src="${combo.img}" alt="${combo.name}" class="combo-image" />
+            <div class="d-flex">
+              <p>${combo.name}</p>
+              <p>${combo.description}</p>
+            </div>
+          </div>
+          <div class="combo-buttons">
+            <span class="btn btn-primary" onclick="updateCombo(${combo.id}, -1)">-</span>
+            <span id="combo${combo.id}Quantity">${combo.quantity}</span>
+            <span class="btn btn-primary" onclick="updateCombo(${combo.id}, 1)">+</span>
+          </div>
+         
+        `;
+        comboList.appendChild(comboItem);
+      });
+      updateTotal();
+    }
+
+    function updateCombo(id, change) {
+      const combo = combos.find((c) => c.id === id);
+      if (combo.quantity + change >= 0) {
+        combo.quantity += change;
+        document.getElementById(`combo${id}Quantity`).textContent = combo.quantity;
+        updateTotal();
+      }
+    }
+
+    function updateTotal() {
+      const totalSeatPrice = seatPrice * selectedSeats;
+      const totalComboPrice = combos.reduce((sum, combo) => sum + combo.price * combo.quantity, 0);
+      const finalTotal = totalSeatPrice + totalComboPrice - discount;
+      document.getElementById("totalSeatPrice").textContent = totalSeatPrice;
+      document.getElementById("finalTotal").textContent = finalTotal;
+    }
+
+    function applyPromoCode() {
+      const promoCode = document.getElementById("promoCode").value.trim();
+      if (promoCode === "SAVE10") {
+        discount = 10000;
+        document.getElementById("discount").textContent = discount;
+      } else {
+        discount = 0;
+        document.getElementById("discount").textContent = discount;
+      }
+      updateTotal();
+    }
+
+    renderCombos();
+  </script>
+  <script>
+    const boxLarge = document.getElementById('boxLarge');
+    const boxSmall = document.getElementById('boxSmall');
+
+    window.addEventListener('scroll', () => {
+      const boxTop = boxLarge.offsetTop; // Vị trí của box lớn so với trang
+      const scrollY = window.scrollY; // Vị trí cuộn của trang
+      const maxScroll = boxLarge.offsetHeight - boxSmall.offsetHeight; // Phạm vi cuộn của box nhỏ
+
+      // Tính toán vị trí mới cho box nhỏ
+      let newTop = scrollY - boxTop;
+
+      // Đảm bảo box nhỏ không vượt quá phạm vi của box lớn
+      if (newTop < 0) newTop = 0;
+      if (newTop > maxScroll) newTop = maxScroll;
+
+      // Cập nhật vị trí box nhỏ
+      boxSmall.style.top = newTop + 'px';
+    });
+  </script>
+  <!-- ====================================== Xử lý điểm beta ============================== -->
+  <script>
+    let currentPoints = 500; // Điểm beta hiện có
+    const conversionRate = 1000; // 10 điểm = 1 nghìn đồng
+    let totalPrice = 150000; // Tổng tiền ban đầu (150000 triệu đồng)== số tiền mua vé nha 
+
+    // Toggle hiển thị chi tiết beta points
+    document.getElementById("betaPointsToggle").addEventListener("click", () => {
+        const details = document.getElementById("betaPointsDetails");
+        details.classList.toggle("hidden");
+    });
+
+    function convertPoints() {
+        const pointsInput = parseInt(document.getElementById("pointsInput").value);
+        const errorMessage = document.getElementById("errorMessage");
+        const resultMessage = document.getElementById("resultMessage");
+        const appliedDiscount = document.getElementById("appliedDiscount");
+        const totalPriceElement = document.getElementById("finalTotal");
+
+        // Ẩn lỗi và kết quả cũ
+        errorMessage.classList.add("hidden");
+        resultMessage.classList.add("hidden");
+        appliedDiscount.classList.add("hidden");
+
+        if (isNaN(pointsInput) || pointsInput <= 0) {
+            errorMessage.textContent = "Vui lòng nhập số điểm hợp lệ.";
+            errorMessage.classList.remove("hidden");
+            return;
+        }
+
+        if (pointsInput > currentPoints) {
+            errorMessage.textContent = "Số điểm nhập vượt quá số điểm hiện có.";
+            errorMessage.classList.remove("hidden");
+            return;
+        }
+
+        // Tính số tiền giảm (10 điểm = 1 nghìn đồng)
+        const money = Math.floor(pointsInput / 10) * conversionRate;
+
+        // Cập nhật số điểm và tổng tiền
+        currentPoints -= pointsInput;
+        totalPrice -= money;
+
+        // Hiển thị kết quả
+        resultMessage.textContent = `Bạn đã sử dụng ${pointsInput} điểm.`;
+        resultMessage.classList.remove("hidden");
+        appliedDiscount.textContent = `Số tiền giảm: ${money.toLocaleString()} VNĐ`;
+        appliedDiscount.classList.remove("hidden");
+        totalPriceElement.textContent = totalPrice.toLocaleString();
+
+        // Cập nhật điểm còn lại
+        document.getElementById("currentPoints").textContent = currentPoints;
+    }
+</script>
+<!-- ============================== Xử lý đồng hồ================================ -->
+<script>
+  // Tổng thời gian: 10 phút (600 giây)
+  let totalTime = 600;
+
+  // Hàm cập nhật bộ đếm ngược
+  function updateTimer() {
+    const minutes = Math.floor(totalTime / 60);
+    const seconds = totalTime % 60;
+
+    // Hiển thị thời gian ở định dạng MM:SS
+    document.getElementById('time').textContent = 
+      `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    // Giảm thời gian
+    totalTime--;
+
+    // Khi thời gian về 0, chuyển hướng sang trang gui.html
+    if (totalTime < 0) {
+      clearInterval(timerInterval);
+      window.location.href = "GuiBetaCinema.html"; // Chuyển hướng
+    }
+  }
+
+  // Thiết lập interval để gọi hàm mỗi giây
+  const timerInterval = setInterval(updateTimer, 1000);
+
+  // Gọi hàm ngay khi trang tải để cập nhật lần đầu
+  updateTimer();
+</script>
+<!-- ================================ quay lại trang chọn ghế ============================ -->
+<script>
+  document.getElementById("backseat").addEventListener("click", () => {
+    
+        window.location.href = "seat.html"; // Chuyển sang trang thanh toán
+   
+    });
+</script>
+</body>
+</html>

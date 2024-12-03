@@ -11,7 +11,7 @@
 <body>
 
 <!-- =============== Navigation ================ -->
-<div th:replace="~{navMenu:: navbar}"></div>
+<div th:replace="~{Admin/navMenu:: navbar}"></div>
 
 <!-- ========================= Main ==================== -->
 <div id="dashboard" class="content active">
@@ -138,12 +138,12 @@
         showContent('dashboard');
     };
 </script>
-<script th:src="@{/assets/js/test.js}"></script>
+<script th:src="@{/assets/js/adminJS/index.js}"></script>
 
 
 <!-- ====== chart JS ======= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
-<script th:src="@{/assets/js/chartsJS.js}"></script>
+<script th:src="@{/assets/js/adminJS/chartsJS.js}"></script>
 <!-- ====== ionicons ======= -->
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

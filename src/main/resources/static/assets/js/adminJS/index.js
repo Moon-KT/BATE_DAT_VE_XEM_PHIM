@@ -146,7 +146,7 @@
 
                 // // Tạo và thêm cột Số lượng vé
                 const seatCell = document.createElement("td");
-                seatCell.textContent = item[3];  // Số lượng vé đã đặt
+                seatCell.textContent = item[5];  // Số lượng vé đã đặt
                 row.appendChild(seatCell);
 
                 // Thêm dòng vào bảng

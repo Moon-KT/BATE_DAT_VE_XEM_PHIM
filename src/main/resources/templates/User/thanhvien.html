@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Thông Tin Tài Khoản</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .main-menu{
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 30px;
+            margin-left: 10%;
+        }
+
+        .main-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            background-color: #007bff;
+        }
+
+        .main-menu li {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white;
+            text-align: center;
+            flex: 1;
+            border-right: 1px solid #0056b3;
+        }
+
+        .main-menu li:last-child {
+            border-right: none;
+        }
+
+        .main-menu li.active, .main-menu li:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        .content {
+            display: none;
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            flex: 1;
+            margin-right: 15px;
+            margin-left: 15px;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .form-group input, .form-group select {
+            flex: 2;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #495057;
+        }
+
+        .form-group img {
+            margin-left: -50%;
+            max-width: 120px;
+            height: 120px;
+            border-radius: 5px;
+            border: 2px solid #007bff;
+        }
+        .form-group #avatar-input{
+          margin-top: -100px;
+          margin-left:20px;
+        }
+
+        .form-group button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #success-message, #error-message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: none;
+        }
+
+        #success-message {
+            color: green;
+        }
+
+        #error-message {
+            color: red;
+        }
+      
+    </style>
+</head>
+<body>
+    <div id="menu-container"></div>
+    
+    <div class="main-menu">
+        <ul>
+            <li class="active" data-tab="account-info">Thông tin tài khoản</li>
+            <li data-tab="membership-card">Thẻ thành viên</li>
+            <li data-tab="movie-journey">Hành trình điện ảnh</li>
+            <li data-tab="points">Điểm hội viên</li>
+            <li data-tab="voucher">Voucher</li>
+        </ul>
+    </div>
+
+    <!-- Nội dung của Thông tin tài khoản -->
+    <div class="content active" id="account-info">
+        <h2>Thông Tin Tài Khoản</h2>
+        <form id="account-form">
+            <div class="form-group">
+                <label>Ảnh đại diện</label>
+                <div>
+                    <img src="img/avt.jpg" id="avatar-preview" alt="Avatar">
+                    <input type="file" id="avatar-input" accept="image/*">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="fullname">Họ và Tên</label>
+                <input type="text" id="fullname" value="Nguyễn Văn A">
+                <label for="email">Email</label>
+                <input type="email" id="email" value="nguyenvana@gmail.com" readonly>
+            </div>
+            <div class="form-group">
+                <label for="phone">Số điện thoại</label>
+                <input type="tel" id="phone" value="0123456789">
+                <label for="dob">Ngày sinh</label>
+                <input type="date" id="dob" value="1990-01-01">
+            </div>
+            <div class="form-group">
+                <label for="city">Tỉnh/Thành phố</label>
+                <select id="city">
+                    <option value="Hà Nội" selected>Hà Nội</option>
+                    <option value="TP Hồ Chí Minh">TP Hồ Chí Minh</option>
+                    <option value="Đà Nẵng">Đà Nẵng</option>
+                </select>
+                <label for="district">Quận/Huyện</label>
+                <select id="district">
+                    <option value="">Chọn quận/huyện</option>
+                    <option value="Ba Đình">Ba Đình</option>
+                    <option value="Hoàn Kiếm">Hoàn Kiếm</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="address">Địa chỉ</label>
+                <input type="text" id="address" value="123 Đường ABC, Hà Nội">
+                <label for="gender">Giới tính</label>
+                <select id="gender">
+                    <option value="Nam" selected>Nam</option>
+                    <option value="Nữ">Nữ</option>
+                    <option value="Khác">Khác</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Đổi mật khẩu: Liên hệ hỗ trợ để thay đổi.</label>
+            </div>
+            <button type="button" id="save-button">Lưu Thông Tin</button>
+        </form>
+        <p id="success-message">Lưu thông tin thành công!</p>
+        <p id="error-message">Vui lòng nhập đầy đủ thông tin!</p>
+    </div>
+
+    <!-- =====================Nội dung Thẻ thành viên=========================  -->
+    <div class="content" id="membership-card">
+        <h2>Thẻ Thành Viên</h2>
+        <table class="table table-bordered">
+            <tr>
+                <th>SỐ THẺ</th>
+                <th>HẠNG THẺ</th>
+                <th>NGÀY KÍCH HOẠT</th>
+                <th>TỔNG CHI TIÊU</th>
+                <th>ĐIỂM TÍCH LŨY</th>
+                <th>ĐIỂM ĐÃ TIÊU</th>
+                <th>ĐIỂM KHẢ DỤNG</th>
+                <th>ĐIỂM SẮP HẾT HẠN</th>
+                <th>NGÀY HẾT HẠN</th>
+            </tr>
+            <tr>
+                <td>15088505</td>
+                <td>Khách hàng<br>STANDARD</td>
+                <td>10/10/2024</td>
+                <td>00 đ</td>
+                <td>00</td>
+                <td>00</td>
+                <td>00</td>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </table>
+        <!-- ================= 3 triệu là số liệu với người chưa mua j nếu đã mua sẽ hiển thị số tiền 3tr - đi money đã mua==== -->
+        <h4 style="font-weight: bold;text-align: center;"> Bạn cần thêm 3.000.000 đ để nâng hạng Khách hàng VIP </h4>
+    </div>
+<!-- ============================== Lịch sử mua vé ===================================== -->
+    <div class="content" id="movie-journey">
+        <h2>Hành Trình Điện Ảnh</h2>
+        <table class="table table-bordered" id="orderTable">
+            <thead>
+                <tr>
+                    <th>MÃ HÓA ĐƠN</th>
+                    <th>PHIM</th>
+                    <th>RẠP CHIẾU</th>
+                    <th>SUẤT CHIẾU</th>
+                    <th>GHẾ ĐÃ ĐẶT</th>
+                    <th>COMBO/PACKAGE</th>
+                    <th>NGÀY ĐẶT</th>
+                    <th>ĐIỂM</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dữ liệu sẽ được thêm vào đây thông qua JS -->
+            </tbody>
+        </table>
+    </div>
+<!-- =================================== tab điểm hội viên nhaa====================== -->
+    <div class="content" id="points">
+        <h2>Điểm Hội Viên</h2>
+        <h4> TỔNG QUAN</h4>
+        <table class="table table-borderless w-50">
+            <tr>
+                <th>Điểm đã tích lũy</th>
+                <td> 00 điểm</td>
+            </tr>
+            <tr>
+                <th>Điểm đã sử dụng</th>
+                <td> 00 điểm</td>
+            </tr>
+            <tr>
+                <th>Điểm hiện có</th>
+                <td> 00 điểm</td>
+            </tr>
+            <tr>
+                <th>Điểm sắp hết hạn</th>
+                <td> 00 điểm</td>
+            </tr>
+        </table>
+        <h4> LỊCH SỬ ĐIỂM </h4>
+        <table class="table table-bordered">
+            <tr>
+                <th>THỜI GIAN</th>
+                <th>SỐ ĐIỂM</th>
+                <th>NỘI DUNG SỬ DỤNG</th>
+            </tr>
+            <tr>
+                <td>12/11/2024</td>
+                <td>120 điểm</td>
+                <td>sử dụng mua bỏng ngô và cà phê </td>
+            </tr>
+
+        </table>
+    </div>
+<!-- ============================ tab Voucher nhé ===================== -->
+    <div class="content" id="voucher">
+        <h2>Voucher</h2>
+        <h4>VOUCHER CỦA TÔI</h4>
+        <table class="table table-bordered">
+            <tr>
+                <th>MÃ VOUCHER</th>
+                <th>NỘI DUNG VOUCHER</th>
+                <th>LOẠI VOUCHER</th>
+                <th>NGÀY HẾT HẠN</th>
+                <th>THAO TÁC</th>
+            </tr>
+            <tr>
+                <td>KM001</td>
+                <td>GIẢM 20% KHI TỔNG THANH TOÁN TRÊN 3.000.000 đ</td>
+                <td>GIẢM GIÁ</td>
+                <td>30/12/2024</td>
+                <td><button class="btn btn-info">Sử dụng</button></td>
+            </tr>
+        </table>
+        <h4>LỊCH SỬ VOUCHER</h4>
+        <table class="table table-bordered">
+            <tr>
+                <th>THỜI GIAN</th>
+                <th>MÃ VOUCHER</th>
+                <th>NỘI DUNG VOUCHER</th>
+                <th>TRẠNG THÁI</th>
+            </tr>
+            <tr>
+                <td>15/11/2024</td>
+                <td>KM004</td>
+                <td>GIẢM 20% KHI MUA COMBO HỦY DIỆT</td>
+                <td><button class="btn btn-warning"> HẾT HẠN </button></td>
+            </tr>
+            <tr>
+                <td>12/11/2024</td>
+                <td>KM005</td>
+                <td>GIẢM 20% KHI MUA COMBO ĂN NO PHIM HẾT</td>
+                <td><button class="btn btn-warning"> ĐÃ SỬ DỤNG </button></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="footer-container"></div>
+    <script>
+          //  =============== Gọi menu vào trình bày ==============
+          // Gọi menu.html và chèn vào #menu-container
+    fetch('menu1.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('menu-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading menu:', error));
+
+        // Chuyển đổi nội dung theo tab menu
+        const menuItems = document.querySelectorAll('.main-menu li');
+        const contents = document.querySelectorAll('.content');
+
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                menuItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                contents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === item.dataset.tab) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // ================ Hiển thị ảnh mới lên khung===============
+        const imageInput = document.getElementById('avatar-input');
+        const imagePreview = document.getElementById('avatar-preview');
+
+        imageInput.addEventListener('change', () => {
+            const file = imageInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Kiểm tra dữ liệu và lưu thông tin
+        const saveButton = document.getElementById('save-button');
+        const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+
+        saveButton.addEventListener('click', () => {
+            const fields = [
+                document.getElementById('fullname').value.trim(),
+                document.getElementById('phone').value.trim(),
+                document.getElementById('dob').value.trim(),
+                document.getElementById('city').value.trim(),
+                document.getElementById('district').value.trim(),
+                document.getElementById('gender').value.trim()
+            ];
+
+            if (fields.every(field => field)) {
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+            } else {
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        // ==================== code fake dữ liệu và hiển thị tương ứng lịch sử mua vé ==================
+         // Dữ liệu giả sẽ được tạo ra và hiển thị
+         const orderData = [
+            {
+                maHoaDon: 'HD12345',
+                phim: 'Avengers: Endgame',
+                rapChieu: 'Rạp CGV Landmark 81',
+                suatChieu: '14:30 - 23/11/2024',
+                gheDat: 'A10, A11',
+                comboPackage: 'Combo 2 Bắp + 2 Nước',
+                ngayDat: '20/11/2024',
+                diem: 100
+            },
+            {
+                maHoaDon: 'HD12346',
+                phim: 'Avatar 2',
+                rapChieu: 'Rạp BHD Star Vincom',
+                suatChieu: '16:00 - 21/11/2024',
+                gheDat: 'B5, B6, B7',
+                comboPackage: 'Package Siêu Tiết Kiệm',
+                ngayDat: '18/11/2024',
+                diem: 80
+            },
+            {
+                maHoaDon: 'HD12347',
+                phim: 'John Wick: Chapter 4',
+                rapChieu: 'Rạp Lotte Cinema Thủ Đức',
+                suatChieu: '19:00 - 20/11/2024',
+                gheDat: 'C1',
+                comboPackage: 'Combo Bắp Caramel',
+                ngayDat: '17/11/2024',
+                diem: 50
+            },
+            {
+                maHoaDon: 'HD12348',
+                phim: 'Fast X',
+                rapChieu: 'Rạp Galaxy Nguyễn Du',
+                suatChieu: '21:00 - 18/11/2024',
+                gheDat: 'D12, D13',
+                comboPackage: 'Combo Gia Đình',
+                ngayDat: '15/11/2024',
+                diem: 120
+            }
+        ];
+
+        // Hàm để thêm dữ liệu vào bảng
+        function displayOrders() {
+            const tbody = document.querySelector('#orderTable tbody');
+            tbody.innerHTML = ''; // Xóa dữ liệu cũ
+
+            orderData.forEach(order => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${order.maHoaDon}</td>
+                    <td>${order.phim}</td>
+                    <td>${order.rapChieu}</td>
+                    <td>${order.suatChieu}</td>
+                    <td>${order.gheDat}</td>
+                    <td>${order.comboPackage}</td>
+                    <td>${order.ngayDat}</td>
+                    <td>${order.diem}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // Gọi hàm khi trang tải
+        displayOrders();
+
+        //  =============== Gọi footer vào trình bày ==============
+          // Gọi footer.html và chèn vào #footer-container
+          fetch('Footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading menu:', error));
+    </script>
+</body>
+</html>

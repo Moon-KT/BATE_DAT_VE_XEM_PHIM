@@ -169,7 +169,7 @@ body {
 
 .search-form {
     max-width: 600px;
-    margin-top: 0px;
+    margin-top: 15px;
     padding: 0px;
     background: #fff;
     /*box-shadow:4px 4px 8px rgba(0, 0, 0, 0.3);*/
@@ -206,7 +206,7 @@ h2 {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 table th, table td {
@@ -227,32 +227,6 @@ table tbody tr:nth-child(even) {
 table tbody tr:hover {
     background-color: #f1f1f1;
 }
-
-/*button {*/
-/*    padding: 5px 10px;*/
-/*    font-size: 14px;*/
-/*    border: none;*/
-/*    border-radius: 4px;*/
-/*    cursor: pointer;*/
-/*}*/
-
-/*button.edit {*/
-/*    background-color: #ffc107;*/
-/*    color: white;*/
-/*}*/
-
-/*button.delete {*/
-/*    background-color: #dc3545;*/
-/*    color: white;*/
-/*}*/
-
-/*button.edit:hover {*/
-/*    background-color: #e0a800;*/
-/*}*/
-
-/*button.delete:hover {*/
-/*    background-color: #c82333;*/
-/*}*/
 
 table {
     margin-left: 10px;

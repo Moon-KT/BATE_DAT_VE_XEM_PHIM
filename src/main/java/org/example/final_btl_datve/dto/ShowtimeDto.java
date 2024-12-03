@@ -16,4 +16,5 @@ public class ShowtimeDto {
     private LocalDateTime startTime;
     private Long roomId;
     private Long movieId;
+    private Long emptySeats;
 }

@@ -20,6 +20,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/verify-email")
+    public ResponseEntity<String> verifyEmail(@RequestParam String email, @RequestParam String verificationCode) {
+        String result = authService.verifyEmail(email, verificationCode);
+        return ResponseEntity.ok(result);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDTO) {
         String result = authService.login(loginDTO.getEmail(), loginDTO.getPassword());

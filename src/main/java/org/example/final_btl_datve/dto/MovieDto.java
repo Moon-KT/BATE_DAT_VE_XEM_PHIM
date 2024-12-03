@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.final_btl_datve.entity.Genre;
 import org.example.final_btl_datve.entity.Movie_Genre;
 import org.example.final_btl_datve.entity.Showtime;
 
@@ -29,8 +30,7 @@ public class MovieDto {
     private String movieLanguage;
     private Long movieViews;
     private Integer movieRated;
-    @JsonIgnore
-    private List<Showtime> showtimeList;
-    @JsonIgnore
-    private List<Movie_Genre> movie_genreList;
+
+    private List<ShowtimeDto> showtimeList;
+    private List<GenreDto> genreList;
 }

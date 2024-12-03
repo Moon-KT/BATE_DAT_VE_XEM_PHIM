@@ -109,6 +109,13 @@ public class ShowtimeServiceImpl implements ShowtimeService {
 //    }
 
     @Override
+    public String getRoomByShowtimeId(Long showtimeId) throws Exception {
+        return showtimeRepository.findById(showtimeId)
+                .map(showtime -> showtime.getRoom().getRoomName())
+                .orElseThrow(() -> new Exception("Không tìm thấy phòng chiếu cho suất chiếu có ID: " + showtimeId));
+    }
+
+    @Override
     public List<ShowtimeDto> search(String keyword) throws Exception {
         return showtimeRepository.findAll().stream()
                 .filter(showtime -> showtime.getMovie().getMovieName().toLowerCase().contains(keyword.toLowerCase()))

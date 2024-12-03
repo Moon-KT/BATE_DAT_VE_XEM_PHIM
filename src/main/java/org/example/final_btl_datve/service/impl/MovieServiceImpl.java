@@ -1,17 +1,8 @@
 package org.example.final_btl_datve.service.impl;
 
-import org.example.final_btl_datve.dto.MovieComboRequest;
-import org.example.final_btl_datve.dto.MovieDto;
-import org.example.final_btl_datve.dto.MovieViewData;
-import org.example.final_btl_datve.dto.PromotionDto;
-import org.example.final_btl_datve.entity.Booking;
-import org.example.final_btl_datve.entity.Combo;
-import org.example.final_btl_datve.entity.Movie;
-import org.example.final_btl_datve.entity.Promotion;
-import org.example.final_btl_datve.repository.BookingRepository;
-import org.example.final_btl_datve.repository.ComboRepository;
-import org.example.final_btl_datve.repository.MovieRepository;
-import org.example.final_btl_datve.repository.PromotionRepository;
+import org.example.final_btl_datve.dto.*;
+import org.example.final_btl_datve.entity.*;
+import org.example.final_btl_datve.repository.*;
 import org.example.final_btl_datve.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,13 +17,32 @@ public class MovieServiceImpl implements MovieService {
     private final BookingRepository bookingRepository;
     private final PromotionRepository promotionRepository;
     private final ComboRepository comboRepository;
+    private final ShowtimeRepository showtimeRepository;
 
     @Autowired
-    public MovieServiceImpl(MovieRepository movieRepository, BookingRepository bookingRepository, PromotionRepository promotionRepository, ComboRepository comboRepository) {
+    public MovieServiceImpl(MovieRepository movieRepository, BookingRepository bookingRepository, PromotionRepository promotionRepository, ComboRepository comboRepository, ShowtimeRepository showtimeRepository) {
         this.movieRepository = movieRepository;
         this.bookingRepository = bookingRepository;
         this.promotionRepository = promotionRepository;
         this.comboRepository = comboRepository;
+        this.showtimeRepository = showtimeRepository;
+    }
+
+    public Long getAvailableSeats(Long showtimeId) {
+        // Lấy showtime và phòng chiếu liên quan
+        Showtime showtime = showtimeRepository.findById(showtimeId)
+                .orElseThrow(() -> new RuntimeException("Showtime not found"));
+        ScreeningRoom room = showtime.getRoom();
+
+        // Tổng số ghế trong phòng
+        Integer totalSeats = room.getSeatList().size();
+        System.out.println("Total seats: " + totalSeats);
+
+        // Số ghế đã được đặt
+        Long bookedSeats = showtimeRepository.countBookedSeatsByShowtime(showtimeId);
+
+        // Tính số ghế trống
+        return totalSeats - bookedSeats;
     }
 
     private MovieDto convertToDto(Movie movie){
@@ -48,9 +58,24 @@ public class MovieServiceImpl implements MovieService {
                 .movieTrailer(movie.getMovieTrailer())
                 .movieReleaseDate(movie.getMovieReleaseDate())
                 .movieRated(movie.getMovieRated())
-                .movie_genreList(movie.getMovie_genreList())
+                .genreList(movieRepository.getGenresbyMovie(movie.getMovieId()).stream()
+                        .map(genre ->
+                                GenreDto.builder()
+                                .genreId(genre.getGenreId())
+                                .genreName(genre.getGenreName())
+                                .build()
+                        ).toList())
                 .movieId(movie.getMovieId())
-                .showtimeList(movie.getShowtimeList())
+                .showtimeList(movieRepository.getShowtimesbyMovie(movie.getMovieId()).stream()
+                        .map(showtime ->
+                                ShowtimeDto.builder()
+                                .showtimeId(showtime.getShowtimeId())
+                                .startTime(showtime.getStartTime())
+                                        .movieId(movie.getMovieId())
+                                        .roomId(showtime.getRoom().getRoomId())
+                                        .emptySeats(getAvailableSeats(showtime.getShowtimeId()))
+                                .build()
+                        ).toList())
                 .movieViews(bookingRepository.findAll().stream()
                         .filter(booking -> booking.getShowtime().getMovie().getMovieId().equals(movie.getMovieId()))
                         .mapToLong(booking -> booking.getBooking_seats().size())
@@ -185,4 +210,6 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDto> getMostViewedMovies() {
         return movieRepository.findMostViewedMovies().stream().map(this::convertToDto).toList();
     }
+
+
 }

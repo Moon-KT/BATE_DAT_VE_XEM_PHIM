@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .build();
     }
 
+    //Tạo admin
     @Override
     public UserDto create (UserDto userDto) throws Exception {
         if(userRepository.findByEmail(userDto.getEmail()) != null) {
@@ -64,6 +65,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return convertToDto(userRepository.save(user));
     }
 
+    // Đọc tất cả người dùng
     @Override
     public List<UserDto> reads () {
         return userRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
@@ -75,6 +77,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         });
     }
 
+    // Cập nhật thông tin người dùng
     @Override
     public UserDto update (Long userID, UserDto userDto) throws Exception {
         User existingUser = userRepository.findById(userID).orElseThrow(() -> {
@@ -92,6 +95,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return convertToDto(userRepository.save(updatedUser));
     }
 
+    // Xóa người dùng
     @Override
     public void delete (Long userID) throws Exception {
         if(!userRepository.existsById(userID)) {
@@ -100,7 +104,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.deleteById(userID);
     }
 
-
+    //
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
@@ -110,11 +114,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user;
     }
 
+    // Tìm kiếm người dùng theo từ khóa
     @Override
     public List<UserDto> search(String keyword) {
         return userRepository.search(keyword).stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
+    // Xem lịch sử đặt vé
     @Override
     public Object getBookingHistory(Long userID) throws Exception {
          return userRepository.getBookingHistory(userID);

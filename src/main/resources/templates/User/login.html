@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snowfall Login</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-image: url('/assets/img/backlog1.jpg'); /* Đảm bảo file tồn tại */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow: hidden;
+            color: white;
+        }
+
+        .snow-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .login-container {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background: #0077cc;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-container button:hover {
+            background: #005fa3;
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            font-size: 1em;
+            color: white;
+            opacity: 0.8;
+            animation: fall 10s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            100% {
+                transform: translateY(100vh) translateX(20px);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="snow-container"></div>
+<div class="login-container">
+    <h2>Login</h2>
+    <form onsubmit="return login()">
+        <label>Email:</label>
+        <input type="text" id="txtLoginName" placeholder="Email" required>
+
+        <label>Password:</label>
+        <input type="password" id="txtPassword" placeholder="Password" required>
+        <button type="submit">Đăng Nhập Tài Khoản</button>
+    </form>
+    <div style="text-align: right;">
+        <a href="#" style="color: white; text-decoration: underline;">Quên mật khẩu?</a>
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+        <a href="sign.html" style="color: white; text-decoration: underline;">Đăng Ký Tài Khoản</a>
+    </div>
+</div>
+<script>
+    function login() {
+        // Fake account data
+        const username = "user123";
+        const password = "password123";
+
+        // Get entered values
+        const enteredUsername = document.getElementById("txtLoginName").value;
+        const enteredPassword = document.getElementById("txtPassword").value;
+
+        // Check credentials
+        if (enteredUsername === username && enteredPassword === password) {
+            window.location.href = "GuiBetaCinema.html"; // Redirect to success page
+        } else {
+            alert("Invalid username or password");
+        }
+        return false; // Prevent default form submission
+    }
+
+    // Snowfall effect
+    const snowContainer = document.querySelector('.snow-container');
+
+    function createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.textContent = '❄';
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+        snowflake.style.animationDuration = Math.random() * 5 + 5 + 's';
+        snowflake.style.opacity = Math.random();
+
+        snowContainer.appendChild(snowflake);
+
+        setTimeout(() => {
+            snowflake.remove();
+        }, 10000);
+    }
+
+    setInterval(createSnowflake, 100);
+</script>
+</body>
+</html>

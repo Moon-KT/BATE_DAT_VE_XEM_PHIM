@@ -16,6 +16,7 @@ public interface ShowtimeService {
     void delete(Long showtimeID) throws Exception;
 
     //Other
+    String getRoomByShowtimeId(Long showtimeId) throws Exception;
     List<Object[]> getShowtimeByMovieName(String movieName);
     List<ShowtimeDto> search(String keyword) throws Exception;
 }

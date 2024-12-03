@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Menu</title>
+    <style>
+         /* Menu cố định ở đầu trang */
+         .navbar {
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: rgb(233, 241, 140);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Căn giữa logo và các mục menu */
+        .navbar-nav {
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        /* Định dạng cho logo */
+        .navbar-brand {
+            padding: 0;
+           margin-right: 20px;
+        }
+        .navbar-brand img {
+            width: 100px;
+        }
+
+        /* Định dạng cho menu items */
+        .nav-link {
+            color: black;
+            font-weight: 500;
+            padding: 15px 20px;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        /* Hiệu ứng khi hover */
+        .nav-link:hover {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #007bff;
+            transition: width .3s;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        button {
+            margin-left: 10px;
+        }
+        .cinema-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+     <!-- Menu với Bootstrap -->
+     <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <!-- Logo -->
+            
+            <!-- Menu toggle button for mobile view -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Menu items -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <div class="navbar-nav">
+                    <a class="navbar-brand" href="#">
+                        <img src="img/logo1.jpg" alt="Logo" width="80px" height="50px" style="border-radius:15px;">
+                    </a>
+                    <!-- Cơ sở dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 30px;">
+                            <span id="betaText">Cơ Sở Beta Cinemas</span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#" data-cinema="Beta Mỹ Đình" data-img="beta_my_dinh.jpg">Beta Mỹ Đình</a></li>
+                            <li><a class="dropdown-item" href="#" data-cinema="Beta Hà Đông" data-img="https://files.betacorp.vn/cms/images/2024/04/03/bang-gia-ve-md-ve-2d-va-3d-1920x2400-1-151421-030424-73.png">Beta Hà Đông</a></li>
+                            <li><a class="dropdown-item" href="#" data-cinema="Beta Bắc Giang" data-img="https://files.betacorp.vn/cms/images/2024/04/03/bang-gia-ve-bg-ve-2d-va-3d-1920x2400-151105-030424-61.png">Beta Bắc Giang</a></li>
+                            <li><a class="dropdown-item" href="#" data-cinema="Beta Thanh Xuân" data-img="beta_thanh_xuan.jpg">Beta Thanh Xuân</a></li>
+                            <li><a class="dropdown-item" href="#" data-cinema="Beta Đông Anh" data-img="beta_dong_anh.jpg">Beta Đông Anh</a></li>
+                        </ul>
+                    </div>
+                    <!-- Lịch Chiếu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="lichchieu.html">Lịch Chiếu</a>
+                    </li>
+                    <!-- Phim -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="movie.html">Phim</a>
+                    </li>
+                    <!-- Rạp -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="locationcinema.html">Rạp</a>
+                    </li>
+                    <!-- Giá Vé -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="Giave.html">Giá Vé</a>
+                    </li>
+                    <!-- Tin Mới -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tin Mới và Ưu Đãi</a>
+                    </li>
+                    <!-- Ưu Đãi -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="thanhtoan.html">Thành Viên</a>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+  <!-- Content -->
+  <div class="container">
+    <div class="text-center mt-4">
+        <h2 id="cinemaTitle">Giá Vé Beta Mỹ Đình</h2>
+        <img id="cinemaImage" src="https://files.betacorp.vn/cms/images/2024/04/03/bang-gia-ve-md-ve-2d-va-3d-1920x2400-1-151421-030424-73.png" alt="Giá vé Beta Mỹ Đình" class="cinema-image">
+    </div>
+</div>
+<hr>
+<div id="footer-container"></div>
+<script>
+    const dropdownItems = document.querySelectorAll(".dropdown-item");
+    const betaText = document.getElementById("betaText");
+    const cinemaTitle = document.getElementById("cinemaTitle");
+    const cinemaImage = document.getElementById("cinemaImage");
+
+    dropdownItems.forEach(item => {
+        item.addEventListener("click", function (event) {
+            event.preventDefault();
+            const cinemaName = item.getAttribute("data-cinema");
+            const cinemaImg = item.getAttribute("data-img");
+
+            betaText.textContent = cinemaName; // Cập nhật text của dropdown
+            cinemaTitle.textContent = "Giá Vé " + cinemaName; // Cập nhật tiêu đề
+            cinemaImage.src = cinemaImg; // Cập nhật hình ảnh
+            cinemaImage.alt = "Giá vé " + cinemaName; // Cập nhật thuộc tính alt
+        });
+    });
+    
+      //  =============== Gọi footer vào trình bày ==============
+          // Gọi footer.html và chèn vào #footer-container
+          fetch('Footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading menu:', error));
+</script>
+</body>
+</html>

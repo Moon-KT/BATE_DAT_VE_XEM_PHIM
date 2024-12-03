@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Detail</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+        .movie-detail-container {
+            margin-top: 10px;
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .movie-detail-img {
+            max-width: 300px;
+            margin-right: 20px;
+        }
+        .time-slots button {
+            margin: 5px;
+        }
+        .movie-trailer{
+            width: 100%;
+            height: 400px;
+            background-color: rgb(76, 76, 81);
+            justify-content: center;
+        }
+        .movie-trailer h4{
+            color:white;
+            text-align: center;
+            font-size: 30px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-top: 5px;
+            margin-bottom: 5px; /* Khoảng cách giữa thẻ h4 và kẻ ngang */
+            padding-top: 20px;
+        }
+
+        .horizontal-line {
+         width: 100%; /* Chiều rộng của kẻ ngang */
+         height: 4px; /* Chiều cao của kẻ ngang */
+          background-color: rgb(29, 126, 211); /* Màu xanh cho kẻ ngang */
+          width: 250px;
+          margin-left: 42%;
+        }
+        .movie-trailer iframe{
+            width: 80%;
+            height: 80%;
+            padding-left: 18%;
+        }
+        .movie-detail-container img{
+            width: 60%;
+            height: 500px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- =======================Nhúng menu vào=========================== -->
+    <div id="menu-container"></div>
+
+    <div id="movieDetail"></div>
+
+    <!-- Modal để hiển thị thông tin khi nhấn vào giờ chiếu -->
+    <div class="modal fade" id="showTimeModal" tabindex="-1" role="dialog" aria-labelledby="showTimeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="showTimeModalLabel">Thông tin chi tiết</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Đóng">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Tên phim:</strong> <span id="movieTitle"></span></p>
+                    <p><strong>Ngày chiếu:</strong> <span id="showDate"></span></p>
+                    <p><strong>Giờ chiếu:</strong> <span id="showTime"></span></p>
+                    <p><strong>Tên rạp:</strong> <span id="cinemaName"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmBooking()">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================================Nhúng footer=================================== -->
+    <div id="footer-container"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    //  =============== Gọi menu vào trình bày ==============
+    // Gọi menu.html và chèn vào #menu-container
+    fetch('menu1.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('menu-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading menu:', error));
+    //  =============== Gọi footer vào trình bày ==============
+    // Gọi footer.html và chèn vào #footer-container
+    fetch('Footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading menu:', error));
+    </script>
+
+    <script>    
+        document.addEventListener("DOMContentLoaded", () => {
+            const movie = {
+                imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f09%2fbeta%2D400x633%2D133538%2D091024%2D49.png",
+                title: "Tên Phim",
+                director: "Đạo diễn A",
+                actors: "Diễn viên A, B, C",
+                genre: "Thể loại XYZ",
+                duration: "120 phút",
+                releaseDate: "2024-12-01",
+                description: "Mô tả phim...",
+                youtubeTrailer: "https://www.youtube.com/embed/am7jfllFOSo",
+            };
+
+            const fakeTimes = ["10:00", "13:00", "16:00", "19:00", "21:30"];
+            const today = new Date();
+            const movieDetailContainer = document.getElementById("movieDetail");
+
+            // Hàm tạo danh sách ngày chiếu
+            function createDateTabs() {
+                let tabsHtml = '<ul class="nav nav-tabs" id="dateTabs">';
+                for (let i = 0; i < 7; i++) {
+                    const currentDate = new Date(today);
+                    currentDate.setDate(today.getDate() + i);
+
+                    const formattedDate = currentDate.toISOString().split("T")[0];
+                    const displayDate = currentDate.toLocaleDateString("vi-VN", {
+                        day: "2-digit",
+                        month: "2-digit",
+                    });
+                    const dayOfWeek = currentDate.toLocaleDateString("vi-VN", {
+                        weekday: "short",
+                    });
+
+                    const activeClass = i === 0 ? "active" : "";
+                    tabsHtml += `
+                        <li class="nav-item">
+                            <a class="nav-link ${activeClass}" data-date="${formattedDate}" href="#">
+                                ${displayDate} (${dayOfWeek})
+                            </a>
+                        </li>`;
+                }
+                tabsHtml += "</ul>";
+                return tabsHtml;
+            }
+
+            // Hàm hiển thị giờ chiếu
+            function createFakeTimeSlots(date) {
+                let timeSlotsHtml = `<h5>Thời gian chiếu cho ngày ${date}:</h5>`;
+                timeSlotsHtml += fakeTimes
+                    .map(
+                        (time) =>
+                            `<button class="btn btn-outline-primary m-1 show-time">${time}</button>`
+                    )
+                    .join("");
+                return timeSlotsHtml;
+            }
+
+            // Hiển thị chi tiết phim
+            function renderMovieDetail() {
+                const tabsHtml = createDateTabs();
+                const initialDate = today.toISOString().split("T")[0];
+                const timeSlotsHtml = createFakeTimeSlots(initialDate);
+
+                movieDetailContainer.innerHTML = `
+                    <div class="movie-detail-container">
+                        <img src="${movie.imgSrc}" class="movie-detail-img" alt="${movie.title}" />
+                        <div class="movie-detail-info">
+                            <h2>${movie.title}</h2>
+                            <p><strong>Đạo diễn:</strong> ${movie.director}</p>
+                            <p><strong>Diễn viên:</strong> ${movie.actors}</p>
+                            <p><strong>Thể loại:</strong> ${movie.genre}</p>
+                            <p><strong>Thời lượng:</strong> ${movie.duration}</p>
+                            <p><strong>Ngày phát hành:</strong> ${movie.releaseDate}</p>
+                            <p><strong>Mô tả:</strong> ${movie.description}</p>
+                            <a href="#" class="btn btn-primary btn-buy-ticket">Mua Vé</a>
+                        </div>
+                    </div>
+                    <div class="timemovie">
+                        <h4>Chọn ngày chiếu</h4>
+                        ${tabsHtml}
+                        <div id="timeSlots" class="time-slots mt-3">
+                            ${timeSlotsHtml}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="movie-trailer">
+                        <h4>GIỚI THIỆU PHIM</h4>
+                        <div class="horizontal-line"></div>
+                        <iframe
+                            src="${movie.youtubeTrailer}"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        ></iframe>
+                    </div>
+                    <hr>
+                `;
+            }
+
+            // Mở popup khi nhấn vào giờ chiếu
+            $(document).on('click', '.show-time', function() {
+                const selectedTime = $(this).text();
+                const selectedDate = $('#dateTabs .nav-link.active').data('date');
+                const cinemaName = "Rạp Beta"; // Có thể thay đổi tên rạp nếu cần
+
+                // Cập nhật thông tin vào modal
+                $('#movieTitle').text(movie.title);
+                $('#showDate').text(selectedDate);
+                $('#showTime').text(selectedTime);
+                $('#cinemaName').text(cinemaName);
+
+                // Hiển thị modal thông báo
+                $('#showTimeModal').modal('show');
+            });
+
+            // Xử lý khi đồng ý đặt vé
+            window.confirmBooking = function() {
+                window.location.href = 'seat.html'; // Chuyển hướng đến trang seat
+                $('#showTimeModal').modal('hide');
+            };
+
+            // Cập nhật giờ chiếu khi chọn ngày
+            function updateTimeSlots(selectedDate) {
+                const timeSlots = document.getElementById("timeSlots");
+                if (timeSlots) {
+                    timeSlots.innerHTML = createFakeTimeSlots(selectedDate);
+                }
+            }
+
+            // Thêm sự kiện chọn ngày
+            function attachDateSelectionEvent() {
+                const dateTabs = document.getElementById("dateTabs");
+                if (dateTabs) {
+                    dateTabs.addEventListener("click", (e) => {
+                        if (e.target.classList.contains("nav-link")) {
+                            e.preventDefault();
+
+                            // Loại bỏ class "active" khỏi tất cả các tab
+                            document
+                                .querySelectorAll(".nav-link")
+                                .forEach((tab) => tab.classList.remove("active"));
+                            e.target.classList.add("active");
+
+                            // Lấy ngày được chọn
+                            const selectedDate = e.target.getAttribute("data-date");
+                            updateTimeSlots(selectedDate);
+                        }
+                    });
+                }
+            }
+
+            // Hiển thị chi tiết phim và gắn sự kiện
+            renderMovieDetail();
+            attachDateSelectionEvent();
+        });
+    </script>
+</body>
+</html>

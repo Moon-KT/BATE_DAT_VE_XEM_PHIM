@@ -20,4 +20,5 @@ public class RegisterDto {
     private String address;
     private LocalDate birthday;
     private Gender gender;
+    private String verificationCode;
 }

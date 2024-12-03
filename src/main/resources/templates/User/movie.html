@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beta Cinema Menu</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        #pagemovie .nav-link {
+            color: black;
+            font-weight: 500;
+            padding: 15px 20px;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        /* Hiệu ứng khi hover */
+        #pagemovie .nav-link:hover {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        #pagemovie .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #007bff;
+            transition: width .3s;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        #pagemovie .nav-link:hover::after {
+            width: 100%;
+        }
+        #pagemovie button {
+            margin-left: 10px;
+        }  
+        /* phần chỉnh làm nội dung phim  */
+        .custom-img {
+            width: 244.5px; /* Đầy đủ chiều rộng của card */
+            height: 424.5px; /* Giảm chiều cao ảnh */
+            object-fit: cover; /* Giữ tỷ lệ ảnh */
+            border-radius: 10px; /* Bo tròn góc */
+        }
+        .movie-card {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+       
+        .movie-card {
+            text-align: center; /* Căn giữa văn bản */
+            width: 244.5px;
+            margin-left: 30px;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng */
+            transition: box-shadow 0.3s ease; /* Hiệu ứng mượt */
+        }
+        .movie-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng khi hover */
+        }
+        .movie-card .card-body {
+            background-color: rgba(255, 255, 255, 0.8); /* Làm mờ nền của nội dung card */
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* Tùy chỉnh cho danh mục phim đang chiếu và sắp chiếu */
+        .category-links a {
+            font-size: 1.2rem;
+            margin: 0 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .category-links a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        .btn-custom {
+            width: 100%;  /* Chiều ngang nút chiếm toàn bộ chiều rộng */
+            font-size: 1rem;
+            padding: 10px;
+            background-color: #0056b3;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+       /* --------------------------------------------------------------------- */
+    
+
+    </style>
+</head>
+<body>
+   <!-- =======================================nhúng menu và footer====================== -->
+<script>
+    //  =============== Gọi menu vào trình bày ==============
+              // Gọi menu.html và chèn vào #menu-container
+        fetch('menu1.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('menu-container').innerHTML = data;
+          })
+          .catch(error => console.error('Error loading menu:', error));
+         //  =============== Gọi footer vào trình bày ==============
+              // Gọi footer.html và chèn vào #footer-container
+              fetch('Footer.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('footer-container').innerHTML = data;
+          })
+          .catch(error => console.error('Error loading menu:', error));
+    </script>
+    
+    <div id="menu-container"></div>
+    <!-- phần nội dung phim  -->
+    <div id="root"></div>
+
+    <div id="footer-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/react@17/umd/react.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/babel-standalone@6.26.0/babel.min.js"></script>
+
+    <script type="text/babel">
+       
+  
+       const moviesNowShowing = [
+            { title: "Cô Dâu Hào Môn", genre: "Tâm Lý", duration: " 114 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f09%2fbeta%2D400x633%2D133538%2D091024%2D49.png" },
+            { title: "Quỷ Ăn Tạng Phần 2", genre: "Kinh dị", duration: "111 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f15%2f400wx633h%2D3%2D163518%2D151024%2D56.jpg" },
+            { title: "Venom: Kèo Cuối", genre: "Khoa học", duration: "109 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f18%2f400x633%2D14%2D153720%2D181024%2D34.jpg" },
+            { title: "Robot Hoang Dã", genre: " Phiêu lưu", duration: "102 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f09%2f24%2fscreenshot%2D2024%2D09%2D24%2D133216%2D133325%2D240924%2D35.png" },
+            { title: "Thần Dược", genre: "Kinh dị", duration: "138 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f23%2f011124%2Dthan%2Dduoc%2D150349%2D231024%2D98.png" },
+            { title: "Thiên Đường Quả Báo", genre: " Kịch, Hồi Hộp", duration: "100 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f10%2fscreenshot%2D2024%2D10%2D10%2D175057%2D175218%2D101024%2D98.png" },
+            { title: "Ác Quỷ Truy Hồn", genre: "Kinh dị", duration: " 107 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f21%2fscreenshot%2D2024%2D10%2D21%2D133508%2D133602%2D211024%2D93.png" },
+            { title: "Võ Sĩ Giác Đấu II", genre: "Hành động", duration: "120 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f23%2f151124%2Dgladiator%2Dii%2D135227%2D231024%2D46.jpg",
+                description: "This is a thrilling action movie.",
+                director: "John Doe", actors: "Actor 1, Actor 2", releaseDate: "2024-01-15",
+                youtubeTrailer: "https://www.youtube.com/embed/am7jfllFOSo" },
+            { 
+                title: "movie ", genre: "Hành động", duration: "120 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f09%2f24%2fscreenshot%2D2024%2D09%2D24%2D133216%2D133325%2D240924%2D35.png", 
+                description: "This is a thrilling action movie.",
+                director: "John Doe", actors: "Actor 1, Actor 2", releaseDate: "2024-01-15",
+                youtubeTrailer: "https://www.youtube.com/embed/am7jfllFOSo"
+            },
+        ];
+    
+
+        const moviesComingSoon =  [
+            { title: "Thiên Đường Quả Báo", genre: " Kịch, Hồi Hộp", duration: "100 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f10%2fscreenshot%2D2024%2D10%2D10%2D175057%2D175218%2D101024%2D98.png" },
+            { title: "Ác Quỷ Truy Hồn", genre: "Kinh dị", duration: " 107 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f21%2fscreenshot%2D2024%2D10%2D21%2D133508%2D133602%2D211024%2D93.png" },
+            { title: "Võ Sĩ Giác Đấu II", genre: "Hành động", duration: "120 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f23%2f151124%2Dgladiator%2Dii%2D135227%2D231024%2D46.jpg",
+                description: "This is a thrilling action movie.",
+                director: "John Doe", actors: "Actor 1, Actor 2", releaseDate: "2024-01-15",
+                youtubeTrailer: "https://www.youtube.com/embed/am7jfllFOSo" },
+            { 
+                title: "movie ", genre: "Hành động", duration: "120 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f09%2f24%2fscreenshot%2D2024%2D09%2D24%2D133216%2D133325%2D240924%2D35.png", 
+                description: "This is a thrilling action movie.",
+                director: "John Doe", actors: "Actor 1, Actor 2", releaseDate: "2024-01-15",
+                youtubeTrailer: "https://www.youtube.com/embed/am7jfllFOSo"
+            },
+        ];
+        
+
+        function MovieCard({ movie, onClick }) {
+            return (
+                <div className="col-md-3 mb-4">
+                        <div className="card movie-card" onClick={() => onClick(movie)}>
+                        <img src={movie.imgSrc} className="custom-img" alt={movie.title} />
+                        <div className="card-body">
+                            <h5 className="card-title">{movie.title}</h5>
+                            <p className="card-text">Thể Loại: {movie.genre}</p>
+                            <p className="card-text">Thời Lượng: {movie.duration}</p>
+                            <a href="chitiet.html" className="btn btn-primary btn-custom" id="btnmuave">MUA VÉ</a>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function MovieList({ movies, onMovieClick }) {
+            return (
+                <div className="row">
+                    {movies.map((movie, index) => (
+                        <MovieCard key={index} movie={movie} onClick={onMovieClick}/>
+                    ))}
+                </div>
+            );
+        }
+
+        function App() {
+            const [selectedMovie, setSelectedMovie] = React.useState(null);
+            const [currentCategory, setCurrentCategory] = React.useState('nowShowing');
+
+            const handleMovieClick = (movie) => {
+                setSelectedMovie(movie);
+            };
+
+            const handleBack = () => {
+                setSelectedMovie(null);
+            };
+            const moviesToShow = currentCategory === 'nowShowing' ? moviesNowShowing : moviesComingSoon;
+
+// ============================ Xử lý chuyển đổi giữa phim đang chiếu và phim sắp chiếu=============
+            return (
+                <div className="container mt-5">
+                  <h1 className="text-center mb-4">Beta Cinema – nơi hội tụ những bom tấn đỉnh cao, trải nghiệm điện ảnh không thể bỏ lỡ!</h1>
+                
+                <div className="d-flex justify-content-center mb-4" id="pagemovie">
+                <button
+                    className={`nav-link btn btn-link ${currentCategory === 'nowShowing' ? 'active' : ''}`}
+                    onClick={() => setCurrentCategory('nowShowing')}
+                >
+                    Phim Đang Chiếu
+                </button>
+                <button
+                    className={`nav-link btn btn-link ${currentCategory === 'upcoming' ? 'active' : ''}`}
+                    onClick={() => setCurrentCategory('upcoming')}
+                >
+                    Phim Sắp Chiếu
+                </button>
+            </div>
+
+            <div className="container mt-5">
+                {!selectedMovie ? (
+                    <MovieList movies={moviesToShow} onMovieClick={handleMovieClick} />
+                ) : (
+                    <MovieDetail movie={selectedMovie} onBack={handleBack} />
+                )}
+            </div>
+            </div>
+            
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beta Cinema</title>
+    <!-- Link to Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #showtimeContainer {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #showtimeContainer .showtime {
+            flex: 1 1 45%;  /* Chiếm 45% chiều rộng, có thể thay đổi tuỳ theo nhu cầu */
+            box-sizing: border-box;
+        }
+
+        #scheduleDateBar button:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #scheduleDateBar button {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: transparent;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #scheduleDateBar button:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Thêm hiệu ứng khi người dùng hover vào */
+        #scheduleDateBar button.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .carousel-indicators li {
+            width: 18px !important;  /* Đặt chiều rộng */
+            height: 18px !important; /* Đặt chiều cao */
+            margin: 0 5px; /* Khoảng cách giữa các chấm */
+            background-color: #007bff ; /* Màu của các chấm */
+            border-radius: 50%; /* Biến chúng thành hình tròn */
+            transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
+        }
+
+        .carousel-indicators .active {
+            background-color: #ffc107; /* Màu khi chấm được active */
+        }
+
+        <style>
+         .tab-films {
+             justify-content: center;
+             margin-top: 20px;
+             padding: 0;
+         }
+
+        .tab-films .nav-item {
+            margin: 0 10px;
+        }
+
+        .tab-films .nav-link {
+            color: #007bff;
+            font-weight: bold;
+            border: none;
+            transition: color 0.3s, border-bottom 0.3s;
+        }
+
+        .tab-films .nav-link.active,
+        .tab-films .nav-link:hover {
+            color: #ffc107;
+            border-bottom: 2px solid #ffc107;
+        }
+    </style>
+        
+    </style>
+</head>
+<body>
+
+<!-- Menu với Bootstrap -->
+<div th:replace="~{Brower/navBar:: navbar}"></div>
+
+<!-- Carousel for promotions -->
+<div id="promotionCarousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-bs-target="#promotionCarousel" data-bs-slide-to="0" class="active"></li>
+        <li data-bs-target="#promotionCarousel" data-bs-slide-to="1"></li>
+        <li data-bs-target="#promotionCarousel" data-bs-slide-to="2"></li>
+    </ol>
+
+    <div class="carousel-inner">
+        <!-- Slide 1 -->
+        <div class="carousel-item show active">
+            <img th:src="@{/assets/img/baner1.png}" class="d-block w-100" alt="Khuyến mãi 1">
+        </div>
+        <!-- Slide 2 -->
+        <div class="carousel-item">
+            <img src="/assets/img/baner2.png" class="d-block w-100" alt="Khuyến mãi 1">
+        </div>
+        <!-- Slide 3 -->
+        <div class="carousel-item">
+            <img src="/assets/img/banner.jpg" class="d-block w-100" alt="Khuyến mãi 3">
+        </div>
+    </div>
+
+    <!-- Controls for the carousel -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#promotionCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#promotionCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class="container">
+    <div class="margin-bottom-35">
+        <div class="text-center">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#now-showing">PHIM ĐANG CHIẾU</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#upcoming">PHIM SẮP CHIẾU</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-content">
+        <!-- Tab 1: Phim Đang Chiếu -->
+        <div class="tab-pane fade show active" id="now-showing">
+            <div class="row" id="now-showing-movies">
+                <!-- Phim đang chiếu sẽ được tải tại đây -->
+            </div>
+        </div>
+
+        <!-- Tab 2: Phim Sắp Chiếu -->
+        <div class="tab-pane fade" id="upcoming">
+            <div class="row" id="upcoming-movies">
+                <!-- Phim sắp chiếu sẽ được tải tại đây -->
+            </div>
+        </div>
+
+<!--        &lt;!&ndash; Tab 3: Suất Chiếu Đặc Biệt &ndash;&gt;-->
+<!--        <div class="tab-pane fade" id="special">-->
+<!--            <div class="row" id="special-movies">-->
+<!--                &lt;!&ndash; Phim suất chiếu đặc biệt sẽ được tải tại đây &ndash;&gt;-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+</div>
+
+
+
+<!-- Modal để hiển thị trailer -->
+<div class="modal fade" id="trailerModal" tabindex="-1" aria-labelledby="trailerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="trailerModalLabel">Trailer Phim</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe
+                        id="trailerVideo"
+                        width="100%"
+                        height="400px"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal cho lịch chiếu -->
+<div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scheduleModalLabel">Lịch chiếu: <span id="movieName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Thanh ngang cho các ngày -->
+                <div id="scheduleDateBar" class="d-flex overflow-auto mb-3">
+                    <!-- Các nút ngày sẽ được thêm vào đây -->
+                </div>
+                <!-- Các giờ chiếu sẽ được hiển thị ở đây -->
+                <div id="showtimeContainer">
+                    <!-- Nội dung giờ chiếu -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<footer class="bg-light text-center py-3 mt-5">
+    <p>&copy; 2024 Beta Cinema</p>
+</footer>
+
+<script th:src="@{/assets/js/browerJS/menuLocation.js}"></script>
+<!-- Link to Bootstrap JS & Dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>-->
+<!-- Script để gọi API và tạo các card phim -->
+<script th:src="@{/assets/js/browerJS/home.js}"></script>
+</body>
+</html>

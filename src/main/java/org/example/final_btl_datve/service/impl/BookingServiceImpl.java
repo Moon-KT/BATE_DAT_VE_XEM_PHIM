@@ -53,9 +53,6 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new RuntimeException("Showtime not found"));
         booking.setShowtime(showtime);
 
-
-
-
         // Set booking_seats
         List<Booking_Seat> booking_seats = bookingRequest.getSeatIds().stream()
                 .map(seatId -> {
@@ -84,13 +81,11 @@ public class BookingServiceImpl implements BookingService {
                     return booking_combo;
                 })
                 .collect(Collectors.toList());
-        System.out.println("Total price: " + totalPrice);
-
         for(Booking_Combo booking_combo : booking_combos){
             totalPrice += booking_combo.getCombo().getPrice();
         }
 
-        booking.setBooking_combos(booking_combos);
+        booking.setBooking_combos(booking_combos); // Set booking_combos
 
         Movie movie = showtime.getMovie();
         List<Promotion> promotionMovie = promotionRepository.findAll();
@@ -113,6 +108,12 @@ public class BookingServiceImpl implements BookingService {
             }
         }
 
+        LocalDateTime oneWeekAfterRegistration = user.getCreatAt().plusWeeks(1);
+        boolean isWithinOneWeek = LocalDateTime.now().isBefore(oneWeekAfterRegistration);
+
+        if (isWithinOneWeek) {
+            totalPrice -= 30000;
+        }
 
         List<Promotion> promotions = promotionRepository.findAll();
         if(promotions.isEmpty()){

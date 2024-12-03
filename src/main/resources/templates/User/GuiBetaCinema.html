@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beta Cinema Menu</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Menu cố định ở đầu trang */
+        .navbar {
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: rgb(233, 241, 140);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Căn giữa logo và các mục menu */
+        .navbar-nav {
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        /* Định dạng cho logo */
+        .navbar-brand {
+            padding: 0;
+           margin-right: 20px;
+        }
+        .navbar-brand img {
+            width: 100px;
+        }
+
+        /* Định dạng cho menu items */
+        .nav-link {
+            color: black;
+            font-weight: 500;
+            padding: 15px 20px;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        /* Hiệu ứng khi hover */
+        .nav-link:hover {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #007bff;
+            transition: width .3s;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        button {
+            margin-left: 10px;
+        }
+        /* ========== phần banner hình ảnh ================== */
+         .slider-container {
+            position: relative;
+            width: 1520px;
+            height: 500px;
+            overflow: hidden;
+            margin: auto;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            width: calc(1520px * 5); /* 4 images + 1 duplicate */
+            transition: transform 1s ease-in-out;
+        }
+
+        .slider-wrapper img {
+            width: 1520px;
+            height: 500px;
+        }
+
+        .dots-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dot {
+            height: 15px;
+            width: 15px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: #808080;
+        }
+
+        /* phần footer */
+        footer {
+            background-color:beige;
+            color: black;
+            padding: 20px 0;
+        }
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        footer .footer-section {
+            flex:1;
+            min-width: 280px;
+            margin: 10px;
+            margin-left: 50px;
+        }
+
+        footer .footer-location ul {
+            list-style: none;
+            padding: 0;
+        }
+        footer .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        footer .footer-section ul li {
+            margin-bottom: 8px;
+        }
+        /* Social Media Icons */
+        footer .social-icons {
+            display: flex;
+            gap: 10px;
+        }
+        footer .social-icons img {
+            width: 24px;
+            height: 24px;
+        }
+        /* Separator Line */
+        .footer-separator {
+            border-top: 2px solid #ccc;
+            margin: 20px 0;
+        }
+        footer li{
+            font-size: 14px;
+        }
+        footer .footer-location{
+        margin-left: 50px;
+        }
+        footer .footer-location ul li a{
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+            text-decoration: none;
+            color: black;
+        }
+        footer .footer-location ul li a:hover {
+            text-decoration: underline;
+            color: rgb(0, 170, 255);
+        }
+        footer .footer-logo ul{
+            list-style: none;
+            margin-left: -20px;
+        }
+        footer .footer-logo{
+           margin-left: 0px;
+        }
+        footer .social-icons
+        {
+            flex-direction: column; /* Đặt các thẻ a theo chiều dọc */
+            gap: 5px; /* Khoảng cách giữa các thẻ a, nếu cần */
+        }
+        footer .social-icons a{
+            text-decoration: none;
+        }
+        /* phần chỉnh làm nội dung phim  */
+        .custom-img {
+            width: 244.5px; /* Đầy đủ chiều rộng của card */
+            height: 424.5px; /* Giảm chiều cao ảnh */
+            object-fit: cover; /* Giữ tỷ lệ ảnh */
+            border-radius: 10px; /* Bo tròn góc */
+        }
+        .movie-card {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+
+        .movie-card {
+            text-align: center; /* Căn giữa văn bản */
+            width: 244.5px;
+            margin-left: 30px;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng */
+            transition: box-shadow 0.3s ease; /* Hiệu ứng mượt */
+        }
+        .movie-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng khi hover */
+        }
+        .movie-card .card-body {
+            background-color: rgba(255, 255, 255, 0.8); /* Làm mờ nền của nội dung card */
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* Tùy chỉnh cho danh mục phim đang chiếu và sắp chiếu */
+        .category-links a {
+            font-size: 1.2rem;
+            margin: 0 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .category-links a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        .btn-custom {
+            width: 100%;  /* Chiều ngang nút chiếm toàn bộ chiều rộng */
+            font-size: 1rem;
+            padding: 10px;
+            background-color: #0056b3;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+       /* --------------------------------------------------------------------- */
+       .movie-detail-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .movie-detail-img {
+            width: 40%;
+            max-width: 300px;
+            border-radius: 10px;
+        }
+
+        .movie-detail-info {
+            width: 60%;
+        }
+
+        .movie-detail-info h2 {
+            margin-bottom: 15px;
+        }
+
+        .movie-detail-info p {
+            margin-bottom: 8px;
+        }
+
+        .btn-buy-ticket {
+            display: block;
+            width: 200px;
+            margin-top: 15px;
+        }
+
+        .movie-trailer {
+            margin-top: 30px;
+        }
+
+        .movie-trailer iframe {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Menu với Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <!-- Logo -->
+
+            <!-- Menu toggle button for mobile view -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Menu items -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <div class="navbar-nav">
+                    <a class="navbar-brand" href="#">
+                        <img src="img/logo1.jpg" alt="Logo" width="80px" height="50px" style="border-radius:15px;">
+                    </a>
+                    <!-- Cơ sở dropdown -->
+                    <button class="btn btn-light" class="location" style="border-radius: 30px;height: 40px;">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" style="margin-top: -12px;">Cơ Sở Beta Cinemas</a>
+                        </li>
+                    </button>
+                    <!-- Lịch Chiếu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="lichchieu.html">Lịch Chiếu</a>
+                    </li>
+                    <!-- Phim -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="movie.html">Phim</a>
+                    </li>
+                    <!-- Rạp -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="locationcinema.html">Rạp</a>
+                    </li>
+                    <!-- Giá Vé -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="Giave.html">Giá Vé</a>
+                    </li>
+                    <!-- Tin Mới -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tin Mới và Ưu Đãi</a>
+                    </li>
+                    <!-- Ưu Đãi -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="thanhvien.html">Thành Viên</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="login.html">
+                            <span>
+                                <i class="fas fa-sign-in-alt"></i>
+                                 ĐĂNG NHẬP
+                            </span>
+
+                        </a>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Bootstrap JS (Optional if you need dropdown to work) -->
+    <div class="slider-container">
+        <div class="slider-wrapper">
+            <img src="@{/assets/img/banner.jpg}" alt="Banner 1">
+            <img src="@{/assets/img/baner1.png}" alt="Banner 2">
+            <img src="@{/assets/img/baner2.png}" alt="Banner 3">
+            <img src="@{/assets/img/banner3.png}" alt="Banner 4">
+            <img src="@{/assets/img/banner.jpg}" alt="Banner 1 Clone">
+        </div>
+
+        <div class="dots-container">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+    <!-- phần nội dung phim  -->
+    <div id="root"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/react@17/umd/react.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/babel-standalone@6.26.0/babel.min.js"></script>
+
+    <script type="text/babel">
+
+
+       const moviesNowShowing = [
+            { title: "Cô Dâu Hào Môn", genre: "Tâm Lý", duration: " 114 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f09%2fbeta%2D400x633%2D133538%2D091024%2D49.png" },
+            { title: "Quỷ Ăn Tạng Phần 2", genre: "Kinh dị", duration: "111 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f15%2f400wx633h%2D3%2D163518%2D151024%2D56.jpg" },
+            { title: "Venom: Kèo Cuối", genre: "Khoa học", duration: "109 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f18%2f400x633%2D14%2D153720%2D181024%2D34.jpg" },
+            { title: "Robot Hoang Dã", genre: " Phiêu lưu", duration: "102 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f09%2f24%2fscreenshot%2D2024%2D09%2D24%2D133216%2D133325%2D240924%2D35.png" },
+            { title: "Thần Dược", genre: "Kinh dị", duration: "138 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f23%2f011124%2Dthan%2Dduoc%2D150349%2D231024%2D98.png" },
+            { title: "Thiên Đường Quả Báo", genre: " Kịch, Hồi Hộp", duration: "100 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f10%2fscreenshot%2D2024%2D10%2D10%2D175057%2D175218%2D101024%2D98.png" },
+            { title: "Ác Quỷ Truy Hồn", genre: "Kinh dị", duration: " 107 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f21%2fscreenshot%2D2024%2D10%2D21%2D133508%2D133602%2D211024%2D93.png" },
+            { title: "Võ Sĩ Giác Đấu II", genre: "Hành động", duration: "120 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f23%2f151124%2Dgladiator%2Dii%2D135227%2D231024%2D46.jpg",
+                description: "This is a thrilling action movie.",
+                director: "John Doe", actors: "Actor 1, Actor 2", releaseDate: "2024-01-15",
+                youtubeTrailer: "https://www.youtube.com/embed/am7jfllFOSo" },
+            {
+                title: "movie ", genre: "Hành động", duration: "120 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f09%2f24%2fscreenshot%2D2024%2D09%2D24%2D133216%2D133325%2D240924%2D35.png",
+                description: "This is a thrilling action movie.",
+                director: "John Doe", actors: "Actor 1, Actor 2", releaseDate: "2024-01-15",
+                youtubeTrailer: "https://www.youtube.com/embed/am7jfllFOSo"
+            },
+        ];
+
+
+        const moviesComingSoon =  [
+            { title: "Thiên Đường Quả Báo", genre: " Kịch, Hồi Hộp", duration: "100 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f10%2fscreenshot%2D2024%2D10%2D10%2D175057%2D175218%2D101024%2D98.png" },
+            { title: "Ác Quỷ Truy Hồn", genre: "Kinh dị", duration: " 107 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f21%2fscreenshot%2D2024%2D10%2D21%2D133508%2D133602%2D211024%2D93.png" },
+            { title: "Võ Sĩ Giác Đấu II", genre: "Hành động", duration: "120 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f10%2f23%2f151124%2Dgladiator%2Dii%2D135227%2D231024%2D46.jpg",
+                description: "This is a thrilling action movie.",
+                director: "John Doe", actors: "Actor 1, Actor 2", releaseDate: "2024-01-15",
+                youtubeTrailer: "https://www.youtube.com/embed/am7jfllFOSo" },
+            {
+                title: "movie ", genre: "Hành động", duration: "120 phút", imgSrc: "https://files.betacorp.vn/media%2fimages%2f2024%2f09%2f24%2fscreenshot%2D2024%2D09%2D24%2D133216%2D133325%2D240924%2D35.png",
+                description: "This is a thrilling action movie.",
+                director: "John Doe", actors: "Actor 1, Actor 2", releaseDate: "2024-01-15",
+                youtubeTrailer: "https://www.youtube.com/embed/am7jfllFOSo"
+            },
+        ];
+
+
+        function MovieCard({ movie, onClick }) {
+            return (
+                <div className="col-md-3 mb-4">
+                        <div className="card movie-card" onClick={() => onClick(movie)}>
+                        <img src={movie.imgSrc} className="custom-img" alt={movie.title} />
+                        <div className="card-body">
+                            <h5 className="card-title">{movie.title}</h5>
+                            <p className="card-text">Thể Loại: {movie.genre}</p>
+                            <p className="card-text">Thời Lượng: {movie.duration}</p>
+                            <a href="chitiet.html" className="btn btn-primary btn-custom" id="btnmuave">MUA VÉ</a>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function MovieList({ movies, onMovieClick }) {
+            return (
+                <div className="row">
+                    {movies.map((movie, index) => (
+                        <MovieCard key={index} movie={movie} onClick={onMovieClick}/>
+                    ))}
+                </div>
+            );
+        }
+
+        function App() {
+            const [selectedMovie, setSelectedMovie] = React.useState(null);
+            const [currentCategory, setCurrentCategory] = React.useState('nowShowing');
+
+            const handleMovieClick = (movie) => {
+                setSelectedMovie(movie);
+            };
+
+            const handleBack = () => {
+                setSelectedMovie(null);
+            };
+            const moviesToShow = currentCategory === 'nowShowing' ? moviesNowShowing : moviesComingSoon;
+
+// ============================ Xử lý chuyển đổi giữa phim đang chiếu và phim sắp chiếu=============
+            return (
+                <div className="container mt-5">
+                  <h1 className="text-center mb-4">Beta Cinema – nơi hội tụ những bom tấn đỉnh cao, trải nghiệm điện ảnh không thể bỏ lỡ!</h1>
+
+                <div className="d-flex justify-content-center mb-4">
+                <button
+                    className={`nav-link btn btn-link ${currentCategory === 'nowShowing' ? 'active' : ''}`}
+                    onClick={() => setCurrentCategory('nowShowing')}
+                >
+                    Phim Đang Chiếu
+                </button>
+                <button
+                    className={`nav-link btn btn-link ${currentCategory === 'upcoming' ? 'active' : ''}`}
+                    onClick={() => setCurrentCategory('upcoming')}
+                >
+                    Phim Sắp Chiếu
+                </button>
+            </div>
+
+            <div className="container mt-5">
+                {!selectedMovie ? (
+                    <MovieList movies={moviesToShow} onMovieClick={handleMovieClick} />
+                ) : (
+                    <MovieDetail movie={selectedMovie} onBack={handleBack} />
+                )}
+            </div>
+            </div>
+
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+     <!-- =============================================Foooter========================================== -->
+    <!-- phần footer  -->
+    <div class="footer-separator" ></div>
+<footer>
+        <div class="container">
+            <!-- Logo Section -->
+            <div class="footer-logo">
+                <img src="img/logo1.jpg" alt="Logo" width="100px" height="50px" style="border-radius:15px;">
+                <ul>
+                    <li>Beta Cinema</li>
+                    <li>© 2024</li>
+                </ul>
+            </div>
+
+            <!-- Cụm rạp Beta Section -->
+            <div class="footer-location">
+                <h3>CỤM RẠP BETA</h3>
+                <ul>
+                    <li>
+                        <a href="#">Beta Cinemas Ung Văn Khiêm, TP Hồ Chí Minh - Hotline 0969 874 873 </a>
+                    </li>
+                    <li><a href="#">Beta Cinemas Lào Cai - Hotline 0358 968 970 </a></li>
+                    <li><a href="#">Beta Cinemas Trần Quang Khải, TP Hồ Chí Minh - Hotline 1900 638 362 </a></li>
+                    <li><a href="#">Beta Cinemas TRMall Phú Quốc, Kiên Giang - Hotline 0983 474 440 </a></li>
+                    <li><a href="#">Beta Cinemas Empire Bình Dương - Hotline 0934 573 748 </a></li>
+                    <li><a href="#">Beta Cinemas Quang Trung, TP Hồ Chí Minh - Hotline 0706 075 509 </a></li>
+                    <li><a href="#">Beta Cinemas Giải Phóng, Hà Nội - Hotline 0585 680 360 </a></li>
+                    <li><a href="#">Beta Cinemas Thanh Xuân, Hà Nội - Hotline 082 4812878 </a></li>
+                    <li><a href="#">Beta Cinemas Mỹ Đình, Hà Nội - Hotline 0866 154 610</a></li>
+                    <li><a href="#">Beta Cinemas Đan Phượng, Hà Nội - Hotline 0983 901 714 </a></li>
+                    <li><a href="#">Beta Cinemas Thái Nguyên - Hotline 0867 460 053</a></li>
+                    <li><a href="#">Beta Cinemas Thanh Hóa - Hotline 0325 360 249</a></li>
+                    <li><a href="#">Beta Cinemas Bắc Giang - Hotline 0866 493 413</a></li>
+                    <li><a href="#">Beta Cinemas Nha Trang, Khánh Hòa - Hotline 0399 475 165</a></li>
+                    <li><a href="#">Beta Cinemas Biên Hòa, Đồng Nai - Hotline 0979 460 002</a></li>
+                    <li><a href="#">Beta Cinemas Long Khánh, Đồng Nai - Hotline 0925 165 684</a></li>
+                    <li><a href="#">Beta Cinemas Hồ Tràm, Bà Rịa Vũng Tàu - Hotline 0254 3788601 </a></li>
+                    <li><a href="#">Beta Cinemas Tân Uyên, Bình Dương - Hotline 0937 905 925 </a></li>
+                    <li><a href="#"></a></li>
+                </ul>
+            </div>
+
+            <!-- Kết nối với chúng tôi Section -->
+            <div class="footer-section">
+                <h3>Kết nối với chúng tôi</h3>
+                <div class="social-icons">
+                   <a href="https://www.facebook.com/betacinemas/"><img src="img/facebook-logo.png" alt="Facebook"> Betacinema.facebook</a><br>
+                   <a href="https://www.instagram.com/betacinemas/"><img src="img/instagram_logo.png" alt="Instagram"> Betacinema.instagram</a><br>
+                   <a href="https://www.tiktok.com/@beta_cinemas"><img src="img/logo_tiktok.avif" alt="tiktok"> Betacinema.tiktok</a><br>
+                   <a href="https://www.youtube.com/channel/UCGj6uah35-eNiH_2mdubYRw"><img src="img/youtube-logo.png" alt="YouTube"> Betacinema.youtube</a>
+
+                </div>
+            </div>
+
+            <!-- Liên hệ Section -->
+            <div class="footer-section">
+                <h3>Liên hệ</h3>
+                <ul>
+                    <li><h6>CÔNG TY CỔ PHẦN BETA MEDIA</h6></li>
+                    <li>Địa chỉ trụ sở :Tầng 3 , số 595, đường Gải Phóng, quận Hoàng Mai, thành phố Hà Nội</li><br>
+                    <li>Email: mkt@betacinemas.vn</li>
+                    <li>Hotline: 1900 636807 / 0934632682</li><br>
+                    <li><strong><h6>Liện hệ hợp tác kinh doanh</h6></strong></li>
+                    <li><h6>Hotline: 1800 646 420</h6></li>
+                    <li><h6>Email: bachtx@betagroup.vn</h6></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        const sliderWrapper = document.querySelector('.slider-wrapper');
+        const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
+        const totalImages = dots.length;
+        const intervalTime = 5000; // 5 seconds
+        let autoSlide;
+        let isTransitioning = false;
+
+        // Function to show a specific image by sliding
+        function showImage(index) {
+            if (isTransitioning) return; // Prevent new transitions before the last one finishes
+
+            // Move the slider wrapper to the correct position
+            sliderWrapper.style.transition = 'transform 1s ease-in-out';
+            sliderWrapper.style.transform = `translateX(-${index * 1520}px)`;
+
+            // Handle the dot display
+            dots.forEach(dot => dot.classList.remove('active'));
+            if (index < totalImages) {
+                dots[index].classList.add('active');
+            }
+
+            currentIndex = index;
+            isTransitioning = true;
+        }
+
+        // Function to move to the next image
+        function nextImage() {
+            if (currentIndex === totalImages) {
+                // If it's the clone of the first image, instantly jump back to the real first image
+                sliderWrapper.style.transition = 'none';
+                sliderWrapper.style.transform = 'translateX(0)';
+                currentIndex = 0;
+                setTimeout(() => {
+                    nextImage(); // Continue sliding after resetting the position
+                }, 50); // Small delay to ensure the transition occurs after resetting
+                return;
+            }
+
+            showImage(currentIndex + 1);
+        }
+
+        // Function to move to a specific image via dot click
+        function selectImage(index) {
+            showImage(index);
+            resetInterval(); // Reset the interval when user clicks on a dot
+        }
+
+        // Add click event listeners to dots
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => selectImage(i));
+        });
+
+        // Automatically switch images every 5 seconds
+        function startAutoSlide() {
+            autoSlide = setInterval(nextImage, intervalTime);
+        }
+
+        // Reset the interval when user interacts (clicks a dot)
+        function resetInterval() {
+            clearInterval(autoSlide);
+            startAutoSlide();
+        }
+
+        // Reset transition state after each transition
+        sliderWrapper.addEventListener('transitionend', () => {
+            isTransitioning = false;
+        });
+
+        // Start automatic sliding when the page loads
+        startAutoSlide();
+    </script>
+
+</body>
+
+</html>
+

@@ -44,6 +44,12 @@ public class ShowtimeController {
         return ResponseEntity.ok().body(showtimeService.search(keyword));
     }
 
+    //Tìm phòng chiếu theo mã suất chiếu
+    @GetMapping("/room/{showtimeId}")
+    public ResponseEntity<?> getRoomByShowtimeId(@PathVariable long showtimeId) throws Exception{
+        return ResponseEntity.ok().body(showtimeService.getRoomByShowtimeId(showtimeId));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable long id,
                                     @RequestBody ShowtimeDto showtimeDto) throws Exception{

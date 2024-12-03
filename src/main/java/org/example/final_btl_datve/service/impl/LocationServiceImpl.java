@@ -36,6 +36,9 @@ public class LocationServiceImpl implements LocationService {
     private CinemaDto convertToDto(Cinema cinema) {
         return CinemaDto.builder()
                 .cinemaName(cinema.getCinemaName())
+                .cinemaId(cinema.getCinemaId())
+                .hotline(cinema.getHotline())
+                .detailedAddress(cinema.getDetailedAddress())
                 .locationId(cinema.getLocation().getLocationId())
                 .build();
     }
@@ -77,6 +80,14 @@ public class LocationServiceImpl implements LocationService {
         if(!locationRepository.existsById(locationId)) {
             throw new Exception("Không tìm thấy địa điểm có ID: " + locationId);
         }
+    }
+
+    @Override
+    public List<CinemaDto> getCinemaByLocation(Long locationId) throws Exception {
+        return cinemaRepository.findAll().stream()
+                .filter(cinema -> cinema.getLocation().getLocationId().equals(locationId))
+                .map(this::convertToDto)
+                .toList();
     }
 }
 

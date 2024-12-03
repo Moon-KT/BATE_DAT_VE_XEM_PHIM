@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<style>
+
+body {
+   display: flex;
+   justify-content: center; /* Căn giữa theo chiều ngang */
+   align-items: center; /* Căn giữa theo chiều dọc */
+   height: 100vh; /* Chiều cao đầy đủ của màn hình */
+   margin: 0; /* Bỏ margin mặc định */
+   background-image:url(img/backlog1.jpg) ;
+   background-size: cover;  /* Đảm bảo ảnh sẽ bao phủ toàn bộ màn hình mà không bị cắt */
+  background-position: center center;  /* Căn giữa ảnh */
+  background-attachment: fixed;  /* Giữ ảnh cố định khi cuộn trang */
+}
+
+.container {
+   width: 300px; /* Đặt chiều rộng cho container */
+}
+
+.input-icon {
+   position: relative;
+}
+
+.input-icon input {
+   padding-left: 30px; /* Chừa khoảng trống cho icon */
+}
+
+.input-icon i {
+   position: absolute;
+   left: 10px; /* Điều chỉnh vị trí của icon */
+   top: 50%;
+   transform: translateY(-50%);
+   color: #999;
+}
+
+.btn {
+   margin-top: 15px; /* Khoảng cách giữa ô nhập và nút đăng nhập */
+   margin-left: 50px;
+   width: 200px;
+}
+</style>
+<body>
+   
+    <div class="form-group">
+        <h2 style="color: aliceblue;"> Đăng Nhập Tài Khoản</h2>
+        <div class="col-md-16 margin-bottom-10">
+           <label class="control-label font-16" style="color: aliceblue;">Email:</label>
+           <div class="input-icon">
+              <input type="text" id="txtLoginName" onclick="togglePassword()" class="form-control" placeholder="Email">
+              <i class="fa fa-user"></i>
+           </div>
+        </div>
+  
+        <div class="col-md-16 margin-bottom-10">
+           <label class="control-label font-16" style="color: aliceblue;">Password:</label>
+           <div class="input-icon">
+              <input  type="password" id="txtPassword" class="form-control" placeholder="Password">
+              <i class="fa fa-lock"></i>
+           </div>
+        </div>
+  
+        <div class="col-md-16">
+           <button type="submit" onclick="login()" class="btn btn-primary btn-block"><a  href="#" style="text-decoration:none;color: aliceblue;">Đăng Nhập Tài Khoản</a></button>
+        </div>
+        <div class="col-md-16">
+            <button type="submit" class="btn btn-warning btn-block"><a href="sign.html" style="text-decoration: none;color:aliceblue;">Đăng Ký Tài Khoản</a></button>
+         </div>
+     </div>
+     <script>
+      
+  function login() {
+    // Fake account data
+    var username = "user123";  // Fake username
+    var password = "password123";  // Fake password
+    
+    // Get entered values
+    var enteredUsername = document.getElementById("txtLoginName").value;
+    var enteredPassword = document.getElementById("txtPassword").value;
+
+    // Check if the entered username and password match the fake account
+    if (enteredUsername === username && enteredPassword === password) {
+      window.location.href = "GuiBetaCinema.html"; // Redirect to index.html on success
+    } else {
+      alert("Invalid username or password");
+    }
+  }
+
+  function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+  }
+     </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<style>
+body {
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   height: 100vh;
+   margin: 0;
+}
+
+.sidebar {
+   width: 250px;
+   background-color: #2c3e50;
+   height: 100vh;
+   padding-top: 20px;
+}
+
+.menu {
+   list-style-type: none;
+   padding: 0;
+   margin: 0;
+}
+
+.menu-item {
+   display: flex;
+   align-items: center;
+   padding: 15px 20px;
+   font-size: 16px;
+   color: #ecf0f1;
+   cursor: pointer;
+   transition: background 0.3s;
+   text-decoration: none;
+}
+
+.menu-item:hover {
+   background-color: #34495e;
+}
+
+.menu-item i {
+   margin-right: 15px;
+   font-size: 20px;
+   color: #ecf0f1;
+}
+
+.menu-item span {
+   color: #ecf0f1;
+}
+
+.admin-dropdown {
+   display: flex;
+   align-items: center;
+   padding: 15px 20px;
+   color: #ecf0f1;
+   font-size: 16px;
+   cursor: pointer;
+   border-bottom: 1px solid #34495e;
+   text-decoration: none;
+}
+
+.admin-dropdown:hover {
+   background-color: #34495e;
+}
+
+.admin-image {
+   width: 30px;
+   height: 30px;
+   margin-right: 10px;
+}
+
+.menu-icon {
+   display: flex;
+   align-items: center;
+   font-size: 24px;
+   color: #ecf0f1;
+   padding: 10px 20px;
+   cursor: pointer;
+}
+
+.menu-icon span {
+   font-size: 18px;
+   color: #ecf0f1;
+   margin-left: 10px;
+}
+
+/* Content Section */
+.content {
+   display: none;
+   margin-left: 260px;
+   padding: 20px;
+}
+
+.active {
+   display: block;
+}
+</style>
+<body>
+    <div class="sidebar">
+       <!-- Menu Icon with Text -->
+       <div class="menu-icon">
+           <i class="fas fa-bars"></i>
+           <span>Menu Quản Lý</span>
+       </div>
+
+       <!-- Admin Profile Dropdown with Image -->
+       <a class="admin-dropdown dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+           <img src="img/avt.jpg" alt="Admin" class="admin-image rounded-circle">
+           <span>Bùi Hồng Phúc</span>
+       </a>
+       <ul class="dropdown-menu">
+           <li><a class="dropdown-item" href="#">Xem Thông Tin</a></li>
+           <li><a class="dropdown-item" href="#">Đăng Xuất</a></li>
+       </ul>
+
+       <!-- Dashboard Section -->
+       <a href="#" class="menu-item" onclick="showContent('dashboard')">
+           <i class="fas fa-home"></i>
+           <span>Dashboard</span>
+       </a>
+
+       <!-- Sidebar Menu -->
+       <ul class="menu">
+          <li class="menu-item" onclick="showContent('quanLyVe')">
+             <i class="fa fa-ticket"></i>
+             <span>Quản Lý Vé</span>
+          </li>
+          <li class="menu-item" onclick="showContent('quanLyTaiKhoan')">
+             <i class="fa fa-user"></i>
+             <span>Quản Lý Tài Khoản</span>
+          </li>
+          <li class="menu-item" onclick="showContent('quanLyRapPhim')">
+             <i class="fa fa-building"></i>
+             <span>Quản Lý Rạp Phim</span>
+          </li>
+          <li class="menu-item" onclick="showContent('quanLyPhim')">
+             <i class="fa fa-film"></i>
+             <span>Quản Lý Phim</span>
+          </li>
+          <li class="menu-item" onclick="showContent('quanLyUuDai')">
+             <i class="fa fa-gift"></i>
+             <span>Quản Lý Ưu Đãi</span>
+          </li>
+          <li class="menu-item" onclick="showContent('quanLyHoiVien')">
+             <i class="fa fa-users"></i>
+             <span>Quản Lý Hội Viên</span>
+          </li>
+          <li class="menu-item" onclick="showContent('quanLySuatChieu')">
+             <i class="fa fa-clock"></i>
+             <span>Quản Lý Suất Chiếu</span>
+          </li>
+          <li class="menu-item" onclick="showContent('thongKeDoanhSo')">
+             <i class="fa fa-chart-line"></i>
+             <span>Thống Kê Doanh Số</span>
+          </li>
+       </ul>
+    </div>
+
+    <!-- Content Section for Each Menu Item -->
+    <div id="dashboard" class="content active">
+        <h1>Dashboard</h1>
+        <p>Trang chủ của hệ thống.</p>
+    </div>
+
+    <div id="quanLyVe" class="content">
+        <h1>Quản Lý Vé</h1>
+        <p>Nội dung quản lý vé với các chức năng thêm, sửa, xóa...</p>
+    </div>
+
+    <div id="quanLyTaiKhoan" class="content">
+        <h1>Quản Lý Tài Khoản</h1>
+        <p>Nội dung quản lý tài khoản người dùng...</p>
+    </div>
+
+    <div id="quanLyRapPhim" class="content">
+        <h1>Quản Lý Rạp Phim</h1>
+        <p>Nội dung quản lý rạp phim với các chức năng như thêm, sửa, xóa...</p>
+    </div>
+
+    <div id="quanLyPhim" class="content">
+        <h1>Quản Lý Phim</h1>
+        <p>Nội dung quản lý phim với các chức năng thêm, sửa, xóa...</p>
+    </div>
+
+    <div id="quanLyUuDai" class="content">
+        <h1>Quản Lý Ưu Đãi</h1>
+        <p>Nội dung quản lý ưu đãi...</p>
+    </div>
+
+    <div id="quanLyHoiVien" class="content">
+        <h1>Quản Lý Hội Viên</h1>
+        <p>Nội dung quản lý hội viên...</p>
+    </div>
+
+    <div id="quanLySuatChieu" class="content">
+        <h1>Quản Lý Suất Chiếu</h1>
+        <p>Nội dung quản lý suất chiếu phim...</p>
+    </div>
+
+    <div id="thongKeDoanhSo" class="content">
+        <h1>Thống Kê Doanh Số</h1>
+        <p>Nội dung thống kê doanh số...</p>
+    </div>
+
+    <script>
+        function showContent(id) {
+            // Ẩn tất cả các phần tử nội dung
+            document.querySelectorAll('.content').forEach(div => div.classList.remove('active'));
+            // Hiển thị phần tử nội dung được chọn
+            document.getElementById(id).classList.add('active');
+        }
+
+        // Đảm bảo trang chủ là trang mặc định khi load
+        window.onload = function() {
+            showContent('dashboard');
+        };
+    </script>
+</body>
+</html>

@@ -11,7 +11,6 @@ import java.util.List;
 public interface CinemaService {
     //CRUD
     CinemaDto create(CinemaDto cinemaDto) throws Exception;
-    List<CinemaDto> findByCinemaName(String cinemaName);
     List<CinemaDto> reads();
 
     CinemaDto read(Long cinemaID) throws Exception;
@@ -21,7 +20,7 @@ public interface CinemaService {
     void delete(Long cinemaID) throws Exception;
 
     //Other
+    List<CinemaDto> findByCinemaName(String cinemaName);
     List<ScreeningRoomDto> getRoomByCinema(Long cinemaID);
-
     List<MovieDto> getMovieByCinema(Long cinemaID);
 }

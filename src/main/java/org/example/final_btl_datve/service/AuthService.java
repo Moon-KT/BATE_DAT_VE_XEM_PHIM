@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 public interface AuthService {
     String login(String email, String password);
     String register(RegisterDto registerDto);
+    String verifyEmail(String email, String verificationCode);
     String resetPassword(String email, String newPassword);
     void logout(String token);
 }
