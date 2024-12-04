@@ -1,9 +1,9 @@
 package org.example.final_btl_datve.service.impl;
 
-import org.example.final_btl_datve.dto.BookingRequest;
+import jakarta.persistence.Tuple;
+import org.example.final_btl_datve.dto.BookingHistoryDto;
 import org.example.final_btl_datve.dto.UserDto;
 import org.example.final_btl_datve.entity.User;
-import org.example.final_btl_datve.entity.enumModel.ERole;
 import org.example.final_btl_datve.repository.UserRepository;
 import org.example.final_btl_datve.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +11,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.example.final_btl_datve.entity.enumModel.ERole.ROLE_ADMIN;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -122,8 +120,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     // Xem lịch sử đặt vé
     @Override
-    public Object getBookingHistory(Long userID) throws Exception {
-         return userRepository.getBookingHistory(userID);
+    public List<BookingHistoryDto> getBookingHistory(Long userID) throws Exception {
+        List<Tuple> results = userRepository.getBookingHistory(userID);
+
+        List<BookingHistoryDto> bookingHistoryDtos = results.stream().map(result -> {
+            return BookingHistoryDto.builder()
+                    .movieName(result.get("movieName", String.class))
+                    .cinemaName(result.get("cinemaName", String.class))
+                    .roomName(result.get("roomName", String.class))
+                    .bookingTime(result.get("bookingTime", Timestamp.class))
+                    .seatNames(result.get("seatNames", String.class))
+                    .comboDetails(result.get("comboDetails", String.class))
+                    .seatCount(result.get("seatCount", Long.class))
+                    .build();
+        }).collect(Collectors.toList());
+        return bookingHistoryDtos;
     }
 }
 

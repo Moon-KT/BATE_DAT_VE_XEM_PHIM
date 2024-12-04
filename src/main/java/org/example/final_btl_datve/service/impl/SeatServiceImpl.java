@@ -68,5 +68,24 @@ public class SeatServiceImpl implements SeatService {
         Seat seat = seatRepository.findById(seatId).orElseThrow(() -> new Exception("Không tìm thấy ghế có ID: " + seatId));
         seatRepository.delete(seat);
     }
+
+    @Override
+    public List<SeatDto> findSeatsByRoom(Long roomId) throws Exception {
+        return seatRepository.findSeatsByRoom(roomId).stream()
+                .map(seat -> {
+                    boolean isBooked = seat.getBookingSeats().stream()
+                            .anyMatch(bookingSeat -> bookingSeat.getSeat().getSeatId().equals(seat.getSeatId()));
+                    String seatStatus = isBooked ? "Booked" : "Available";
+                    return SeatDto.builder()
+                            .seatId(seat.getSeatId())
+                            .seatNumber(seat.getSeatNumber())
+                            .seatRow(seat.getSeatRow())
+                            .seatPrice(seat.getSeatType().getSeatPrice())
+                            .seatStatus(seatStatus)
+                            .seatTypeId(seat.getSeatType().getSeatTypeId())
+                            .roomId(seat.getRoom().getRoomId())
+                            .build();
+                }).toList();
+    }
 }
 

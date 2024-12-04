@@ -1,8 +1,6 @@
 package org.example.final_btl_datve.service.impl;
 
-import org.example.final_btl_datve.dto.CinemaDto;
-import org.example.final_btl_datve.dto.MovieDto;
-import org.example.final_btl_datve.dto.ScreeningRoomDto;
+import org.example.final_btl_datve.dto.*;
 import org.example.final_btl_datve.entity.Cinema;
 import org.example.final_btl_datve.entity.Location;
 import org.example.final_btl_datve.repository.CinemaRepository;
@@ -112,8 +110,32 @@ public class CinemaServiceImpl implements CinemaService {
                         .map(showtime -> showtime.getMovie()) // Lấy phim từ showtime
                         .distinct() // Để loại bỏ phim trùng lặp
                         .map(movie -> {
-                            MovieDto movieDto = new MovieDto();
-                            movieDto.setMovieName(movie.getMovieName());
+                            MovieDto movieDto = MovieDto.builder()
+                                    .movieId(movie.getMovieId())
+                                    .movieName(movie.getMovieName())
+                                    .movieDuration(movie.getMovieDuration())
+                                    .movieDescription(movie.getMovieDescription())
+                                    .moviePoster(movie.getMoviePoster())
+                                    .movieTrailer(movie.getMovieTrailer())
+                                    .movieReleaseDate(movie.getMovieReleaseDate())
+                                    .movieRated(movie.getMovieRated())
+                                    .movieActor(movie.getMovieActor())
+                                    .movieDirector(movie.getMovieDirector())
+                                    .movieLanguage(movie.getMovieLanguage())
+                                    .genreList(movie.getMovie_genreList().stream()
+                                            .map(movieGenre -> new GenreDto(movieGenre.getGenre().getGenreId(), movieGenre.getGenre().getGenreName()))
+                                            .toList())
+                                    .showtimeList(movie.getShowtimeList().stream()
+                                            .filter(showtime -> !showtime.getStartTime().isBefore(java.time.LocalDateTime.now()))
+                                            .map(showtime ->{
+                                                    Integer totalSeats = showtime.getRoom().getSeatList().size();
+                                                    Long bookedSeats = showtime.getBookings().stream()
+                                                            .flatMap(booking -> booking.getBooking_seats().stream())
+                                                            .count();
+                                                    Long emptySeats = totalSeats - bookedSeats;
+                                                    return new ShowtimeDto(showtime.getShowtimeId(), showtime.getStartTime(), showtime.getRoom().getRoomId(), showtime.getMovie().getMovieId(),emptySeats );})
+                                            .toList())
+                                    .build();
                             return movieDto;
                         }).toList())
                 .orElseGet(Collections::emptyList);

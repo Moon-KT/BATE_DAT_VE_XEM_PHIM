@@ -72,6 +72,7 @@ async function fetchMovieShowtimes(showtimeList) {
     const uniqueDays = [...new Set(showtimeList.map(showtime => showtime.startTime.split('T')[0]))];
     let isActive = 'active';
 
+    console.log(showtimeList);
     for (const day of uniqueDays) {
         // Tạo tab cho ngày
         showtimeTabs.innerHTML += `

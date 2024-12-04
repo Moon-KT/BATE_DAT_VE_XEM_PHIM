@@ -1,0 +1,74 @@
+/* phần footer */
+footer {
+    background-color:beige;
+    color: black;
+    padding: 20px 0;
+}
+footer .container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+footer .footer-section {
+    flex:1;
+    min-width: 280px;
+    margin: 10px;
+    margin-left: 50px;
+}
+
+footer .footer-location ul {
+    list-style: none;
+    padding: 0;
+}
+footer .footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+footer .footer-section ul li {
+    margin-bottom: 8px;
+}
+/* Social Media Icons */
+footer .social-icons {
+    display: flex;
+    gap: 10px;
+}
+footer .social-icons img {
+    width: 24px;
+    height: 24px;
+}
+/* Separator Line */
+.footer-separator {
+    border-top: 2px solid #ccc;
+    margin: 20px 0;
+}
+footer li{
+    font-size: 14px;
+}
+footer .footer-location{
+    margin-left: 50px;
+}
+footer .footer-location ul li a{
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    color: black;
+}
+footer .footer-location ul li a:hover {
+    text-decoration: underline;
+    color: rgb(0, 170, 255);
+}
+footer .footer-logo ul{
+    list-style: none;
+    margin-left: -20px;
+}
+footer .footer-logo{
+    margin-left: 0px;
+}
+footer .social-icons
+{
+    flex-direction: column; /* Đặt các thẻ a theo chiều dọc */
+    gap: 5px; /* Khoảng cách giữa các thẻ a, nếu cần */
+}
+footer .social-icons a{
+    text-decoration: none;
+}

@@ -1,7 +1,6 @@
 package org.example.final_btl_datve.service;
 
-import org.example.final_btl_datve.dto.BookingRequest;
-import org.example.final_btl_datve.dto.BookingResponse;
+import org.example.final_btl_datve.dto.BookingHistoryDto;
 import org.example.final_btl_datve.dto.UserDto;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +19,5 @@ public interface UserService {
 
     //Other
     List<UserDto> search(String keyword);
-    Object getBookingHistory(Long userID) throws Exception;
+    List<BookingHistoryDto> getBookingHistory(Long userID) throws Exception;
 }

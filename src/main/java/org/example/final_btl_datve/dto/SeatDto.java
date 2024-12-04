@@ -14,7 +14,8 @@ public class SeatDto {
     private Long seatId;
     private String seatRow;
     private Integer seatNumber;
-
+    private String seatStatus;
+    private Double seatPrice;
     private Long roomId;
     private Long seatTypeId;
 }

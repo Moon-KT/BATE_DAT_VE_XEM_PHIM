@@ -12,4 +12,7 @@ public interface SeatService {
     SeatDto read(Long seatId) throws Exception;
     SeatDto update(Long seatId, SeatDto seatDto) throws Exception;
     void delete(Long seatId) throws Exception;
+
+    //Other
+    List<SeatDto> findSeatsByRoom(Long roomId) throws Exception;
 }
