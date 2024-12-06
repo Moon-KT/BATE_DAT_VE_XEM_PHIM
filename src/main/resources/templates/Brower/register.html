@@ -1,0 +1,107 @@
+<!-- Tab Đăng ký -->
+    <div th:fragment="register">
+
+    <h3 class="text-center">Đăng ký</h3>
+    <form>
+        <!-- Họ và tên -->
+        <div >
+            <label for="name">Họ và tên: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">👤</span>
+                </div>
+                <input type="text" class="form-control" id="name" placeholder="Nhập họ và tên">
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+            <label for="email-register">Email: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">📧</span>
+                </div>
+                <input type="email" class="form-control" id="email-register" placeholder="Nhập email">
+            </div>
+        </div>
+
+        <!-- Mật khẩu -->
+        <div class="form-group">
+            <label for="password-register">Mật khẩu: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">🔒</span>
+                </div>
+                <input type="password" class="form-control" id="password-register" placeholder="Nhập mật khẩu">
+            </div>
+        </div>
+
+        <!-- Xác nhận mật khẩu -->
+        <div class="form-group">
+            <label for="confirm-password">Xác nhận mật khẩu: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">🔒</span>
+                </div>
+                <input type="password" class="form-control" id="confirm-password" placeholder="Nhập lại mật khẩu">
+            </div>
+        </div>
+
+        <!-- Ngày sinh -->
+        <div class="form-group">
+            <label for="birthdate">Ngày sinh: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">📅</span>
+                </div>
+                <input type="date" class="form-control" id="birthdate">
+            </div>
+        </div>
+
+        <!-- Giới tính -->
+        <div class="form-group">
+            <label for="gender">Giới tính:</label>
+            <select id="gender" class="form-control">
+                <option value="male">Nam</option>
+                <option value="female">Nữ</option>
+                <option value="other">Khác</option>
+            </select>
+        </div>
+
+        <!-- Số điện thoại -->
+        <div class="form-group">
+            <label for="phone">Số điện thoại: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">📞</span>
+                </div>
+                <input type="tel" class="form-control" id="phone" placeholder="Nhập số điện thoại">
+            </div>
+        </div>
+
+        <!-- Mã xác thực -->
+        <div class="form-group">
+            <label for="captcha">Mã xác thực: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">🔢</span>
+                </div>
+                <input type="text" class="form-control" id="captcha" placeholder="Nhập mã xác thực">
+                <div class="input-group-append">
+                    <span class="input-group-text">1234AB</span> <!-- Mã xác thực ngẫu nhiên -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkbox điều khoản -->
+        <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="terms">
+            <label class="form-check-label" for="terms">
+                Tôi cam kết tuân theo <a href="#">chính sách bảo mật</a> và <a href="#">điều khoản sử dụng</a>.
+            </label>
+        </div>
+
+        <!-- Nút Đăng ký -->
+        <button type="submit" class="btn btn-success btn-block">Đăng ký</button>
+    </form>
+</div>

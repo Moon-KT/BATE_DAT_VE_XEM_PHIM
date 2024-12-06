@@ -40,14 +40,40 @@
                         <a class="nav-link" href="#">Tin mới và ưu đãi</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Thành viên</a>
+                        <a class="nav-link" th:href="${#authentication.principal != null} ? '/thongtinthanhvien.htm' : '/dangkithanhvien.htm'">
+                            <span th:text="${#authentication.principal != null ? 'Thành viên' : 'Đăng ký'}"></span>
+                        </a>
                     </li>
+
                 </ul>
             </div>
         </div>
     </nav>
 
 </div>
+
+<script>
+    async function updateNavbar() {
+        try {
+            const response = await fetch('/api/auth/status');
+            const data = await response.json();
+
+            const memberLink = document.querySelector('.nav-item a.nav-link');
+            if (data.loggedIn) {
+                memberLink.href = '/thongtinthanhvien.htm';
+                memberLink.textContent = 'Thành viên';
+            } else {
+                memberLink.href = '/dangkithanhvien.htm';
+                memberLink.textContent = 'Đăng ký';
+            }
+        } catch (error) {
+            console.error('Lỗi khi kiểm tra trạng thái đăng nhập:', error);
+        }
+    }
+
+    // Gọi hàm khi trang tải
+    updateNavbar();
+</script>
 
 <!-- Link to Bootstrap JS & Dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

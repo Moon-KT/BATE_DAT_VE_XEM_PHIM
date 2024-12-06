@@ -1,11 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Chọn ghế</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema Seat Map</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<!-- Menu với Bootstrap -->
+<div th:replace="~{Brower/navBar:: navbar}"></div>
 
+<div class="container">
+    <div class="container">
+        <div id="breadcrumb" class="breadcrumb">
+            <p>Trang chủ > Đặt vé </p> > <span id="movie-name"></span>
+        </div>
+
+    <div class="row mt-4">
+        <!-- Phần sơ đồ ghế -->
+        <div class="col-md-8">
+            <div class="text-center">
+                <div class="alert alert-danger">
+                    Theo quy định của cục điện ảnh, phim này không dành cho khán giả dưới 18 tuổi.
+                </div>
+            </div>
+
+            <div class="container d-flex justify-content-between align-items-center">
+                <div class="seats-container" style="border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-right: 10px;">
+                    <!-- Ghế Thường -->
+                    <div class="seat-info" style="text-align: center;">
+                        <img src="assets/img/seat-unselect-normal.png" alt="Ghế Thường" class="img-fluid" style="width: 30px; height: 30px;">
+                        <p>Ghế Trống</p>
+                    </div>
+                </div>
+
+                <div class="seats-container" style="border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-right: 10px;">
+                    <!-- Ghế VIP -->
+                    <div class="seat-info" style="text-align: center;">
+                        <img src="assets/img/seat-select-normal.png" alt="Ghế VIP" class="img-fluid" style="width: 30px; height: 30px;">
+                        <p>Ghế Đang Chọn</p>
+                    </div>
+                </div>
+
+                <div class="seats-container" style="border: 1px solid #ddd; padding: 10px; border-radius: 10px;">
+                    <!-- Ghế Đôi -->
+                    <div class="seat-info" style="text-align: center;">
+                        <img src="assets/img/seat-buy-normal.png" alt="Ghế Đôi" class="img-fluid" style="width: 30px; height: 30px;">
+                        <p>Ghế Đã Bán</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Hình ảnh màn hình -->
+            <div class="text-center mt-4">
+                <img src="/assets/img/ic-screen.png" alt="Screen" class="img-fluid">
+            </div>
+
+            <!-- Sơ đồ ghế -->
+            <div id="seat-map" class="d-flex flex-wrap justify-content-center mt-4">
+                <!-- Ghế sẽ được hiển thị ở đây -->
+            </div>
+
+            <!-- Thanh thông tin tổng tiền và thời gian -->
+            <div class="container d-flex justify-content-between align-items-center">
+                <div class="seats-container" style="border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-right: 10px;">
+                    <!-- Ghế Thường -->
+                    <div class="seat-info" style="text-align: center;">
+                        <img src="assets/img/seat-unselect-normal.png" alt="Ghế Thường" class="img-fluid" style="width: 30px; height: 30px;">
+                        <p>Ghế Thường</p>
+                    </div>
+                </div>
+
+                <div class="seats-container" style="border: 1px solid #ddd; padding: 10px; border-radius: 10px; margin-right: 10px;">
+                    <!-- Ghế VIP -->
+                    <div class="seat-info" style="text-align: center;">
+                        <img src="assets/img/seat-unselect-vip.png" alt="Ghế VIP" class="img-fluid" style="width: 30px; height: 30px;">
+                        <p>Ghế VIP</p>
+                    </div>
+                </div>
+
+                <div class="seats-container" style="border: 1px solid #ddd; padding: 10px; border-radius: 10px;">
+                    <!-- Ghế Đôi -->
+                    <div class="seat-info" style="text-align: center;">
+                        <img src="assets/img/seat-unselect-double.png" alt="Ghế Đôi" class="img-fluid" style="width: 30px; height: 30px;">
+                        <p>Ghế Đôi</p>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <p class="m-0">Tổng Tiền: <span id="total-price">0</span> VND</p>
+                    <p class="m-0">Thời gian còn lại: <span id="timer">10:00</span></p>
+                </div>
+
+                <button class="btn btn-danger" id="cancel-booking">Hủy Đặt Ghế</button>
+            </div>
+
+        </div>
+
+        <!-- Phần thông tin phim bên phải -->
+        <div class="col-md-4">
+            <div class="sticky-top" style="top: 10px;">
+                <div class="card">
+                    <img id="moviePoster" src="https://via.placeholder.com/300x400" alt="Movie Poster" class="card-img-top">
+                    <div class="card-body">
+                        <h4 id="movieTitle" class="card-title">Tên Phim</h4>
+                        <h4>2D Phụ đề</h4>
+                        <p id="movieGenres" class="bi bi-tags card-text"><strong>Thể loại:</strong></p>
+                        <p id="duration" class="bi bi-clock card-text"><strong>Thời lượng:</strong></p>
+                        <!-- Đường kẻ ngang nét đứt -->
+                        <hr style="border-top: 2px dashed #ccc;">
+                        <p id="cinemaName" class="bi bi-house card-text"><strong>Rạp chiếu:</strong></p>
+                        <p id="dateShow" class="bi bi-calendar card-text"><strong>Ngày chiếu:</strong></p>
+                        <p id="timeShow" class="fa fa-clock card-text"><strong>Giờ chiếu:</strong></p>
+                        <p id="movieRoom" class="card-text bi bi-"><strong>Phòng:</strong></p>
+                        <p class="fa fa-cubes" id="seatNames"><strong>Ghế ngồi</strong></p>
+                        <button id="btnContinue" class="btn btn-primary btn-continue w-50" style="margin-left: auto; margin-right: auto; display: block;">Tiếp tục</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+    <!-- Footer -->
+<div th:replace="~{Brower/footer::footer}"></div>
+<!-- Bootstrap JS + jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets/js/browerJS/menuLocation.js}"></script>
+<script th:src="@{/assets/js/browerJS/chonGhe.js}"></script>
 
 </body>
 </html>

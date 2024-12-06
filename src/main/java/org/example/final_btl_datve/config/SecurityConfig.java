@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizedRequests -> authorizedRequests
                         .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
                         .requestMatchers("/assets/css/**", "/assets/imgs/**","/assets/img/**", "/assets/js/**").permitAll()
-                        .requestMatchers("/login", "/logout", "/home.htm","/chitietphim.htm", "phim.htm","test.htm").permitAll()
+                        .requestMatchers("/login", "/logout", "/home.htm","/chitietphim.htm", "phim.htm","test.htm","chonGhe.htm","dangkithanhvien.htm","thongtinthanhvien.htm").permitAll()
                         .requestMatchers("/forget-password").permitAll()
                         .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated())

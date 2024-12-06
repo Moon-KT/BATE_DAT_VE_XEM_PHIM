@@ -25,6 +25,11 @@ public class BrowerController {
         return "Brower/phim";
     }
 
+    @GetMapping("/chonGhe.htm")
+    public String chonGhe() {
+        return "Brower/chonGhe";
+    }
+
     @GetMapping("/menuLocation.htm")
     public String menuLocation() {
         return "Brower/menuLocation";
@@ -35,9 +40,14 @@ public class BrowerController {
         return "Brower/login";
     }
 
-    @GetMapping("/sign.htm")
+    @GetMapping("/dangkithanhvien.htm")
     public String sign() {
-        return "Brower/sign";
+        return "Brower/dangkithanhvien";
+    }
+
+    @GetMapping("/thongtinthanhvien.htm")
+    public String dangKy() {
+        return "Brower/thongtinthanhvien";
     }
 
     @GetMapping("/forget-password.htm")

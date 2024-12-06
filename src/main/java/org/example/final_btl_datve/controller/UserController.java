@@ -31,6 +31,11 @@ public class UserController {
         return ResponseEntity.ok().body(userService.search(keyword));
     }
 
+    @GetMapping("/search/{userId}")
+    public ResponseEntity<?> search(@PathVariable long userId) throws Exception{
+        return ResponseEntity.ok().body(userService.searchId(userId));
+    }
+
     @GetMapping("history/{userID}")
     public ResponseEntity<?> getBookingHistory(@PathVariable long userID) throws Exception {
         return ResponseEntity.ok().body(userService.getBookingHistory(userID));

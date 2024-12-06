@@ -18,6 +18,7 @@ public interface UserService {
     void delete(Long userID) throws Exception;
 
     //Other
+    UserDto searchId(Long userID) throws Exception;
     List<UserDto> search(String keyword);
     List<BookingHistoryDto> getBookingHistory(Long userID) throws Exception;
 }

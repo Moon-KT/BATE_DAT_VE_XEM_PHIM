@@ -2,7 +2,7 @@
 values = []
 
 # Loop through the user_id range and assign role_id based on the conditions
-for user_id in range(189, 389):
+for user_id in range(1, 201):
     role_id = 1 if user_id <= 10 else 2
     values.append(f"({user_id}, {role_id})")
 

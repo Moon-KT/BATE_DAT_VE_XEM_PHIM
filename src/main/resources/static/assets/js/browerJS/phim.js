@@ -1,7 +1,7 @@
 // Hàm gọi API và hiển thị phim
 
 let cinemaNameNow = "Beta Thanh Xuân"
-
+let cinemaIdF = 1;
 
 async function fetchMovies() {
     try {
@@ -14,13 +14,14 @@ async function fetchMovies() {
         console.log('response:', response);
         const movies = await response.json(); // Danh sách phim
 
+        cinemaIdF = cinemaId;
+        // Lấy tên rạp
         await fetch(`http://localhost:8080/api/cinemas/${cinemaId}`)
             .then(response => response.json())
             .then(data => {
                 let cinenaNameModal = document.getElementById('cinemaNameModal');
                 cinemaNameNow = data.cinemaName;
                 cinenaNameModal.textContent = cinemaNameNow;
-                // console.log('Tên rạp:', cinemaNameNow);
             });
 
         console.log('Danh sách phim:', movies);
@@ -107,7 +108,7 @@ function showSchedule(movieName, showtimeList) {
     days.forEach(day => {
         const button = document.createElement('button');
         button.className = 'btn btn-outline-primary mx-1';
-        button.innerText = `${day.getDate()}/${day.getMonth() + 1} - ${day.toLocaleString('default', { weekday: 'short' })}`;
+        button.innerText = `${day.getDate()}/${day.getMonth() + 1} - ${day.toLocaleString('default', {weekday: 'short'})}`;
         button.addEventListener('click', () => showShowtimesForDate(day, showtimeList));
         scheduleDateBar.appendChild(button);
     });
@@ -130,11 +131,10 @@ function showSchedule(movieName, showtimeList) {
             showtimeElement.style.cursor = 'pointer';  // Make it clickable
 
             // Kiểm tra console xem showtime có được tạo đúng không
-            console.log('Showtime:', showtime);
+            // console.log('Showtime:', showtime);
 
             showtimeElement.addEventListener('click', () => {
-                console.log('Clicked on showtime element');
-                openBookingModal(showtime, cinemaNameNow, date);
+                openBookingModal(showtime, cinemaNameNow, date, movieName);
             });
 
             showtimeDiv.appendChild(showtimeElement);
@@ -149,22 +149,22 @@ function showSchedule(movieName, showtimeList) {
     }
 
 // Hàm mở modal khi chọn giờ chiếu
-    function openBookingModal(showtime, cinemaName, date) {
+    function openBookingModal(showtime, cinemaName, date, movieName) {
         // Đóng scheduleModal nếu đang mở
         const scheduleModal = new bootstrap.Modal(document.getElementById('scheduleModal'));
         scheduleModal.hide();
 
+
+        console.log('Showtime:', showtime);
+
         // Lấy các phần tử trong modal
+        const movieNameModal = document.getElementById('movieNameModal');
         const cinemaNameModal = document.getElementById('cinemaNameModal');
         const showDateModal = document.getElementById('showDateModal');
         const showTimeModal = document.getElementById('showTimeModal');
 
-        // // Kiểm tra các phần tử trong modal có đúng không
-        // console.log(cinemaNameModal);
-        // console.log(showDateModal);
-        // console.log(showTimeModal);
-
         // Cập nhật thông tin vào modal
+        movieNameModal.innerText = movieName;
         cinemaNameModal.innerText = cinemaName;
         showDateModal.innerText = date.toLocaleDateString();
         showTimeModal.innerText = new Date(showtime.startTime).toLocaleTimeString();
@@ -175,8 +175,9 @@ function showSchedule(movieName, showtimeList) {
 
         // Thêm sự kiện cho nút "Đồng ý"
         document.getElementById('confirmBookingBtn').addEventListener('click', () => {
-            console.log('Confirmed booking for:', cinemaName, date, showtime.startTime);
             bookingModal.hide();  // Đóng modal sau khi xác nhận
+
+            window.location.href = `/chonGhe.htm?roomId=${showtime.roomId}&movieId=${showtime.movieId}&showtimeId=${showtime.showtimeId}&cinemaId=${cinemaIdF}`;
         });
     }
 }
@@ -190,6 +191,7 @@ function renderMovies(containerId, movies) {
         return;
     }
 
+    console.log(cinemaNameNow);
     movies.forEach(movie => {
         const genres = movie.genreList.map(genre => `<span class="badge bg-secondary me-1">${genre.genreName}</span>`).join('');
         const movieCard = `
@@ -198,7 +200,7 @@ function renderMovies(containerId, movies) {
                     <img src="${movie.moviePoster}" class="card-img-top" alt="${movie.movieName}" style="cursor: pointer;" onclick="showTrailer('${movie.movieTrailer}')">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="/chitietphim.htm?id=${movie.movieId}" class="text-decoration-none">${movie.movieName}</a>
+                            <a href="/chitietphim.htm?id=${movie.movieId}&cinemaId=${cinemaIdF}&cinemaName=${cinemaNameNow}" class="text-decoration-none">${movie.movieName}</a>
                         </h5>
                         <p class="card-text">Thể loại: ${genres}</p>
                         <p class="card-text">Thời lượng: ${movie.movieDuration} phút</p>

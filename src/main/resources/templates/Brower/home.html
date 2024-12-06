@@ -28,5 +28,19 @@
 <!-- Script để gọi API và tạo các card phim -->
 <script th:src="@{/assets/js/browerJS/phim.js}"></script>
 <script th:src="@{/assets/js/browerJS/menuLocation.js}"></script>
+<script>
+    document.getElementById('bookingModal').addEventListener('hidden.bs.modal', function () {
+        document.querySelectorAll('.modal-backdrop').forEach((backdrop) => {
+            backdrop.remove();
+        });
+    });
+
+    document.getElementById('scheduleModal').addEventListener('hidden.bs.modal', function () {
+        document.querySelectorAll('.modal-backdrop').forEach((backdrop) => {
+            backdrop.remove();
+        });
+    });
+
+</script>
 </body>
 </html>

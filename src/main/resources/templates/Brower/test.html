@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cinema Seat Map</title>
     <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -15,9 +18,16 @@
     <div class="row mt-4">
         <!-- Phần sơ đồ ghế -->
         <div class="col-md-8">
-            <h2 class="text-center">Movie Theater Seat Map</h2>
-            <div class="alert alert-danger text-center">
-                Theo quy định của cục điện ảnh, phim này không dành cho khán giả dưới 18 tuổi.
+            <div class="text-center">
+                <h2 class="mb-3">Movie Theater Seat Map</h2>
+                <div class="alert alert-danger">
+                    Theo quy định của cục điện ảnh, phim này không dành cho khán giả dưới 18 tuổi.
+                </div>
+            </div>
+
+            <!-- Hình ảnh màn hình -->
+            <div class="text-center mt-4">
+                <img src="/assets/img/ic-screen.png" alt="Screen" class="img-fluid">
             </div>
 
             <!-- Sơ đồ ghế -->
@@ -26,27 +36,32 @@
             </div>
         </div>
 
-        <!-- Phần thông tin phim bên phải (trôi lên xuống khi cuộn trang) -->
-        <div class="col-md-4 position-sticky top-0">
-            <h3>Thông tin Phim</h3>
-            <img src="https://via.placeholder.com/200x300" alt="Movie Poster" class="img-fluid">
-            <h4 class="mt-3">Tên Phim</h4>
-            <p><strong>Thể loại:</strong> Hành động, Phiêu lưu</p>
-            <p><strong>Phòng:</strong> Phòng 1</p>
-
-            <button class="btn btn-primary btn-continue w-100 mt-3">Tiếp tục</button>
+        <!-- Phần thông tin phim bên phải -->
+        <div class="col-md-4">
+            <div class="sticky-top" style="top: 10px;">
+                <h3 class="text-center mb-3">Thông tin Phim</h3>
+                <div class="card">
+                    <img src="https://via.placeholder.com/300x400" alt="Movie Poster" class="card-img-top">
+                    <div class="card-body">
+                        <h4 class="card-title">Tên Phim</h4>
+                        <p class="bi bi-tags"><strong>Thể loại:</strong> Hành động, Phiêu lưu</p>
+                        <p class="card-text"><strong>Phòng:</strong> Phòng 1</p>
+                        <button class="btn btn-primary btn-continue w-100">Tiếp tục</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Thanh thông tin tổng tiền và thời gian -->
-<div class="fixed-bottom bg-dark text-white p-3">
+<div class="fixed-bottom bg-dark text-white py-3">
     <div class="container d-flex justify-content-between align-items-center">
         <div>
-            <img src="assets/img/seat-unselect-normal.png" alt="Ghế Thường" class="img-fluid" style="width: 30px; height: 30px;">
+            <img src="assets/img/seat-unselect-normal.png" alt="Ghế Thường" class="img-fluid me-2" style="width: 30px; height: 30px;">
             <img src="assets/img/seat-unselect-vip.png" alt="Ghế VIP" class="img-fluid" style="width: 30px; height: 30px;">
         </div>
-        <div>
+        <div class="text-center">
             <p class="m-0">Tổng Tiền: <span id="total-price">0</span> VND</p>
             <p class="m-0">Thời gian còn lại: <span id="timer">10:00</span></p>
         </div>
@@ -59,18 +74,29 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    // Biến lưu tổng tiền
+    let totalPrice = 0;
+
     // Hàm chuyển trạng thái ghế (chọn, bỏ chọn)
-    function toggleSeat(seatElement) {
+    function toggleSeat(seatElement, seat) {
         if ($(seatElement).hasClass('selected')) {
+            // Nếu ghế đã chọn thì bỏ chọn và giảm tổng tiền
             $(seatElement).removeClass('selected').addClass('available');
             $(seatElement).css('background-image', `url('${$(seatElement).data('available-image')}')`);
+            totalPrice -= seat.seatPrice; // Giảm tổng tiền
         } else if ($(seatElement).hasClass('available')) {
+            // Nếu ghế chưa chọn thì chọn và tăng tổng tiền
             $(seatElement).removeClass('available').addClass('selected');
             $(seatElement).css('background-image', `url('${$(seatElement).data('selected-image')}')`);
+            totalPrice += seat.seatPrice; // Tăng tổng tiền
         } else {
+            // Nếu ghế đã được mua thì giữ nguyên trạng thái
             $(seatElement).removeClass('selected').addClass('booked');
             $(seatElement).css('background-image', `url('${$(seatElement).data('booked-image')}')`);
         }
+
+        // Cập nhật tổng tiền hiển thị
+        $('#total-price').text(totalPrice.toLocaleString());
     }
 
     // Hàm tạo sơ đồ ghế từ API
@@ -132,7 +158,7 @@
                         .data('available-image', availableImage)
                         .data('selected-image', selectedImage)
                         .data('booked-image', bookedImage)
-                        .click(function() { toggleSeat(this); });
+                        .click(function() { toggleSeat(this, seat); });
 
                     rowSeatsContainer.append($('<div class="col">').append(seatElement));
                 });
@@ -145,7 +171,6 @@
     // Chạy đồng hồ đếm ngược
     let timer = 600; // 10 phút tính bằng giây
     const timerDisplay = $('#timer');
-    const totalPriceDisplay = $('#total-price');
 
     function updateTimer() {
         const minutes = Math.floor(timer / 60);
@@ -165,6 +190,7 @@
     $(document).ready(function() {
         generateSeatMap(); // Tạo sơ đồ ghế khi tải trang
     });
+
 </script>
 
 </body>

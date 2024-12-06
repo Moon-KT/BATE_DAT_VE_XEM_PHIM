@@ -1,6 +1,8 @@
 // Lấy ID phim từ URL
 const urlParams = new URLSearchParams(window.location.search);
 const movieId = urlParams.get('id');
+const cinemaId = urlParams.get('cinemaId');
+const cinemaName = urlParams.get('cinemaName');
 
 // URL API
 const apiMovieUrl = `http://localhost:8080/api/movies/${movieId}`;
@@ -17,7 +19,7 @@ async function fetchMovieDetails() {
         updateBreadcrumb(movie.movieName);
 
         if (movie.showtimeList) {
-            fetchMovieShowtimes(movie.showtimeList);
+            showSchedule(movie.movieName, movie.showtimeList);
         }
     } catch (error) {
         console.error('Lỗi:', error);
@@ -63,61 +65,89 @@ async function fetchRoomName(showtimeId) {
         return 'Phòng không xác định';
     }
 }
+// Hàm để hiển thị modal với lịch chiếu
+function showSchedule(movieName, showtimeList) {
+    const scheduleDateBar = document.getElementById('scheduleDateBar');
+    const showtimeContainer = document.getElementById('showtimeContainer');
+    const movieNameElement = document.getElementById('movieName');
 
-// Hiển thị lịch chiếu
-async function fetchMovieShowtimes(showtimeList) {
-    const showtimeTabs = document.getElementById('showtime-tabs');
-    const tabContent = document.getElementById('showtime-tab-content');
+    movieNameElement.innerText = movieName;
 
-    const uniqueDays = [...new Set(showtimeList.map(showtime => showtime.startTime.split('T')[0]))];
-    let isActive = 'active';
+    // Lọc các ngày trong vòng 5 ngày kể từ hôm nay
+    const today = new Date();
+    const days = [];
+    for (let i = 0; i < 5; i++) {
+        const day = new Date(today);
+        day.setDate(today.getDate() + i);
+        days.push(day);
+    }
 
-    console.log(showtimeList);
-    for (const day of uniqueDays) {
-        // Tạo tab cho ngày
-        showtimeTabs.innerHTML += `
-            <li class="${isActive}">
-                <a href="#${day}" data-toggle="tab">${day}</a>
-            </li>
-        `;
+    scheduleDateBar.innerHTML = ''; // Xóa nội dung cũ
+    days.forEach(day => {
+        const button = document.createElement('button');
+        button.className = 'btn btn-outline-primary mx-1';
+        button.innerText = `${day.getDate()}/${day.getMonth() + 1} - ${day.toLocaleString('default', {weekday: 'short'})}`;
+        button.addEventListener('click', () => showShowtimesForDate(day, showtimeList));
+        scheduleDateBar.appendChild(button);
+    });
 
-        const dayShowtimes = showtimeList.filter(showtime => showtime.startTime.startsWith(day));
-        let showtimeHtml = '';
+    function showShowtimesForDate(date, showtimeList) {
+        showtimeContainer.innerHTML = ''; // Xóa nội dung cũ
+        const filteredShowtimes = showtimeList.filter(showtime => {
+            const showtimeDate = new Date(showtime.startTime);
+            return showtimeDate.toDateString() === date.toDateString();
+        });
 
-        for (const showtime of dayShowtimes) {
-            const roomName = await fetchRoomName(showtime.showtimeId);
+        filteredShowtimes.forEach(showtime => {
+            const showtimeDiv = document.createElement('div');
+            showtimeDiv.className = 'd-flex justify-content-between mb-2 p-3 border rounded';
 
-            showtimeHtml += `
-                <div class="col-lg-2 text-center">
-                    <a class="btn btn-showtime" onclick="openBookingPopup('${roomName}', '${showtime.startTime}', ${showtime.emptySeats})">
-                        ${new Date(showtime.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </a>
-                    <p>${showtime.emptySeats} ghế trống</p>
-                </div>
-            `;
-        }
+            const showtimeElement = document.createElement('span');
+            showtimeElement.innerText = new Date(showtime.startTime).toLocaleTimeString();
+            showtimeElement.style.cursor = 'pointer';  // Make it clickable
 
-        // Tạo nội dung tab
-        tabContent.innerHTML += `
-            <div class="tab-pane ${isActive}" id="${day}">
-                <div class="row">${showtimeHtml}</div>
-            </div>
-        `;
-        isActive = '';
+            // Khi nhấn vào giờ chiếu, mở form đặt vé
+            showtimeElement.addEventListener('click', () => {
+                openBookingForm(showtime, cinemaName, date, movieName);
+            });
+
+            showtimeDiv.appendChild(showtimeElement);
+
+            // Tạo span cho số ghế trống
+            const emptySeatsSpan = document.createElement('span');
+            emptySeatsSpan.innerText = `Số ghế trống: ${showtime.emptySeats}`;
+            showtimeDiv.appendChild(emptySeatsSpan);
+
+            showtimeContainer.appendChild(showtimeDiv);
+        });
+    }
+
+// Hàm mở modal khi chọn giờ chiếu
+    function openBookingForm(showtime, cinemaName, date, movieName) {
+        // Lấy các phần tử trong modal
+        const movieNameModal = document.getElementById('movieNameModal');
+        const cinemaNameModal = document.getElementById('cinemaNameModal');
+        const showDateModal = document.getElementById('showDateModal');
+        const showTimeModal = document.getElementById('showTimeModal');
+
+        // Cập nhật thông tin vào modal
+        movieNameModal.innerText = movieName;
+        cinemaNameModal.innerText = cinemaName;
+        showDateModal.innerText = date.toLocaleDateString();
+        showTimeModal.innerText = new Date(showtime.startTime).toLocaleTimeString();
+
+        // Mở modal booking
+        const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+        bookingModal.show();
+
+        // Thêm sự kiện cho nút "Đồng ý"
+        document.getElementById('confirmBookingBtn').addEventListener('click', () => {
+            bookingModal.hide();  // Đóng modal sau khi xác nhận
+
+            window.location.href = `/chonGhe.htm?roomId=${showtime.roomId}&movieId=${showtime.movieId}&showtimeId=${showtime.showtimeId}&cinemaId=${cinemaId}`;
+        });
     }
 }
-
-// Hiển thị popup đặt vé
-function openBookingPopup( startTime, emptySeats) {
-    document.getElementById('ngaychieu').textContent = startTime.split('T')[0];
-    document.getElementById('giochieu').textContent = startTime.split('T')[1];
-    document.getElementById('datve-pop-up').style.display = 'block';
-}
-
-// Đóng popup
-document.getElementById('close-popup').addEventListener('click', () => {
-    document.getElementById('datve-pop-up').style.display = 'none';
-});
 
 // Gọi API khi trang tải
 if (movieId) {

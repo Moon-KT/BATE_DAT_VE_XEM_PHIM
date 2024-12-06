@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin tài khoản</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<!-- Thanh menu -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="#">Trang chủ</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a href="javascript:;" class="nav-link dropdown-toggle" id="memberDropdown" data-toggle="dropdown">
+                        Xin chào: K <i class="fa fa-angle-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#thongtintaikhoan"><i class="icon-user"></i> Thông tin tài khoản</a>
+                        <a class="dropdown-item" href="#thethanhvien"><i class="icon-diamond"></i> Thẻ thành viên</a>
+                        <a class="dropdown-item" href="#hanhtrinhdienanh"><i class="icon-paper-plane"></i> Hành trình điện ảnh</a>
+                        <a class="dropdown-item" href="#betapoint"><i class="icon-pointer"></i> Điểm Beta</a>
+                        <a class="dropdown-item" href="#voucher"><i class="icon-briefcase"></i> Voucher của tôi</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" onclick="logout();"><i class="icon-logout"></i> Đăng xuất</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Nội dung -->
+<div class="container mt-5">
+    <h2 class="text-center">Thông tin thành viên</h2>
+    <div class="tab-content mt-4">
+        <div id="thongtintaikhoan">
+            <h4>Thông tin tài khoản</h4>
+            <p>Họ tên: <span id="username"></span></p>
+            <p>Email: <span id="email"></span></p>
+        </div>
+        <div id="thethanhvien" class="mt-4">
+            <h4>Thẻ thành viên</h4>
+            <p>Cấp độ: VIP</p>
+        </div>
+        <div id="hanhtrinhdienanh" class="mt-4">
+            <h4>Hành trình điện ảnh</h4>
+            <p>Danh sách vé đã đặt...</p>
+        </div>
+        <div id="betapoint" class="mt-4">
+            <h4>Điểm Beta</h4>
+            <p>Tổng điểm: 1000</p>
+        </div>
+        <div id="voucher" class="mt-4">
+            <h4>Voucher của tôi</h4>
+            <p>Danh sách voucher...</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    async function fetchUserInfo() {
+        try {
+            const response = await fetch('/api/users/{id}'); // Gọi API Spring Boot để lấy thông tin người dùng
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('username').textContent = data.username;
+                document.getElementById('email').textContent = data.email;
+            } else {
+                alert("Vui lòng đăng nhập để xem thông tin!");
+                window.location.href = '/dangkithanhvien.htm';
+            }
+        } catch (error) {
+            console.error('Lỗi khi lấy thông tin người dùng:', error);
+        }
+    }
+
+    // Gọi hàm khi trang tải
+    document.addEventListener('DOMContentLoaded', fetchUserInfo);
+</script>
+<script>
+    function logout() {
+        fetch('/logout', { method: 'POST' }) // Gọi API Spring Security để đăng xuất
+            .then(() => {
+                window.location.href = '/dangkithanhvien.htm';
+            })
+            .catch(error => console.error('Lỗi khi đăng xuất:', error));
+    }
+</script>
+
+</body>
+</html>

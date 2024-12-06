@@ -1,19 +1,38 @@
 <div th:fragment="conformTicket">
     <!-- Modal -->
     <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="bookingModalLabel">Bạn đang đặt vé xem phim</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Rạp chiếu:</strong> <span id="cinemaNameModal"></span></p>
-                    <p><strong>Ngày chiếu:</strong> <span id="showDateModal"></span></p>
-                    <p><strong>Giờ chiếu:</strong> <span id="showTimeModal"></span></p>
-                    <button type="button" class="btn btn-primary" id="confirmBookingBtn">Đồng ý</button>
+                    <!-- Tên phim bên ngoài bảng -->
+                    <p class="text-center"><strong id="movieNameModal">Tên Phim</strong></p>
+                    <!-- Bảng hiển thị thông tin theo chiều ngang -->
+                    <table class="table table-bordered text-center">
+                        <thead>
+                        <tr>
+                            <th>Rạp chiếu</th>
+                            <th>Ngày chiếu</th>
+                            <th>Giờ chiếu</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td id="cinemaNameModal"></td>
+                            <td id="showDateModal"></td>
+                            <td id="showTimeModal"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary" id="confirmBookingBtn">Đồng ý</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>

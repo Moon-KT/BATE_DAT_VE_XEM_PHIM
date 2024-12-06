@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Thành Viên</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- Menu với Bootstrap -->
+<div th:replace="~{Brower/navBar:: navbar}"></div>
+
+<div class="container mt-4" style="max-width: 600px;"> <!-- Giới hạn độ rộng nội dung -->
+    <!-- Tabs cho Đăng nhập và Đăng ký -->
+    <ul class="nav nav-tabs">
+        <li class="nav-item w-50 text-center">
+            <a class="nav-link active" data-toggle="tab" href="#login">Đăng nhập</a>
+        </li>
+        <li class="nav-item w-50 text-center">
+            <a class="nav-link" data-toggle="tab" href="#register">Đăng ký</a>
+        </li>
+    </ul>
+
+    <!-- Nội dung Tab -->
+    <div class="tab-content mt-4 mb-4"> <!-- Thêm khoảng cách dưới -->
+        <!-- Tab Đăng nhập -->
+        <div id="login" class="tab-pane fade show active">
+            <h3 class="text-center">Đăng nhập</h3>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" placeholder="Nhập email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mật khẩu:</label>
+                    <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu">
+                </div>
+                <div id="errorMessage" class="text-danger mt-2" style="display: none;"></div>
+                <button type="button" class="btn btn-primary btn-block" id="loginButton">Đăng nhập</button>
+            </form>
+        </div>
+    <!-- Tab Đăng ký -->
+    <div id="register" class="tab-pane fade">
+        <h3 class="text-center">Đăng ký</h3>
+        <form>
+            <!-- Họ và tên -->
+            <div class="form-group">
+                <label for="name">Họ và tên: <span style="color: red;">*</span></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">👤</span>
+                    </div>
+                    <input type="text" class="form-control" id="name" placeholder="Nhập họ và tên">
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email-register">Email: <span style="color: red;">*</span></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">📧</span>
+                    </div>
+                    <input type="email" class="form-control" id="email-register" placeholder="Nhập email">
+                </div>
+            </div>
+
+            <!-- Mật khẩu -->
+            <div class="form-group">
+                <label for="password-register">Mật khẩu: <span style="color: red;">*</span></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">🔒</span>
+                    </div>
+                    <input type="password" class="form-control" id="password-register" placeholder="Nhập mật khẩu">
+                </div>
+            </div>
+
+            <!-- Xác nhận mật khẩu -->
+            <div class="form-group">
+                <label for="confirm-password">Xác nhận mật khẩu: <span style="color: red;">*</span></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">🔒</span>
+                    </div>
+                    <input type="password" class="form-control" id="confirm-password" placeholder="Nhập lại mật khẩu">
+                </div>
+            </div>
+
+            <!-- Ngày sinh -->
+            <div class="form-group">
+                <label for="birthdate">Ngày sinh: <span style="color: red;">*</span></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">📅</span>
+                    </div>
+                    <input type="date" class="form-control" id="birthdate">
+                </div>
+            </div>
+
+            <!-- Giới tính -->
+            <div class="form-group">
+                <label for="gender">Giới tính:</label>
+                <select id="gender" class="form-control">
+                    <option value="male">Nam</option>
+                    <option value="female">Nữ</option>
+                    <option value="other">Khác</option>
+                </select>
+            </div>
+
+            <!-- Số điện thoại -->
+            <div class="form-group">
+                <label for="phone">Số điện thoại: <span style="color: red;">*</span></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">📞</span>
+                    </div>
+                    <input type="tel" class="form-control" id="phone" placeholder="Nhập số điện thoại">
+                </div>
+            </div>
+
+            <!-- Mã xác thực -->
+            <div class="form-group">
+                <label for="captcha">Mã xác thực: <span style="color: red;">*</span></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">🔢</span>
+                    </div>
+                    <input type="text" class="form-control" id="captcha" placeholder="Nhập mã xác thực">
+                    <div class="input-group-append">
+                        <span class="input-group-text">1234AB</span> <!-- Mã xác thực ngẫu nhiên -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checkbox điều khoản -->
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="terms">
+                <label class="form-check-label" for="terms">
+                    Tôi cam kết tuân theo <a href="#">chính sách bảo mật</a> và <a href="#">điều khoản sử dụng</a>.
+                </label>
+            </div>
+
+            <!-- Nút Đăng ký -->
+            <button type="submit" class="btn btn-success btn-block">Đăng ký</button>
+        </form>
+    </div>
+</div>
+    </div>
+
+<!-- Footer -->
+<div class="mt-5"> <!-- Tạo khoảng cách lớn giữa nội dung và footer -->
+    <div th:replace="~{Brower/footer::footer}"></div>
+</div>
+
+<script th:src="@{/assets/js/browerJS/menuLocation.js}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById('loginButton').addEventListener('click', async function () {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Kiểm tra thông tin đầu vào
+        if (!email || !password) {
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = 'Vui lòng nhập đầy đủ thông tin.';
+            return;
+        }
+
+        try {
+            // Gửi yêu cầu tới API đăng nhập
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+
+
+            if (response.ok) {
+                url = `http://localhost:8080/home.htm?userId=${id}`;
+                // Nếu đăng nhập thành công, chuyển hướng tới trang home
+                window.location.href = '/home.htm?userId=';
+            } else {
+                // Nếu thất bại, hiển thị lỗi
+                const errorData = await response.json();
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = errorData.message || 'Tên đăng nhập hoặc mật khẩu không đúng.';
+            }
+        } catch (error) {
+            console.error('Lỗi đăng nhập:', error);
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = 'Đã xảy ra lỗi. Vui lòng thử lại sau.';
+        }
+    });
+</script>
+
+</body>
+</html>

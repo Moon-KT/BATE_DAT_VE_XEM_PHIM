@@ -118,6 +118,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.search(keyword).stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
+    // Tìm kiếm người dùng theo ID
+    @Override
+    public UserDto searchId(Long userID) throws Exception {
+        return userRepository.findById(userID).map(this::convertToDto).orElseThrow(() -> {
+            return new Exception("Người dùng không tồn tại");
+        });
+    }
+
     // Xem lịch sử đặt vé
     @Override
     public List<BookingHistoryDto> getBookingHistory(Long userID) throws Exception {

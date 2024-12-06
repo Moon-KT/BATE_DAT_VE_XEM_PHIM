@@ -3,10 +3,16 @@ package org.example.final_btl_datve.controller;
 import org.example.final_btl_datve.dto.ChangePasswordRequest;
 import org.example.final_btl_datve.dto.LoginDto;
 import org.example.final_btl_datve.dto.RegisterDto;
+import org.example.final_btl_datve.dto.UserDto;
 import org.example.final_btl_datve.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,12 +33,19 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDTO) {
-        String result = authService.login(loginDTO.getEmail(), loginDTO.getPassword());
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDTO) {
+        try {
+            // Gọi AuthService để thực hiện đăng nhập
+            UserDto userDto = authService.login(loginDTO.getEmail(), loginDTO.getPassword());
 
-        return result.equals("Login successful!") ?
-                ResponseEntity.ok(result) :
-                ResponseEntity.status(401).body(result);
+            // Nếu đăng nhập thành công, trả về thông tin người dùng
+            return ResponseEntity.ok(userDto);
+        } catch (AuthenticationException e) {
+            // Nếu đăng nhập thất bại, trả về mã lỗi và thông báo
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email hoặc mật khẩu không chính xác!");
+        } catch (javax.naming.AuthenticationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping("/forgot-password")
@@ -41,5 +54,13 @@ public class AuthenticationController {
         return result.equals("Password reset successful!") ?
                 ResponseEntity.ok(result) :
                 ResponseEntity.status(401).body(result);
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<?> getStatus(Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            return ResponseEntity.ok(Map.of("loggedIn", true));
+        }
+        return ResponseEntity.ok(Map.of("loggedIn", false));
     }
 }

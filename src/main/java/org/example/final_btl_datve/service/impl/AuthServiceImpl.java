@@ -1,6 +1,7 @@
 package org.example.final_btl_datve.service.impl;
 
 import org.example.final_btl_datve.dto.RegisterDto;
+import org.example.final_btl_datve.dto.UserDto;
 import org.example.final_btl_datve.dto.VerificationCodeStorage;
 import org.example.final_btl_datve.entity.Membership;
 import org.example.final_btl_datve.entity.User;
@@ -10,6 +11,8 @@ import org.example.final_btl_datve.service.AuthService;
 import org.example.final_btl_datve.service.EmailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import javax.naming.AuthenticationException;
 import java.util.UUID;
 
 @Component
@@ -27,17 +30,26 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String login(String email, String password) {
+    public UserDto login(String email, String password) throws AuthenticationException {
+        // Kiểm tra email và mật khẩu
         User user = userRepository.findByEmail(email);
 
-        if(!user.getEnabled()){
-            return "Please verify your email first!";
+        if (user == null) {
+            throw new AuthenticationException("Email không tồn tại!");
         }
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            return "Login successful!";
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new AuthenticationException("Sai mật khẩu!");
         }
-        return "Invalid username or password!";
+
+        UserDto userDto = UserDto.builder()
+                .userId(user.getUserId()) // Lấy ID từ User
+                .email(user.getEmail())  // Lấy email từ User
+                .username(user.getUsername())    // Lấy tên từ User (nếu có thuộc tính này)
+                .build();
+
+// Trả về thông tin người dùng dưới dạng UserDto
+        return userDto;
     }
 
     @Override
