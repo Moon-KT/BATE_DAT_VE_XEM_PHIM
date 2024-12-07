@@ -65,9 +65,9 @@ public class User implements UserDetails {
 
     private Boolean enabled; // Trạng thái xác thực email
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<UserRole> userRoles;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -79,11 +79,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return userRoles == null ? List.of() : userRoles.stream()
-                .map(UserRole::getRole)
-                .map(Role::getRoleName)
-                .map(roleName -> (GrantedAuthority) roleName::name)
-                .toList();
+        return role == null ? List.of() : List.of((GrantedAuthority) () -> role.getRoleName().name());
     }
 
     @Override
@@ -97,7 +93,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

@@ -159,6 +159,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId =  urlParams.get('roomId');
+    const movieId = urlParams.get('movieId');
+    const showtimeId = urlParams.get('showtimeId');
+    const cinemaId = urlParams.get('cinemaId');
+
     document.getElementById('loginButton').addEventListener('click', async function () {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
@@ -181,12 +187,21 @@
                 body: JSON.stringify({ email, password })
             });
 
-
-
             if (response.ok) {
-                url = `http://localhost:8080/home.htm?userId=${id}`;
+                const data = await response.json();
+
+                const userId = data.userId;
+                const email = data.email;
+
+                sessionStorage.setItem('userId', userId); // Hoặc localStorage.setItem('userId', userId);
+                sessionStorage.setItem('email', email);  // Lưu email người dùng
+
+                if (roomId && movieId && showtimeId && cinemaId) {
+                    window.location.href = `/chonGhe.htm?roomId=${roomId}&movieId=${movieId}&showtimeId=${showtimeId}&cinemaId=${cinemaId}&userId=${userId}`;
+                    return;
+                }
                 // Nếu đăng nhập thành công, chuyển hướng tới trang home
-                window.location.href = '/home.htm?userId=';
+                window.location.href = `/home.htm?userId=${userId}`; // Chuyển hướng với userId
             } else {
                 // Nếu thất bại, hiển thị lỗi
                 const errorData = await response.json();

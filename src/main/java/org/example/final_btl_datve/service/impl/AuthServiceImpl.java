@@ -4,6 +4,7 @@ import org.example.final_btl_datve.dto.RegisterDto;
 import org.example.final_btl_datve.dto.UserDto;
 import org.example.final_btl_datve.dto.VerificationCodeStorage;
 import org.example.final_btl_datve.entity.Membership;
+import org.example.final_btl_datve.entity.Role;
 import org.example.final_btl_datve.entity.User;
 import org.example.final_btl_datve.entity.enumModel.MembershipType;
 import org.example.final_btl_datve.repository.UserRepository;
@@ -32,24 +33,25 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserDto login(String email, String password) throws AuthenticationException {
         // Kiểm tra email và mật khẩu
-        User user = userRepository.findByEmail(email);
+        User userFind = userRepository.findByEmail(email);
+        if(userFind.getRole().getRoleName().equals("ROLE_USER")){
+            return  UserDto.builder()
+                    .userId(userFind.getUserId()) // Lấy ID từ User
+                    .email(userFind.getEmail())  // Lấy email từ User
+                    .build();
+        }
 
-        if (user == null) {
+        if (userFind == null) {
             throw new AuthenticationException("Email không tồn tại!");
         }
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, userFind.getPassword())) {
             throw new AuthenticationException("Sai mật khẩu!");
         }
-
-        UserDto userDto = UserDto.builder()
-                .userId(user.getUserId()) // Lấy ID từ User
-                .email(user.getEmail())  // Lấy email từ User
-                .username(user.getUsername())    // Lấy tên từ User (nếu có thuộc tính này)
+        return UserDto.builder()
+                .userId(userFind.getUserId()) // Lấy ID từ User
+                .email(userFind.getEmail())  // Lấy email từ User
                 .build();
-
-// Trả về thông tin người dùng dưới dạng UserDto
-        return userDto;
     }
 
     @Override
@@ -72,16 +74,18 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
-        // Tạo và lưu mã xác thực
-        String verificationCode = generateVerificationCode();
-        verificationCodeStorage.storeVerificationCode(registerDto.getEmail(), verificationCode);
+//        // Tạo và lưu mã xác thực
+//        String verificationCode = generateVerificationCode();
+//        verificationCodeStorage.storeVerificationCode(registerDto.getEmail(), verificationCode);
 
-        // Gửi email xác thực
-        emailService.sendVerificationEmail(user.getEmail(), "Verification Code", verificationCode);
+//        // Gửi email xác thực
+//        emailService.sendVerificationEmail(user.getEmail(), "Verification Code", verificationCode);
+//
+//        System.out.println("Verification code for email " + user.getEmail() + ": " + verificationCode);
+//
+//        return "User registered successfully! Check your email for verification code.";
 
-        System.out.println("Verification code for email " + user.getEmail() + ": " + verificationCode);
-
-        return "User registered successfully! Check your email for verification code.";
+            return "User registered successfully!";
     }
 
     @Override

@@ -24,12 +24,13 @@ def random_phone_number():
     return "0" + ''.join(random.choice("0123456789") for _ in range(9))
 
 def random_user_data():
-    first_names = ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Võ", "Đặng","Bùi"]
-    middle_names = ["Minh", "Văn", "Thị", "Hữu", "Quốc", "Ngọc", "Thanh", "Thảo", "Anh", "Tấn", "Hồng"]
-    last_names = ["Quang", "Hùng", "Trang", "Lan", "Hương", "Tú", "Dũng", "Hạnh", "Phương", "Bình", "Phúc"]
+    first_names = ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Võ", "Đặng","Bùi", "Đỗ", "Ngô", "Dương", "Lý", "Hồ", "Chu", "Vương", "Lưu", "Trịnh", "Đinh", "Phùng", "Trương", "Lâm", "Kiều", "Mai", "Tô", "Tăng", "Hà", "Đoàn", "Bạch", "Tạ", "Thạch", "Tiêu", "Từ", "Thái", "Sử", "Hứa", "Tôn", "Lục", "Đường", "Quách", "Đinh", "Đồng", "Tống", "Hạc", "Đổng", "Từ", "Thủy", "Thi", "Từ", "Tô", "Tống"]
+    middle_names = ["Minh", "Văn", "Thị", "Hữu", "Quốc", "Ngọc", "Thanh", "Thảo", "Anh", "Tấn", "Hồng","Kiều", "Đức"]
+    last_names = ["Quang", "Hùng", "Trang", "Lan", "Hương", "Tú", "Dũng", "Hạnh", "Phương", "Bình", "Phúc", "Thắng", "Hải", "Hà", "Thành", "Thảo", "Thu", "Hoa", "Sơn", "Linh", "Nhung", "Nga", "Thi", "Tâm", "Tân"]
     genders = ["FEMALE", "MALE", "OTHERS"]
 
     values = []
+    usernames = set()
 
     for i in range(200):
         start_date = datetime(1950, 1, 1)
@@ -47,7 +48,12 @@ def random_user_data():
         )
         join_date += random_time
 
-        username = f"{random.choice(first_names)} {random.choice(middle_names)} {random.choice(last_names)}"
+        while True:
+            username = f"{random.choice(first_names)} {random.choice(middle_names)} {random.choice(last_names)}"
+            if username not in usernames:
+                usernames.add(username)
+                break
+
         address = random_address()
         gender = random.choice(genders)
         membership_id = "null" if i < 10 else random.choice([1, 2, 3])
@@ -58,13 +64,14 @@ def random_user_data():
         email = unidecode(username.replace(" ", "").lower()) + "@gmail.com"
         password = random_password()
         phone_number = random_phone_number()
+        role_id = 1 if i < 10 else 2
 
-        values.append(f"('{username}', '{birthday_str}', '{join_date_str}', {accumulated_points}, {total_spent}, '{address}', '{gender}', '{email}', {membership_id}, '{password}', '{phone_number}', true)")
+        values.append(f"('{username}', '{birthday_str}', '{join_date_str}', {accumulated_points}, {total_spent}, '{address}', '{gender}', '{email}', {membership_id}, '{password}', '{phone_number}', true, {role_id})")
 
     return values
 
 insert_values = random_user_data()
-insert_sql = "INSERT INTO user (user_name, birthday, start_join, accumulated_points, total_spent, address, gender, email, membership_id, password, phone, enabled)\nVALUES\n"
+insert_sql = "INSERT INTO user (user_name, birthday, start_join, accumulated_points, total_spent, address, gender, email, membership_id, password, phone, enabled, role_id)\nVALUES\n"
 insert_sql += ",\n       ".join(insert_values) + ";"
 
 with open("user.sql", "w", encoding="utf-8") as file:

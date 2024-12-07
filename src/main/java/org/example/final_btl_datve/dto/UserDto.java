@@ -21,6 +21,7 @@ public class UserDto {
     private Gender gender;
     private String address;
     private ERole role;
+    private Double accPoint;
 //    private Double totalSpent;
     private LocalDateTime createdAt;
 //    private Boolean enabled;

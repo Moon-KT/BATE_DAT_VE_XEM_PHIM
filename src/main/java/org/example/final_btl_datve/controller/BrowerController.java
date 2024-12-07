@@ -41,15 +41,39 @@ public class BrowerController {
     }
 
     @GetMapping("/dangkithanhvien.htm")
-    public String sign() {
+    public String dangkithanhvien() {
         return "Brower/dangkithanhvien";
     }
 
     @GetMapping("/thongtinthanhvien.htm")
-    public String dangKy() {
-        return "Brower/thongtinthanhvien";
+    public String thongtinthanhvien() {
+        return  "Brower/thongtinthanhvien";
     }
 
+    @GetMapping("/conform.htm")
+    public String conform() {
+        return "Brower/conformInforandCombo";
+    }
+
+    @GetMapping("/payment.htm")
+    public String payment() {
+        return "Brower/payment";
+    }
+
+    @GetMapping("/showtimeCinema.htm")
+    public String showtimeCinema() {
+        return "Brower/movieShowTime";
+    }
+
+    @GetMapping("/cinema.htm")
+    public String cinema() {
+        return "Brower/cinema";
+    }
+
+    @GetMapping("/promotion.htm")
+    public String promotion() {
+        return "Brower/promotion";
+    }
     @GetMapping("/forget-password.htm")
     public String forgetPassword1() {
         return "Brower/forget-password";

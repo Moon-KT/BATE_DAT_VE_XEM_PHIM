@@ -20,11 +20,6 @@ public class SeatTypeController {
         return ResponseEntity.ok().body(seatTypeService.reads());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> read(@PathVariable Long id) throws Exception{
-        return ResponseEntity.ok().body(seatTypeService.read(id));
-    }
-
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody SeatTypeDto seatTypeDto) throws Exception{
         return ResponseEntity.ok().body(seatTypeService.create(seatTypeDto));

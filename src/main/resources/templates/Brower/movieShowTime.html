@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang Phim</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{Brower/navBar:: navbar}"></div>
+
+<div class="container">
+  <!-- TABS -->
+  <div class="tab-style-1 margin-bottom-35">
+    <ul class="nav nav-tabs dayofweek" style="margin-bottom: 10px; margin-left: 1%; margin-right: 1%;">
+      <li class="in active">
+        <a href="#342" name="firtTimeInSchedule" onclick="tabClick('342')" data-toggle="tab" class="dayofweek" id="342"><span class="font-38 font-s-35">07</span>/12 - T7</a>
+      </li>
+      <li>
+        <a href="#343" onclick="tabClick('343')" data-toggle="tab" class="dayofweek" id="343"><span class="font-38 font-s-35">08</span>/12 - CN</a>
+      </li>
+      <li>
+        <a href="#344" onclick="tabClick('344')" data-toggle="tab" class="dayofweek" id="344"><span class="font-38 font-s-35">09</span>/12 - T2</a>
+      </li>
+      <li>
+        <a href="#345" onclick="tabClick('345')" data-toggle="tab" class="dayofweek" id="345"><span class="font-38 font-s-35">10</span>/12 - T3</a>
+      </li>
+      <li>
+        <a href="#346" onclick="tabClick('346')" data-toggle="tab" class="dayofweek" id="346"><span class="font-38 font-s-35">11</span>/12 - T4</a>
+      </li>
+      <li>
+        <a href="#347" onclick="tabClick('347')" data-toggle="tab" class="dayofweek" id="347"><span class="font-38 font-s-35">12</span>/12 - T5</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="tab-content">
+      <!-- Nội dung các tab sẽ được tải qua API -->
+    </div>
+  </div>
+  <!-- END TABS -->
+</div>
+
+<!-- Section for upcoming movies -->
+  <div class="margin-bottom-35 d-flex justify-content-center align-items-center" style="padding-top: 30px">
+    <div class="text-center">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link text-hover-effect active" data-bs-toggle="tab" href="#now-showing">PHIM ĐANG CHIẾU</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-hover-effect" data-bs-toggle="tab" href="#upcoming">PHIM SẮP CHIẾU</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tab-content">
+    <!-- Tab 1: Phim Đang Chiếu -->
+    <div class="tab-pane fade show active" id="now-showing">
+      <div class="row" id="now-showing-movies">
+        <!-- Phim đang chiếu sẽ được tải tại đây -->
+      </div>
+    </div>
+
+    <!-- Tab 2: Phim Sắp Chiếu -->
+    <div class="tab-pane fade" id="upcoming">
+      <div class="row" id="upcoming-movies">
+        <!-- Phim sắp chiếu sẽ được tải tại đây -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{Brower/footer::footer}"></div>
+<!-- END fast view of a product -->
+<script th:src="@{/assets/js/browerJS/menuLocation.js}"></script>
+<script th:src="@{/assets/js/browerJS/navBar.js}"></script>
+<script>
+  // Hàm gọi API và cập nhật giao diện
+  async function fetchMovies() {
+    try {
+      const response = await fetch(`http://localhost:8080/api/movies/all`); // Đổi URL này với endpoint của bạn
+      const data = await response.json();
+
+      // Cập nhật phần carousel với dữ liệu phim
+      const movieCarousel = document.getElementById('movie-carousel');
+      movieCarousel.innerHTML = '';  // Xóa hết các mục phim cũ
+
+      data.movies.forEach(movie => {
+        const movieElement = document.createElement('div');
+        movieElement.classList.add('carousel-item');
+        movieElement.innerHTML = `
+                <div class="carousel-thumb">
+                    <a href="//chitietphim.htm?gf=${movie.movieId}">
+                        <img src="${movie.moviePoster}" class="img-responsive" alt="${movie.movieName}" />
+                    </a>
+                </div>
+                <div class="carousel-content">
+                    <h3 class="carousel-title"><a href="/chi-tiet-phim.htm?gf=${movie.movieId}">${movie.movieName}</a></h3>
+                    <h4 class="font-family-san no-margin font-12">${movie.genreList}</h4>
+                    <span class="font-family-oswa color1" style="font-size: 20px;">${movie.movieReleaseDate}</span>
+                </div>
+            `;
+        movieCarousel.appendChild(movieElement);
+      });
+    } catch (error) {
+      console.error("Error fetching movie data:", error);
+    }
+  }
+
+  // Tải dữ liệu phim khi trang được tải
+  document.addEventListener('DOMContentLoaded', function() {
+    fetchMovies();
+  });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</body>
+</html>

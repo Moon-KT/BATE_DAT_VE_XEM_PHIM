@@ -13,4 +13,6 @@ public interface SeatTypeService {
     SeatTypeDto read(Long seatTypeId) throws Exception;
     SeatTypeDto update(Long seatTypeId, SeatTypeDto seatTypeDto) throws Exception;
     void delete(Long seatTypeId) throws Exception;
+
+    //Other
 }

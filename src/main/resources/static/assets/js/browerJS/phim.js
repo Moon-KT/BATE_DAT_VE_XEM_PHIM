@@ -176,8 +176,15 @@ function showSchedule(movieName, showtimeList) {
         // Thêm sự kiện cho nút "Đồng ý"
         document.getElementById('confirmBookingBtn').addEventListener('click', () => {
             bookingModal.hide();  // Đóng modal sau khi xác nhận
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('userId');
 
-            window.location.href = `/chonGhe.htm?roomId=${showtime.roomId}&movieId=${showtime.movieId}&showtimeId=${showtime.showtimeId}&cinemaId=${cinemaIdF}`;
+            if (userId != null) {
+                window.location.href = `/chonGhe.htm?roomId=${showtime.roomId}&movieId=${showtime.movieId}&showtimeId=${showtime.showtimeId}&cinemaId=${cinemaIdF}&userId=${userId}`;
+            }else
+            {
+                window.location.href = `/dangkithanhvien.htm?roomId=${showtime.roomId}&movieId=${showtime.movieId}&showtimeId=${showtime.showtimeId}&cinemaId=${cinemaIdF}`;
+            }
         });
     }
 }

@@ -2,10 +2,7 @@ package org.example.final_btl_datve.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.final_btl_datve.entity.enumModel.ERole;
 
 import java.util.List;
@@ -18,15 +15,13 @@ import java.util.List;
 @Table(name = "roles")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long roleId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_name")
     private ERole roleName;
 
     @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<UserRole> userRoles;
+    private List<User> users;
 }

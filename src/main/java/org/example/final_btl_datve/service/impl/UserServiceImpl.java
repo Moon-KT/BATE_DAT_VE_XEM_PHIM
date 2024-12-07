@@ -3,7 +3,9 @@ package org.example.final_btl_datve.service.impl;
 import jakarta.persistence.Tuple;
 import org.example.final_btl_datve.dto.BookingHistoryDto;
 import org.example.final_btl_datve.dto.UserDto;
+import org.example.final_btl_datve.entity.Role;
 import org.example.final_btl_datve.entity.User;
+import org.example.final_btl_datve.repository.RoleRepository;
 import org.example.final_btl_datve.repository.UserRepository;
 import org.example.final_btl_datve.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,24 +23,27 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     private UserDto convertToDto(User user) {
         return UserDto.builder()
                 .userId(user.getUserId())
-                .username(user.getFullName())
+                .username(user.getUsername())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .phone(user.getPhone())
                 .address(user.getAddress())
                 .gender(user.getGender())
                 .birthday(user.getBirthday())
-                .role(user.getUserRoles().get(0).getRole().getRoleName())
+                .accPoint(user.getAccumulatedPoints())
+                .role(user.getRole().getRoleName())
                 .createdAt(user.getCreatAt())
                 .membershipType(user.getMembership() == null?
                 null : user.getMembership().getMembership_type())
@@ -51,6 +56,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if(userRepository.findByEmail(userDto.getEmail()) != null) {
             throw new Exception("Email đã tồn tại");
         }
+
+        Role adminRole = roleRepository.findByRoleName("ROLE_ADMIN");
+        if(adminRole == null) {
+            throw new Exception("Role không tồn tại");
+        }
+
         User user = User.builder()
                 .username(userDto.getUsername())
                 .email(userDto.getEmail())
@@ -58,7 +69,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .phone(userDto.getPhone())
                 .address(userDto.getAddress())
                 .gender(userDto.getGender())
+                .role(adminRole)
                 .birthday(userDto.getBirthday())
+                .enabled(true)
                 .build();
         return convertToDto(userRepository.save(user));
     }

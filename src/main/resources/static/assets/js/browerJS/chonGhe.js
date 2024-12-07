@@ -4,6 +4,7 @@ const roomId = urlParams.get('roomId');
 const movieId = urlParams.get('movieId');
 const showtimeId = urlParams.get('showtimeId');
 const cinemaId = urlParams.get('cinemaId');
+const userId = urlParams.get('userId');
 
 const roomIdLong = Number(roomId);
 const movieIdLong = Number(movieId);
@@ -180,29 +181,41 @@ async function getMovieInfo() {
     }
 }
 
-// Hủy đặt ghế
-document.getElementById('cancel-booking').addEventListener('click', function () {
-    window.location.href = 'home.htm';
+// Hàm đặt ghế
+document.getElementById('btnContinue').addEventListener('click', function () {
+    window.location.href = `conform.htm?userId=${userId}&roomId=${roomId}&movieId=${movieId}&showtimeId=${showtimeId}&cinemaId=${cinemaId}&seats=${selectedSeats.join(',')}&totalPrice=${totalPrice}&timerDisplay=${timer}`;
 });
 
-// Chạy đồng hồ đếm ngược
-let timer = 600; // 10 phút tính bằng giây
-const timerDisplay = document.getElementById('timer');
+// Hủy đặt ghế
+document.getElementById('cancel-booking').addEventListener('click', function () {
+    window.location.href = `home.htm?userId=${userId}`;
+});
 
-function updateTimer() {
-    const minutes = Math.floor(timer / 60);
-    const seconds = timer % 60;
-    timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+let timer = parseInt(localStorage.getItem('timer')) || 600;  // Ví dụ: 600 giây (10 phút) mặc định
+const timerDisplay = document.getElementById('timer');  // Sử dụng ID 'timer' trong HTML để hiển thị thời gian
 
-    if (timer <= 0) {
-        window.location.href = 'home.htm'; // Quay về trang home nếu hết thời gian
-    } else {
-        timer--;
+// Kiểm tra nếu phần tử 'timer' tồn tại trong DOM
+if (timerDisplay) {
+    function updateTimer() {
+        const minutes = Math.floor(timer / 60);  // Tính phút
+        const seconds = timer % 60;  // Tính giây
+        timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;  // Cập nhật nội dung phần tử
+
+        // Nếu hết thời gian, điều hướng về trang home
+        if (timer <= 0) {
+            window.location.href = `home.htm?userId=${userId}`;  // Quay về trang home nếu hết thời gian
+        } else {
+            timer--;  // Giảm timer mỗi giây
+            localStorage.setItem('timer', timer);  // Lưu giá trị timer vào localStorage
+        }
     }
+
+    // Cập nhật đồng hồ mỗi giây
+    setInterval(updateTimer, 1000);
+} else {
+    console.log('Không tìm thấy phần tử với ID "timer".');
 }
 
-// Cập nhật đồng hồ mỗi giây
-setInterval(updateTimer, 1000);
 
 // Tạo sơ đồ ghế khi tải trang
 document.addEventListener('DOMContentLoaded', function () {
