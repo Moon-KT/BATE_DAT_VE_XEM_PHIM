@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Suất Chiếu</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome (Optional, for icons) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>Quản lý Suất Chiếu</h2>
+
+    <!-- Lọc theo địa điểm -->
+    <div class="mb-3">
+        <label for="filterCinema" class="form-label">Lọc theo Cinema</label>
+        <select class="form-control" id="filterCinema">
+            <option value="">Chọn Cinema</option>
+            <!-- Cinema options will be dynamically populated here -->
+        </select>
+    </div>
+
+    <!-- Lọc theo phòng -->
+    <div class="mb-3">
+        <label for="filterRoom" class="form-label">Lọc theo phòng chiếu</label>
+        <select class="form-control" id="filterRoom">
+            <option value="">Chọn phòng chiếu</option>
+            <!-- Room options will be dynamically populated here -->
+        </select>
+    </div>
+
+
+    <!-- Button to open modal for adding a new showtime -->
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addShowtimeModal">
+        Thêm Suất Chiếu
+    </button>
+
+    <!-- Display movies grouped by movie -->
+    <div id="moviesContainer">
+        <!-- Movies with their showtimes will be dynamically added here -->
+    </div>
+</div>
+
+<!-- Modal for viewing/editing showtime details -->
+<div class="modal fade" id="showtimeDetailModal" tabindex="-1" aria-labelledby="showtimeDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="showtimeDetailModalLabel">Chi Tiết Suất Chiếu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="showtimeDetail">
+                    <!-- Detailed information will be dynamically inserted here -->
+                </div>
+                <button class="btn btn-danger" id="deleteShowtimeBtn">Xóa</button>
+                <button class="btn btn-warning" id="editShowtimeBtn">Sửa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    const apiUrl = "http://localhost:8080/api/showtimes/all"; // API for showtimes
+    const movieApiUrl = "http://localhost:8080/api/movies"; // API for movies
+    const roomApiUrl = "http://localhost:8080/api/rooms"; // API for rooms
+    const cinemaApiUrl = "http://localhost:8080/api/cinemas/all"; // API for cinemas
+
+    // Function to load cinemas
+    function loadCinemas() {
+        $.get(cinemaApiUrl, function(cinemas) {
+            $('#filterCinema').empty().append('<option value="">Chọn Cinema</option>');
+            cinemas.forEach(cinema => {
+                $('#filterCinema').append(`<option value="${cinema.cinemaId}">${cinema.cinemaName}</option>`);
+            });
+        });
+    }
+
+    // Function to load rooms
+    function loadRooms() {
+        $.get("http://localhost:8080/api/rooms/all", function(rooms) {
+            $('#filterRoom').empty().append('<option value="">Chọn phòng chiếu</option>');
+            rooms.forEach(room => {
+                $('#filterRoom').append(`<option value="${room.roomId}">${room.roomName}</option>`);
+            });
+        });
+    }
+
+    // Function to filter showtimes by selected room
+    function filterShowtimesByRoom(roomId) {
+        $.get(apiUrl, function(showtimes) {
+            // console.log(showtimes);
+            const filteredShowtimes = showtimes.filter(showtime => showtime.roomId == roomId);
+            console.log(filteredShowtimes);
+            // Display movies with their filtered showtimes
+            $('#moviesContainer').empty(); // Clear previous content
+            filteredShowtimes.forEach(showtime => {
+                $.get(`${movieApiUrl}/${showtime.movieId}`, function(movie) {
+                    let movieHtml = `
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h5>${movie.movieName}</h5>
+                                <img src="${movie.moviePoster}" alt="${movie.movieName}" class="img-fluid" style="max-width: 150px; height: auto;">
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h6>Danh sách thời gian chiếu:</h6>
+                                        <div class="row">`;
+
+                    // Display the showtime for this movie
+                    movieHtml += `
+                            <div class="col-12 col-md-3 mb-2">
+                                <button class="btn btn-outline-primary w-100 showtimeBtn" data-showtime-id="${showtime.showtimeId}">
+                                    ${new Date(showtime.startTime).toLocaleString()}
+                                </button>
+                            </div>`;
+
+                    movieHtml += `
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+
+                    $('#moviesContainer').append(movieHtml);
+                });
+            });
+        });
+    }
+
+
+
+    // Function to load movies and their respective showtimes
+    function loadMoviesAndShowtimes() {
+        $.get(apiUrl, function(showtimes) {
+            const moviesMap = new Map(); // Map to group showtimes by movieId
+
+            // Group showtimes by movieId
+            showtimes.forEach(showtime => {
+                if (!moviesMap.has(showtime.movieId)) {
+                    moviesMap.set(showtime.movieId, []);
+                }
+                moviesMap.get(showtime.movieId).push(showtime);
+            });
+
+            // Display movies with their showtimes
+            $('#moviesContainer').empty(); // Clear previous content
+            moviesMap.forEach((showtimes, movieId) => {
+                $.get(`${movieApiUrl}/${movieId}`, function(movie) {
+                    let movieHtml = `
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h5>${movie.movieName}</h5>
+                                <img src="${movie.moviePoster}" alt="${movie.movieName}" class="img-fluid" style="max-width: 150px; height: auto;">
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h6>Danh sách thời gian chiếu:</h6>
+                                        <div class="row">`;
+
+                    // Display all showtimes for this movie
+                    showtimes.forEach((showtime) => {
+                        movieHtml += `
+                            <div class="col-12 col-md-3 mb-2">
+                                <button class="btn btn-outline-primary w-100 showtimeBtn" data-showtime-id="${showtime.showtimeId}">
+                                    ${new Date(showtime.startTime).toLocaleString()}
+                                </button>
+                            </div>`;
+                    });
+
+                    movieHtml += `
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+
+                    $('#moviesContainer').append(movieHtml);
+                });
+            });
+        });
+    }
+
+    // Function to show showtime details in modal
+    function showShowtimeDetails(showtimeId) {
+        // Get showtime details from the API
+        $.get(`http://localhost:8080/api/showtimes/${showtimeId}`, function(showtime) {
+            $.get(`http://localhost:8080/api/movies/${showtime.movieId}`, function (movie) {
+                // Populate the modal with showtime details
+                $.get(`http://localhost:8080/api/rooms/${showtime.roomId}`, function (room) {
+                    const showtimeDetailsHtml = `
+            <p><strong>Phim:</strong> ${movie.movieName}</p>
+                <p><strong>Phòng Chiếu:</strong> ${room.roomName}</p>
+
+            <p><strong>Giờ Chiếu:</strong> ${new Date(showtime.startTime).toLocaleString()}</p>
+            <p><strong>Ghế Trống:</strong> ${showtime.emptySeats || 'Không xác định'}</p>
+        `;
+                    $('#showtimeDetail').html(showtimeDetailsHtml);
+
+                    // Set up the edit and delete buttons
+                    $('#editShowtimeBtn').off('click').on('click', function () {
+                        editShowtime(showtimeId);  // Open the edit modal when "Sửa" is clicked
+                        $('#showtimeDetailModal').modal('hide');
+                    });
+
+                    $('#deleteShowtimeBtn').off('click').on('click', function () {
+                        deleteShowtime(showtimeId);  // Delete the showtime when "Xóa" is clicked
+                        $('#showtimeDetailModal').modal('hide');
+                    });
+
+                    // Show the modal with the details
+                    $('#showtimeDetailModal').modal('show');
+                });
+            });
+        });
+
+    }
+
+    // Function to add a new showtime
+    $('#showtimeForm').submit(function(e) {
+        e.preventDefault();
+        const formData = {
+            movieId: $('#movieId').val(),
+            roomId: $('#roomId').val(),
+            startTime: $('#startTime').val(),
+            emptySeats: $('#emptySeats').val() || null
+        };
+        const showtimeId = $('#showtimeId').val();
+
+        if (showtimeId) {
+            // Update existing showtime
+            $.ajax({
+                url: `http://localhost:8080/api/showtimes/${showtimeId}`,
+                type: 'PUT',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                success: function() {
+                    $('#addShowtimeModal').modal('hide');
+                    loadMoviesAndShowtimes();
+                }
+            });
+        } else {
+            // Add new showtime
+            $.ajax({
+                url: `http://localhost:8080/api/showtimes`,
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                success: function() {
+                    $('#addShowtimeModal').modal('hide');
+                    loadMoviesAndShowtimes();
+                }
+            });
+        }
+    });
+
+    // Function to view/show the details of a showtime
+    $(document).on('click', '.showtimeBtn', function() {
+        const showtimeId = $(this).data('showtime-id');
+        showShowtimeDetails(showtimeId);
+    });
+
+    // Function to delete a showtime
+    function deleteShowtime(id) {
+        if (confirm("Bạn có chắc chắn muốn xóa suất chiếu này?")) {
+            $.ajax({
+                url: `${apiUrl}/${id}`,
+                type: 'DELETE',
+                success: function() {
+                    loadMoviesAndShowtimes();
+                }
+            });
+        }
+    }
+
+    // Handle cinema selection to load rooms
+    $('#filterCinema').on('change', function() {
+        const selectedCinemaId = $(this).val();
+        loadRooms(selectedCinemaId); // Load rooms based on selected cinema
+    });
+
+    // Handle room selection to filter showtimes
+    $('#filterRoom').on('change', function() {
+        const selectedRoomId = $(this).val();
+        console.log(selectedRoomId);
+        if (selectedRoomId) {
+            filterShowtimesByRoom(selectedRoomId); // Filter showtimes based on selected room
+        }
+    });
+
+    // Load cinemas and showtimes when page loads
+    $(document).ready(function() {
+        loadCinemas();
+    });
+
+    // Load movies and showtimes when page loads
+    $(document).ready(function() {
+        loadMoviesAndShowtimes();
+    });
+</script>
+
+</body>
+</html>

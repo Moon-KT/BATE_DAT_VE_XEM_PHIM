@@ -24,10 +24,15 @@ public class RoomController {
         return ResponseEntity.ok().body(roomService.read(id));
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody RoomDto screeningRoomDto) throws Exception{
-        return ResponseEntity.ok().body(roomService.create(screeningRoomDto));
+
+    @GetMapping("/room/{id}/seats/{seatRow}/{seatNumber}")
+    public ResponseEntity<?> readSeat(
+            @PathVariable Long id,
+            @PathVariable String seatRow, // Đổi int thành String
+            @PathVariable int seatNumber) throws Exception {
+        return ResponseEntity.ok().body(roomService.readSeat(id, seatRow, seatNumber));
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id,

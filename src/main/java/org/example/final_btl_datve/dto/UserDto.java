@@ -22,7 +22,7 @@ public class UserDto {
     private String address;
     private ERole role;
     private Double accPoint;
-//    private Double totalSpent;
+    private Double totalSpent;
     private LocalDateTime createdAt;
 //    private Boolean enabled;
     private MembershipType membershipType;

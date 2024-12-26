@@ -129,7 +129,7 @@
                     </div>
                     <input type="text" class="form-control" id="captcha" placeholder="Nhập mã xác thực">
                     <div class="input-group-append">
-                        <span class="input-group-text">1234AB</span> <!-- Mã xác thực ngẫu nhiên -->
+                        <span id="maN" class="input-group-text">1234AB</span> <!-- Mã xác thực ngẫu nhiên -->
                     </div>
                 </div>
             </div>
@@ -215,6 +215,6 @@
         }
     });
 </script>
-
+<script th:src="@{/assets/js/browerJS/register.js}"></script>
 </body>
 </html>

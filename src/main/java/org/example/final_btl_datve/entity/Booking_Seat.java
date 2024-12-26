@@ -1,10 +1,7 @@
 package org.example.final_btl_datve.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.final_btl_datve.entity.enumModel.SeatStatus;
 import org.example.final_btl_datve.entity.key.BookingSeatKey;
 
@@ -19,18 +16,17 @@ public class Booking_Seat {
     private BookingSeatKey id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "seat_status")
+    @Column(name = "seat_status", nullable = false)
     private SeatStatus status;
 
 
     @ManyToOne
     @MapsId("bookingId")
-    @JoinColumn(name = "booking_id")
+    @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
     @ManyToOne
     @MapsId("seatId")
-    @JoinColumn(name = "seat_id")
+    @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
-
 }

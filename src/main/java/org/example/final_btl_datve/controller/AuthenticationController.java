@@ -5,15 +5,8 @@ import org.example.final_btl_datve.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,8 +15,8 @@ public class AuthenticationController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDTO) {
-        String result = authService.register(registerDTO);
+    public ResponseEntity<?> register(@RequestBody RegisterDto registerDTO) {
+        Long result = authService.register(registerDTO);
         return ResponseEntity.ok(result);
     }
 

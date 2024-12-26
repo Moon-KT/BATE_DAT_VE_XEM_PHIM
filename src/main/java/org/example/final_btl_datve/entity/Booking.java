@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.final_btl_datve.entity.enumModel.BookingStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,6 +36,9 @@ public class Booking {
     private Double pointsEarned; // Điểm tích lũy từ booking này
 
     private LocalDateTime bookingTime;
+
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
 
     @OneToMany(mappedBy = "booking",cascade = CascadeType.ALL)
     @JsonIgnore

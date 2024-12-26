@@ -17,6 +17,6 @@ public class BookingHistoryDto {
     private String cinemaName;
     private String roomName;
     private String seatNames;
-    private Long point;
+    private Double point;
 
 }

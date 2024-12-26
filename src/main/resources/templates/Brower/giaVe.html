@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Menu</title>
+  <style>
+    .cinema-image {
+      max-width: 100%;
+      height: auto;
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+<!-- Menu với Bootstrap -->
+<div th:replace="~{Brower/navBar:: navbar}"></div>
+
+<!-- Content -->
+<div class="container">
+  <div class="text-center mt-4">
+    <h2 id="cinemaTitle">Giá Vé Beta Thanh Xuân</h2>
+    <img id="cinemaImage" src="https://files.betacorp.vn/cms/images/2024/04/03/bang-gia-ve-md-ve-2d-va-3d-1920x2400-1-151421-030424-73.png" alt="Giá vé Beta Mỹ Đình" class="cinema-image">
+  </div>
+</div>
+<hr>
+<!-- Footer -->
+<div th:replace="~{Brower/footer::footer}"></div>
+<script th:src="@{/assets/js/browerJS/menuLocation.js}"></script>
+<script th:src="@{/assets/js/browerJS/navBar.js}"></script>
+<script>
+  let cinemaIdF = 1;
+
+  // Lấy thông tin cinemaId từ URL
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  // Hàm gọi API để lấy thông tin rạp
+  async function fetchCinemaInfo(cinemaId) {
+    try {
+      const response = await fetch(`http://localhost:8080/api/cinemas/${cinemaId}`);
+      if (!response.ok) throw new Error('Failed to fetch cinema info');
+
+      const data = await response.json();
+
+      // Cập nhật giao diện
+      const cinemaTitle = document.getElementById('cinemaTitle');
+      const cinemaImage = document.getElementById('cinemaImage');
+      if (cinemaTitle) cinemaTitle.textContent = `Giá Vé ${data.cinemaName}`;
+      if (cinemaImage) {
+        cinemaImage.src = data.cinemaImageUrl || cinemaImage.src;
+        cinemaImage.alt = `Giá vé ${data.cinemaName}`;
+      }
+    } catch (error) {
+      console.error('Lỗi khi lấy thông tin rạp:', error);
+    }
+  }
+
+  // Hàm xử lý sự kiện dropdown
+  function setupCinemaDropdown() {
+    const dropdownItems = document.querySelectorAll(".dropdown-item");
+    const cinemaTitle = document.getElementById("cinemaTitle");
+    const cinemaImage = document.getElementById("cinemaImage");
+
+    dropdownItems.forEach(item => {
+      item.addEventListener("click", event => {
+        event.preventDefault();
+
+        const cinemaName = item.getAttribute("data-cinema");
+        const cinemaImg = item.getAttribute("data-img");
+
+        if (cinemaTitle) cinemaTitle.textContent = `Giá Vé ${cinemaName}`;
+        if (cinemaImage) {
+          cinemaImage.src = cinemaImg;
+          cinemaImage.alt = `Giá vé ${cinemaName}`;
+        }
+      });
+    });
+  }
+  // Hàm khởi tạo
+  async function init() {
+    let cinemaId = getQueryParam("cinemaId");
+    if (!cinemaId) cinemaId = 1;
+    cinemaIdF = cinemaId;
+
+    await fetchCinemaInfo(cinemaId);
+    setupCinemaDropdown();
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>

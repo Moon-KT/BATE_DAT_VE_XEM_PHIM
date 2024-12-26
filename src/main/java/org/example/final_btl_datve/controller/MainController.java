@@ -71,6 +71,15 @@ public class MainController {
         return "Admin/total";
     }
 
+    @GetMapping("/test")
+    public String test() {
+        return "User/test";
+    }
+
+    @GetMapping("/test2")
+    public String test2() {
+        return "Admin/test.ticket";
+    }
 
     // Kiem tra nguoi dung va phan quyen hien tai
     @GetMapping("/auth")

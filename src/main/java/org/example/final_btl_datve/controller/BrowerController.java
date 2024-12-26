@@ -65,6 +65,11 @@ public class BrowerController {
         return "Brower/movieShowTime";
     }
 
+    @GetMapping("/price.htm")
+    public String price() {
+        return "Brower/giaVe";
+    }
+
     @GetMapping("/cinema.htm")
     public String cinema() {
         return "Brower/cinema";

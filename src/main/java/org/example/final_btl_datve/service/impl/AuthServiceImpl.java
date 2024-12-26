@@ -6,7 +6,10 @@ import org.example.final_btl_datve.dto.VerificationCodeStorage;
 import org.example.final_btl_datve.entity.Membership;
 import org.example.final_btl_datve.entity.Role;
 import org.example.final_btl_datve.entity.User;
+import org.example.final_btl_datve.entity.enumModel.ERole;
 import org.example.final_btl_datve.entity.enumModel.MembershipType;
+import org.example.final_btl_datve.repository.MembershipRepository;
+import org.example.final_btl_datve.repository.RoleRepository;
 import org.example.final_btl_datve.repository.UserRepository;
 import org.example.final_btl_datve.service.AuthService;
 import org.example.final_btl_datve.service.EmailService;
@@ -22,12 +25,16 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final VerificationCodeStorage verificationCodeStorage;
+    private final MembershipRepository membershipRepository;
+    private final RoleRepository roleRepository;
 
-    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, VerificationCodeStorage verificationCodeStorage) {
+    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, VerificationCodeStorage verificationCodeStorage, MembershipRepository membershipRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.verificationCodeStorage = verificationCodeStorage;
+        this.membershipRepository = membershipRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -55,10 +62,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String register(RegisterDto registerDto) {
+    public Long register(RegisterDto registerDto) {
         if (userRepository.findByEmail(registerDto.getEmail()) != null) {
-            return "Username already exists!";
+            throw new RuntimeException("Email đã tồn tại!");
         }
+        Membership membership = membershipRepository.findById(1L) // NORMAL
+                .orElseThrow(() -> new RuntimeException("Membership not found"));
+
+
+        Role role = roleRepository.findById(2L) // ROLE_USER
+                .orElseThrow(() -> new RuntimeException("Role not found"));
 
         User user = User.builder()
                 .username(registerDto.getUsername())
@@ -68,11 +81,15 @@ public class AuthServiceImpl implements AuthService {
                 .phone(registerDto.getPhone())
                 .gender(registerDto.getGender())
                 .birthday(registerDto.getBirthday())
-                .membership(Membership.builder().membership_type(MembershipType.valueOf("NORMAL")).build())
-                .enabled(false)
+                .membership(membership)
+                .role(role)
+                .accumulatedPoints(0.0)
+                .totalSpent(0.0)
+                .creatAt(java.time.LocalDateTime.now())
+                .enabled(true)
                 .build();
 
-        userRepository.save(user);
+        User saveUser = userRepository.save(user);
 
 //        // Tạo và lưu mã xác thực
 //        String verificationCode = generateVerificationCode();
@@ -85,7 +102,7 @@ public class AuthServiceImpl implements AuthService {
 //
 //        return "User registered successfully! Check your email for verification code.";
 
-            return "User registered successfully!";
+            return saveUser.getUserId();
     }
 
     @Override

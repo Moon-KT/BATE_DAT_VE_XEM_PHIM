@@ -28,4 +28,10 @@ public class Booking_Combo {
     @MapsId("comboId")
     @JoinColumn(name = "combo_id")
     private Combo combo;
+
+    public Booking_Combo(BookingComboKey bookingComboKey, Booking booking, Combo combo) {
+        this.bookingComboKey = bookingComboKey;
+        this.booking = booking;
+        this.combo = combo;
+    }
 }

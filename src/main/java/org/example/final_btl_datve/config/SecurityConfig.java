@@ -25,7 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
                         .requestMatchers("/assets/css/**", "/assets/imgs/**","/assets/img/**", "/assets/js/**").permitAll()
                         .requestMatchers("/login", "/logout", "/home.htm","/chitietphim.htm", "phim.htm","test.htm","chonGhe.htm","dangkithanhvien.htm","thongtinthanhvien.htm","conform.htm", "payment.htm").permitAll()
-                        .requestMatchers("/showtimeCinema.htm","/cinema.htm","/promotion.htm").permitAll()
+                        .requestMatchers("/showtimeCinema.htm","/cinema.htm","/promotion.htm", "/price.htm","/test", "/test2").permitAll()
                         .requestMatchers("/forget-password").permitAll()
                         .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated())

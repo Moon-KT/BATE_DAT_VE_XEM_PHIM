@@ -1,6 +1,7 @@
 package org.example.final_btl_datve.service.impl;
 
 import org.example.final_btl_datve.dto.RoomDto;
+import org.example.final_btl_datve.dto.SeatDto;
 import org.example.final_btl_datve.entity.ScreeningRoom;
 import org.example.final_btl_datve.repository.CinemaRepository;
 import org.example.final_btl_datve.repository.RoomRepository;
@@ -67,6 +68,22 @@ public class RoomServiceImpl implements RoomService {
             throw new Exception("Không tìm thấy phòng chiếu có ID: " + screeningRoomID);
         }
         screeningRoomRepository.deleteById(screeningRoomID);
+    }
+
+    @Override
+    public SeatDto readSeat(Long screeningRoomID, String seatRow, int seatNumber) throws Exception {
+        ScreeningRoom screeningRoom = screeningRoomRepository.findById(screeningRoomID)
+                .orElseThrow(() -> { return new Exception("Không tìm thấy phòng chiếu có ID: " + screeningRoomID);});
+        return screeningRoom.getSeatList().stream()
+                .filter(seat -> seat.getSeatRow().equals(seatRow) && seat.getSeatNumber() == seatNumber)
+                .findFirst()
+                .map(seat -> SeatDto.builder()
+                        .roomId(screeningRoom.getRoomId())
+                        .seatId(seat.getSeatId())
+                        .seatRow(seat.getSeatRow())
+                        .seatNumber(seat.getSeatNumber())
+                        .build())
+                .orElseThrow(() -> { return new Exception("Không tìm thấy ghế có hàng " + seatRow + " và số " + seatNumber);});
     }
 }
 

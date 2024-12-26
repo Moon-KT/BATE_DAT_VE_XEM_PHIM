@@ -1,6 +1,7 @@
 package org.example.final_btl_datve.repository;
 
 import org.example.final_btl_datve.entity.Booking;
+import org.example.final_btl_datve.entity.enumModel.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,6 +11,9 @@ import java.util.List;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
+    // Tìm kiếm booking theo status
+    List<Booking> findByStatus(BookingStatus status);
+
     // Truy vấn để tính tổng giá theo tháng
     @Query("SELECT MONTH(b.bookingTime) AS month, SUM(b.totalPrice) AS totalSales " +
             "FROM Booking b " +
@@ -39,4 +43,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "JOIN s.movie m " +
             "GROUP BY m.movieName ")
     List<Object[]> countByMovie();
+
+
 }

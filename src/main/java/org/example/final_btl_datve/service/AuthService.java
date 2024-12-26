@@ -9,7 +9,7 @@ import javax.naming.AuthenticationException;
 @Service
 public interface AuthService {
     UserDto login(String email, String password) throws AuthenticationException;
-    String register(RegisterDto registerDto);
+    Long register(RegisterDto registerDto);
     String verifyEmail(String email, String verificationCode);
     String resetPassword(String email, String newPassword);
     void logout(String token);

@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .gender(user.getGender())
                 .birthday(user.getBirthday())
                 .accPoint(user.getAccumulatedPoints())
+                .totalSpent(user.getTotalSpent())
                 .role(user.getRole().getRoleName())
                 .createdAt(user.getCreatAt())
                 .membershipType(user.getMembership() == null?
@@ -153,6 +154,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     .seatNames(result.get("seatNames", String.class))
                     .comboDetails(result.get("comboDetails", String.class))
                     .seatCount(result.get("seatCount", Long.class))
+                    .point(result.get("point", Double.class))
                     .build();
         }).collect(Collectors.toList());
         return bookingHistoryDtos;

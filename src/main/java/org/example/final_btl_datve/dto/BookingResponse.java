@@ -22,4 +22,5 @@ public class BookingResponse {
     private List<Long> seatIds;    // Danh sách ID ghế đã đặt
     private List<Long> comboIds;   // Danh sách ID combo trong booking
     private String message;
+    private String status;        // Trạng thái của booking
 }

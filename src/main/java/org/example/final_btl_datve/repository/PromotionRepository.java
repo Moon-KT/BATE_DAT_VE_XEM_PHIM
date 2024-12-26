@@ -17,4 +17,6 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
     @Query("SELECT p FROM Promotion p WHERE p.promotionDescription IN :types")
     List<Promotion> findPromotionByTypes(List<String> types);
+
+
 }

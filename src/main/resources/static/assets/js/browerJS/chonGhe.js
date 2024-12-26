@@ -17,6 +17,9 @@ let totalPrice = 0;
 // Mảng lưu các ghế đã chọn
 let selectedSeats = [];
 
+// Mảng lưu id của các ghế đã chọn
+let selectedSeatIds = [];
+
 // Hàm chuyển trạng thái ghế (chọn, bỏ chọn)
 function toggleSeat(seatElement, seat) {
     const seatName = seat.seatRow + seat.seatNumber;
@@ -37,6 +40,9 @@ function toggleSeat(seatElement, seat) {
 
         // Thêm tên ghế vào danh sách đã chọn
         selectedSeats.push(seatName);
+
+        // Thêm id ghế vào danh sách đã chọn
+        selectedSeatIds.push(seat.seatId);
     } else {
         seatElement.classList.remove('selected');
         seatElement.classList.add('booked');
@@ -183,7 +189,7 @@ async function getMovieInfo() {
 
 // Hàm đặt ghế
 document.getElementById('btnContinue').addEventListener('click', function () {
-    window.location.href = `conform.htm?userId=${userId}&roomId=${roomId}&movieId=${movieId}&showtimeId=${showtimeId}&cinemaId=${cinemaId}&seats=${selectedSeats.join(',')}&totalPrice=${totalPrice}&timerDisplay=${timer}`;
+    window.location.href = `conform.htm?userId=${userId}&roomId=${roomId}&movieId=${movieId}&showtimeId=${showtimeId}&cinemaId=${cinemaId}&seats=${selectedSeats.join(',')}&seatIds=${selectedSeatIds.join(',')}&totalPrice=${totalPrice}&timerDisplay=${timer}`;
 });
 
 // Hủy đặt ghế

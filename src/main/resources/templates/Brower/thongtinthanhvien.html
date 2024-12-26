@@ -13,7 +13,8 @@
             padding: 0;
             background-color: #f8f9fa;
         }
-        .main-menu{
+
+        .main-menu {
             width: 100%;
             max-width: 1200px;
             margin-top: 30px;
@@ -96,9 +97,10 @@
             border-radius: 5px;
             border: 2px solid #007bff;
         }
-        .form-group #avatar-input{
+
+        .form-group #avatar-input {
             margin-top: -100px;
-            margin-left:20px;
+            margin-left: 20px;
         }
 
         .form-group button {
@@ -229,11 +231,165 @@
     <p id="error-message">Vui lòng nhập đầy đủ thông tin!</p>
 </div>
 
+<!-- =====================Nội dung Thẻ thành viên=========================  -->
+<div class="content" id="membership-card" >
+    <h2>Thẻ Thành Viên</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>SỐ THẺ</th>
+            <th>HẠNG THẺ</th>
+            <th>NGÀY KÍCH HOẠT</th>
+            <th>TỔNG CHI TIÊU</th>
+            <th>ĐIỂM TÍCH LŨY</th>
+            <th>NGÀY HẾT HẠN</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <!-- ================= 3 triệu là số liệu với người chưa mua j nếu đã mua sẽ hiển thị số tiền 3tr - đi money đã mua==== -->
+    <h4 style="font-weight: bold;text-align: center;"> Bạn cần thêm 3.000.000 đ để nâng hạng Khách hàng VIP </h4>
+</div>
+<!-- ============================== Lịch sử mua vé ===================================== -->
+<div class="content" id="movie-journey">
+    <h2>Hành Trình Điện Ảnh</h2>
+    <table class="table table-bordered" id="orderTable">
+        <thead>
+        <tr>
+            <th>MÃ HÓA ĐƠN</th>
+            <th>PHIM</th>
+            <th>RẠP CHIẾU</th>
+            <th>SUẤT CHIẾU</th>
+            <th>GHẾ ĐÃ ĐẶT</th>
+            <th>COMBO/PACKAGE</th>
+            <th>NGÀY ĐẶT</th>
+            <th>ĐIỂM</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Dữ liệu sẽ được thêm vào đây thông qua JS -->
+        </tbody>
+    </table>
+</div>
+<!-- =================================== tab điểm hội viên nhaa====================== -->
+<div class="content" id="points">
+    <h2>Điểm Hội Viên</h2>
+    <h4> TỔNG QUAN</h4>
+    <table class="table table-borderless w-50">
+        <tr>
+            <th>Điểm đã tích lũy</th>
+            <td> 00 điểm</td>
+        </tr>
+        <tr>
+            <th>Điểm đã sử dụng</th>
+            <td> 00 điểm</td>
+        </tr>
+        <tr>
+            <th>Điểm hiện có</th>
+            <td> 00 điểm</td>
+        </tr>
+        <tr>
+            <th>Điểm sắp hết hạn</th>
+            <td> 00 điểm</td>
+        </tr>
+    </table>
+    <h4> LỊCH SỬ ĐIỂM </h4>
+    <table class="table table-bordered">
+        <tr>
+            <th>THỜI GIAN</th>
+            <th>SỐ ĐIỂM</th>
+            <th>NỘI DUNG SỬ DỤNG</th>
+        </tr>
+        <tr>
+            <td>12/11/2024</td>
+            <td>120 điểm</td>
+            <td>sử dụng mua bỏng ngô và cà phê</td>
+        </tr>
+
+    </table>
+</div>
+<!-- ============================ tab Voucher nhé ===================== -->
+<div class="content" id="voucher">
+    <h2>Voucher</h2>
+    <h4>VOUCHER CỦA TÔI</h4>
+    <table class="table table-bordered">
+        <tr>
+            <th>MÃ VOUCHER</th>
+            <th>NỘI DUNG VOUCHER</th>
+            <th>LOẠI VOUCHER</th>
+            <th>NGÀY HẾT HẠN</th>
+            <th>THAO TÁC</th>
+        </tr>
+        <tr>
+            <td>KM001</td>
+            <td>GIẢM 20% KHI TỔNG THANH TOÁN TRÊN 3.000.000 đ</td>
+            <td>GIẢM GIÁ</td>
+            <td>30/12/2024</td>
+            <td>
+                <button class="btn btn-info">Sử dụng</button>
+            </td>
+        </tr>
+    </table>
+    <h4>LỊCH SỬ VOUCHER</h4>
+    <table class="table table-bordered">
+        <tr>
+            <th>THỜI GIAN</th>
+            <th>MÃ VOUCHER</th>
+            <th>NỘI DUNG VOUCHER</th>
+            <th>TRẠNG THÁI</th>
+        </tr>
+        <tr>
+            <td>15/11/2024</td>
+            <td>KM004</td>
+            <td>GIẢM 20% KHI MUA COMBO HỦY DIỆT</td>
+            <td>
+                <button class="btn btn-warning"> HẾT HẠN</button>
+            </td>
+        </tr>
+        <tr>
+            <td>12/11/2024</td>
+            <td>KM005</td>
+            <td>GIẢM 20% KHI MUA COMBO ĂN NO PHIM HẾT</td>
+            <td>
+                <button class="btn btn-warning"> ĐÃ SỬ DỤNG</button>
+            </td>
+        </tr>
+    </table>
+</div>
 <!-- Footer -->
 <div class="mt-5"> <!-- Tạo khoảng cách lớn giữa nội dung và footer -->
     <div th:replace="~{Brower/footer::footer}"></div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const menuItems = document.querySelectorAll(".main-menu li");
+        const tabs = document.querySelectorAll(".content");
 
+        menuItems.forEach(item => {
+            item.addEventListener("click", () => {
+                // Xóa lớp 'active' khỏi tất cả các menu
+                menuItems.forEach(menu => menu.classList.remove("active"));
+
+                // Ẩn tất cả nội dung tab
+                tabs.forEach(tab => tab.style.display = "none");
+
+                // Thêm lớp 'active' cho menu được nhấn
+                item.classList.add("active");
+
+                // Hiển thị nội dung tab tương ứng
+                const targetTab = item.getAttribute("data-tab");
+                const activeTab = document.getElementById(targetTab);
+                if (activeTab) activeTab.style.display = "block";
+            });
+        });
+
+        // Hiển thị tab đầu tiên mặc định
+        tabs.forEach((tab, index) => {
+            tab.style.display = index === 0 ? "block" : "none";
+        });
+    });
+
+</script>
 <!-- Các nội dung khác sẽ hiển thị từ API -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -292,7 +448,7 @@
 
             fetch(`http://localhost:8080/api/users/${userId}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(userData),
             })
                 .then(response => {
@@ -316,6 +472,147 @@
         });
     });
 
+
+
+</script>
+<script>
+    // Hàm gọi API hoặc sử dụng dữ liệu mẫu
+    async function fetchMembershipData() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+
+        try {
+            // Giả sử API trả về dữ liệu thẻ
+            const response = await fetch(`http://localhost:8080/api/users/${userId}`);
+            if (!response.ok) throw new Error("Failed to fetch membership data");
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Lỗi khi lấy thông tin thẻ thành viên:", error);
+
+            // Dữ liệu mẫu nếu API không hoạt động
+            return {
+                cardNumber: "",
+                cardRank: "",
+                activationDate: "",
+                totalSpending: 0,
+                accumulatedPoints: 0,
+                usedPoints: 0,
+                expirationDate: "",
+            };
+        }
+    }
+
+    // Hàm cập nhật giao diện bảng
+    function updateMembershipTable(data) {
+        const table = document.querySelector("#membership-card table");
+        const tbody = table.querySelector("tbody") || document.createElement("tbody");
+
+        // Xóa dữ liệu cũ
+        tbody.innerHTML = "";
+        const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+
+        // Định dạng ngày tạo
+        const createdDate = new Date(data.createdAt);
+        const createdAtFormatted = new Intl.DateTimeFormat("vi-VN", options).format(createdDate);
+
+        // Tính toán ngày hết hạn
+        createdDate.setFullYear(createdDate.getFullYear() + 3);
+        const expirationDate = new Intl.DateTimeFormat("vi-VN", options).format(createdDate);
+        // Thêm hàng mới với dữ liệu từ API hoặc mẫu
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>123456789.${data.userId}</td>
+            <td>${data.membershipType}</td>
+            <td>${createdAtFormatted}</td>
+            <td>${data.totalSpent.toLocaleString()} đ</td>
+            <td>${data.accPoint}</td>
+            <td>${expirationDate}</td>
+  `;
+        tbody.appendChild(row);
+        table.appendChild(tbody);
+
+        // Tính toán số tiền cần để nâng hạng VIP
+        const vipThreshold = 3000000;
+        const remainingAmount = Math.max(vipThreshold - data.totalSpent, 0);
+        const message = remainingAmount > 0
+            ? `Bạn cần thêm ${remainingAmount.toLocaleString()} VND để nâng hạng Khách hàng VIP`
+            : "Chúc mừng! Bạn đã đạt hạng Khách hàng VIP.";
+        document.querySelector("#membership-card h4").textContent = message;
+    }
+
+    // Khởi tạo trang
+    async function initMembershipCard() {
+        const userId = 1; // Thay bằng userId thực tế
+        const membershipData = await fetchMembershipData(userId);
+        updateMembershipTable(membershipData);
+    }
+
+    // Gọi hàm khởi tạo khi trang tải
+    document.addEventListener("DOMContentLoaded", initMembershipCard);
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+        if (!userId) {
+            alert('Không tìm thấy userId!');
+            window.location.href = '/home.html';
+            return;
+        }
+        
+        const apiUrl = `http://localhost:8080/api/users/history/${userId}`;
+        const orderTableBody = document.querySelector("#orderTable tbody");
+
+        // Hàm định dạng ngày giờ
+        function formatDateTime(dateTime) {
+            const options = { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" };
+            return new Intl.DateTimeFormat("vi-VN", options).format(new Date(dateTime));
+        }
+
+        // Hàm hiển thị dữ liệu lên bảng
+        function populateTable(data) {
+            orderTableBody.innerHTML = ""; // Xóa nội dung cũ (nếu có)
+
+            data.forEach((item, index) => {
+                const row = `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${item.movieName}</td>
+          <td>${item.cinemaName} - ${item.roomName}</td>
+          <td>${formatDateTime(item.bookingTime)}</td>
+          <td>${item.seatNames} (${item.seatCount} ghế)</td>
+          <td>${item.comboDetails || "Không có"}</td>
+          <td>${formatDateTime(item.bookingTime)}</td>
+          <td>${item.point || "0 điểm"}</td>
+        </tr>
+      `;
+                orderTableBody.innerHTML += row;
+            });
+        }
+
+        // Hàm lấy dữ liệu từ API
+        async function fetchMovieHistory() {
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Phản hồi không phải JSON");
+                }
+
+                const data = await response.json();
+                populateTable(data); // Gọi hàm hiển thị dữ liệu lên bảng
+            } catch (error) {
+                console.error("Lỗi khi lấy dữ liệu:", error);
+                orderTableBody.innerHTML = `<tr><td colspan="8" class="text-center">Không thể tải dữ liệu: ${error.message}</td></tr>`;
+            }
+        }
+
+        // Gọi API và hiển thị dữ liệu
+        await fetchMovieHistory();
+    });
 
 </script>
 <script th:src="@{/assets/js/browerJS/menuLocation.js}"></script>

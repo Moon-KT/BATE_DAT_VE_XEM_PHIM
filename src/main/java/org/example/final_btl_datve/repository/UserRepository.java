@@ -35,6 +35,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 @Query(value = "SELECT m.movie_name AS movieName, " +
         "b.booking_time AS bookingTime, " +
+        "b.points_earned AS point, " +
         "(SELECT GROUP_CONCAT(CONCAT(temp.combo_id, ' (', temp.combo_count, ')')) " +
         " FROM (SELECT bc.combo_id, COUNT(*) AS combo_count " +
         "       FROM booking_combo bc " +

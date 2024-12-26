@@ -6,6 +6,7 @@ const showtimeId = Number(urlParams.get('showtimeId'));
 const cinemaId = Number(urlParams.get('cinemaId'));
 const userId = Number(urlParams.get('userId'));
 const seats = urlParams.get('seats');
+const seatIds = urlParams.get('seatIds');
 const timerDisplay = document.getElementById('timer');
 let totalPrice = Number(urlParams.get('totalPrice'));
 let currentPoints = 0; // Điểm beta hiện có
@@ -18,6 +19,7 @@ let comboQuantities = [
     price = 0
 ];
 const selectedSeats = seats ? seats.split(',') : [];
+const selectedSeatIds = seatIds ? seatIds.split(',') : [];
 // Hàm để gọi API và cập nhật nội dung trang
 async function loadMovieData() {
     try {
@@ -308,7 +310,7 @@ document.addEventListener('DOMContentLoaded', loadMovieData);
 
 document.getElementById("btnThanhtoan").addEventListener("click", () => {
 
-    window.location.href = `/payment.htm?roomId=${roomId}&movieId=${movieId}&showtimeId=${showtimeId}&cinemaId=${cinemaId}&userId=${userId}&totalPrice=${totalPrice}&seats=${selectedSeats.join(',')}&comboQuantities=${encodeURIComponent(JSON.stringify(comboQuantities))}`;
+    window.location.href = `/payment.htm?roomId=${roomId}&movieId=${movieId}&showtimeId=${showtimeId}&cinemaId=${cinemaId}&userId=${userId}&totalPrice=${totalPrice}&seats=${selectedSeats.join(',')}&seatIds=${selectedSeatIds.join(',')}&comboQuantities=${encodeURIComponent(JSON.stringify(comboQuantities))}`;
 });
     <!-- ================================ quay lại trang chọn ghế ============================ -->
     document.getElementById("backseat").addEventListener("click", () => {
